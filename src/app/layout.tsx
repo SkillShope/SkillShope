@@ -79,7 +79,7 @@ export default async function RootLayout({
       <body className={`min-h-screen antialiased ${jaro.variable} ${spaceGrotesk.variable} ${jacquesFrancois.variable}`}>
         <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
-        <Happie />
+        <Happie isSignedIn={!!session?.user} />
         <Analytics />
         <ConsentBanner />
       </body>
