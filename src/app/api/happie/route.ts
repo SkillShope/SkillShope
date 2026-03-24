@@ -32,8 +32,14 @@ Tone: Warm, helpful, knowledgeable. Like a friend who knows every tool in the re
 
 export async function POST(req: NextRequest) {
   const session = await auth();
-  const userId = session?.user?.id || "anonymous";
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { error: "Sign in to chat with Happie.", requiresAuth: true },
+      { status: 401 }
+    );
+  }
 
+  const userId = session.user.id;
   const { allowed } = rateLimit(`happie:${userId}`, 15, 60_000);
   if (!allowed) {
     return NextResponse.json({ error: "Too many requests. Try again in a moment." }, { status: 429 });

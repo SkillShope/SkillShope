@@ -12,7 +12,7 @@ type Message = {
   content: string;
 };
 
-export function Happie() {
+export function Happie({ isSignedIn = false }: { isSignedIn?: boolean }) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -191,7 +191,25 @@ export function Happie() {
 
             {/* Messages — scrollable area */}
             <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
-              {messages.length === 0 && (
+              {!isSignedIn ? (
+                <div className="flex h-full flex-col items-center justify-center px-2 text-center">
+                  <Image src="/logo.png" alt="Happie" width={40} height={40} className="mb-4 opacity-40" />
+                  <p className="mb-2 text-sm font-medium">Happie to Help!</p>
+                  <p className="mb-4 text-xs leading-relaxed text-[var(--text-secondary)]">
+                    I can recommend the perfect skills, MCP servers, and agents
+                    for your project — and even generate a tailored SKILL.md just for you.
+                  </p>
+                  <a
+                    href="/auth/signin"
+                    className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-2.5 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors"
+                  >
+                    Sign in to get started
+                  </a>
+                  <p className="mt-3 text-[10px] text-[var(--text-secondary)]">
+                    Free to use · Takes 30 seconds
+                  </p>
+                </div>
+              ) : messages.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center px-2 text-center">
                   <Image src="/logo.png" alt="Happie" width={40} height={40} className="mb-4 opacity-40" />
                   <p className="mb-2 text-sm font-medium">Happie to Help!</p>
@@ -218,7 +236,7 @@ export function Happie() {
                     ))}
                   </div>
                 </div>
-              )}
+              ) : null}
 
               {messages.map((msg, i) => (
                 <div key={i} className={`mb-3 ${msg.role === "user" ? "text-right" : "text-left"}`}>
@@ -297,8 +315,8 @@ export function Happie() {
               </div>
             )}
 
-            {/* Input — pinned to bottom, above safe area */}
-            <div className="shrink-0 border-t border-[var(--border)] px-4 py-3">
+            {/* Input — pinned to bottom, above safe area (hidden when not signed in) */}
+            {isSignedIn && <div className="shrink-0 border-t border-[var(--border)] px-4 py-3">
               <div className="flex items-center gap-2">
                 <input
                   ref={inputRef}
@@ -325,7 +343,7 @@ export function Happie() {
               <p className="mt-2 text-center text-[10px] text-[var(--text-secondary)]/50">
                 <span className="hidden md:inline">⌘K to toggle · </span>Happie may make mistakes
               </p>
-            </div>
+            </div>}
           </div>
         </div>
       )}
