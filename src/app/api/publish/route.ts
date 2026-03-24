@@ -117,6 +117,21 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Dependencies
+  if (Array.isArray(body.dependencies)) {
+    for (const depSlug of body.dependencies.slice(0, 20)) {
+      const dep = await prisma.skill.findUnique({
+        where: { slug: depSlug },
+        select: { id: true },
+      });
+      if (dep) {
+        await prisma.skillDependency.create({
+          data: { skillId: skill.id, dependsOnId: dep.id },
+        });
+      }
+    }
+  }
+
   // Auto-verify source
   if (skill.sourceUrl) {
     verifySkillSource(skill.id).catch(() => {});

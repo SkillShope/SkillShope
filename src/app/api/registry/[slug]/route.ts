@@ -28,6 +28,7 @@ export async function GET(
       currentVersion: true,
       files: { select: { filename: true } },
       versions: { select: { version: true, changelog: true, createdAt: true }, orderBy: { createdAt: "desc" as const }, take: 5 },
+      dependencies: { select: { dependsOn: { select: { slug: true, name: true, id: true } } } },
       author: { select: { name: true, publisherVerified: true } },
     },
   });
@@ -42,6 +43,7 @@ export async function GET(
     ...skill,
     files: filenames,
     formats: detectFormats(filenames),
+    dependencies: skill.dependencies.map((d) => d.dependsOn),
     downloadUrl: `/api/deliver/${skill.id}`,
   });
 }

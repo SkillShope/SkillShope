@@ -93,6 +93,8 @@ model Skill {
   listingType     String   @default("original") // original | community
   originalAuthor  String?  // attribution for community skills
   originalUrl     String?  // canonical URL for community skills
+  dependencies    SkillDependency[] @relation("skillDeps")
+  dependedOnBy    SkillDependency[] @relation("depOf")
   featured        Boolean  @default(false)
   verified        Boolean  @default(false)
   createdAt     DateTime @default(now())
@@ -177,4 +179,15 @@ model InstallEvent {
   createdAt DateTime @default(now())
 
   @@index([skillId, createdAt])
+}
+
+model SkillDependency {
+  id          String @id @default(cuid())
+  skillId     String
+  skill       Skill  @relation("skillDeps", fields: [skillId], references: [id], onDelete: Cascade)
+  dependsOnId String
+  dependsOn   Skill  @relation("depOf", fields: [dependsOnId], references: [id], onDelete: Cascade)
+  versionReq  String?
+
+  @@unique([skillId, dependsOnId])
 }
