@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { detectFormats } from "@/lib/formats";
 
 export async function GET(
   _req: NextRequest,
@@ -35,9 +36,12 @@ export async function GET(
     return NextResponse.json({ error: "Skill not found" }, { status: 404 });
   }
 
+  const filenames = skill.files.map((f) => f.filename);
+
   return NextResponse.json({
     ...skill,
-    files: skill.files.map((f) => f.filename),
+    files: filenames,
+    formats: detectFormats(filenames),
     downloadUrl: `/api/deliver/${skill.id}`,
   });
 }
