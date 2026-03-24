@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/sign-out-button";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://skillshope.com";
@@ -41,10 +42,19 @@ export default async function RootLayout({
 }) {
   const session = await auth();
 
+  let isAdmin = false;
+  if (session?.user?.id) {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { isAdmin: true },
+    });
+    isAdmin = user?.isAdmin ?? false;
+  }
+
   return (
     <html lang="en">
       <body className="min-h-screen antialiased">
-        <Navbar user={session?.user} signOutButton={<SignOutButton />} />
+        <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
       </body>
     </html>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Search, Plus, Sparkles, LayoutDashboard, User } from "lucide-react";
+import { Search, Plus, Sparkles, LayoutDashboard, User, ShieldCheck } from "lucide-react";
 import { useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
@@ -10,10 +10,11 @@ type NavbarProps = {
     name?: string | null;
     image?: string | null;
   } | null;
+  isAdmin?: boolean;
   signOutButton?: ReactNode;
 };
 
-export function Navbar({ user, signOutButton }: NavbarProps) {
+export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
   const [search, setSearch] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
@@ -120,6 +121,16 @@ export function Navbar({ user, signOutButton }: NavbarProps) {
                         <LayoutDashboard className="h-4 w-4" />
                         Dashboard
                       </Link>
+                      {isAdmin && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setShowMenu(false)}
+                          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text)] transition-colors"
+                        >
+                          <ShieldCheck className="h-4 w-4" />
+                          Admin
+                        </Link>
+                      )}
                       <div className="my-1 border-t border-[var(--border)]" />
                       {signOutButton}
                     </div>

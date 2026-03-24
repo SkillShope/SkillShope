@@ -72,8 +72,10 @@ model Skill {
   price         Float    @default(0)
   isFree        Boolean  @default(true)
   installCmd    String?
-  sourceUrl     String   @default("")
-  sourceType    String   @default("github") // github | npm | other
+  sourceUrl         String   @default("")
+  sourceType        String   @default("github") // github | npm | other
+  sourceStatus      String   @default("pending") // pending | valid | invalid | error
+  sourceCheckedAt   DateTime?
   downloads     Int      @default(0)
   rating        Float    @default(0)
   reviewCount   Int      @default(0)
@@ -83,6 +85,7 @@ model Skill {
   author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   reviews       Review[]
   purchases     Purchase[]
+  files         SkillFile[]
   featured      Boolean  @default(false)
   verified      Boolean  @default(false)
   createdAt     DateTime @default(now())
@@ -99,7 +102,28 @@ model Purchase {
   amount          Float
   createdAt       DateTime @default(now())
 
+  downloadToken   DownloadToken?
+
   @@unique([userId, skillId])
+}
+
+model SkillFile {
+  id        String @id @default(cuid())
+  skillId   String
+  skill     Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  filename  String
+  content   String // file content (markdown, JSON, etc.)
+
+  @@unique([skillId, filename])
+}
+
+model DownloadToken {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  purchaseId String   @unique
+  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime?
+  createdAt  DateTime @default(now())
 }
 
 model Review {

@@ -1,3 +1,11 @@
+// Admin Skills API
+// Auth: requires admin session (cookie-based via requireAdmin)
+// Future: add API key auth for external access (CI/CD, dashboards, etc.)
+//
+// GET  /api/admin/skills          — List all skills with author info
+// PATCH /api/admin/skills         — Manage a skill
+//   body: { id: string, action: "feature" | "unfeature" | "verify" | "unverify" | "remove" }
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ExternalLink, Loader2 } from "lucide-react";
+import { Check, ExternalLink, Loader2, Key } from "lucide-react";
 import { CopyButton } from "./copy-button";
 
 type InstallCardProps = {
@@ -28,6 +28,7 @@ export function InstallCard({
   isSignedIn,
 }: InstallCardProps) {
   const [loading, setLoading] = useState(false);
+  const [downloadToken, setDownloadToken] = useState<string | null>(null);
 
   const handlePurchase = async () => {
     setLoading(true);
@@ -41,6 +42,14 @@ export function InstallCard({
       window.location.href = data.url;
     } else {
       setLoading(false);
+    }
+  };
+
+  const fetchToken = async () => {
+    const res = await fetch(`/api/deliver/token?skillId=${skillId}`);
+    if (res.ok) {
+      const data = await res.json();
+      setDownloadToken(data.token);
     }
   };
 
@@ -62,6 +71,7 @@ export function InstallCard({
         )}
       </div>
 
+      {/* Install command */}
       {installCmd && (
         <div className="mb-4">
           <label className="mb-1.5 block text-xs font-medium text-[var(--text-secondary)]">
@@ -76,6 +86,37 @@ export function InstallCard({
         </div>
       )}
 
+      {/* Download token for owned paid skills */}
+      {owned && !isFree && (
+        <div className="mb-4">
+          {downloadToken ? (
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-[var(--text-secondary)]">
+                Download Token
+              </label>
+              <div className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2.5 font-mono text-xs">
+                <code className="flex-1 overflow-x-auto text-[var(--accent)]">
+                  {downloadToken.slice(0, 12)}...{downloadToken.slice(-8)}
+                </code>
+                <CopyButton text={downloadToken} />
+              </div>
+              <p className="mt-1.5 text-xs text-[var(--text-secondary)]">
+                Use this token to download via CLI or API.
+              </p>
+            </div>
+          ) : (
+            <button
+              onClick={fetchToken}
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-[var(--border)] py-2.5 text-sm text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--text)] transition-colors"
+            >
+              <Key className="h-3.5 w-3.5" />
+              Get Download Token
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Action button */}
       {owned ? (
         <button
           disabled
@@ -97,7 +138,7 @@ export function InstallCard({
                 Redirecting...
               </>
             ) : (
-              `Purchase & Install`
+              "Purchase & Install"
             )}
           </button>
         ) : (
@@ -110,6 +151,7 @@ export function InstallCard({
         )
       ) : null}
 
+      {/* Source link */}
       {sourceUrl && (
         <a
           href={sourceUrl}
@@ -118,7 +160,7 @@ export function InstallCard({
           className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border border-[var(--border)] py-2.5 text-sm text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--text)] transition-colors"
         >
           <ExternalLink className="h-3.5 w-3.5" />
-          View Source
+          {isFree ? "View Source" : "View Preview"}
         </a>
       )}
     </div>

@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
+import { randomBytes } from "crypto";
 import Stripe from "stripe";
+
+function generateToken(): string {
+  return randomBytes(32).toString("hex");
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -29,13 +34,23 @@ export async function POST(req: NextRequest) {
 
     if (skillId && userId && session.payment_status === "paid") {
       // Idempotent: upsert to handle duplicate webhook deliveries
-      await prisma.purchase.upsert({
+      const purchase = await prisma.purchase.upsert({
         where: { userId_skillId: { userId, skillId } },
         create: {
           userId,
           skillId,
           stripeSessionId: session.id,
           amount: (session.amount_total || 0) / 100,
+        },
+        update: {},
+      });
+
+      // Generate download token for CLI access
+      await prisma.downloadToken.upsert({
+        where: { purchaseId: purchase.id },
+        create: {
+          purchaseId: purchase.id,
+          token: generateToken(),
         },
         update: {},
       });

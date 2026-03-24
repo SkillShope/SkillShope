@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { validate, sanitize, isValidUrl, isValidSlug } from "@/lib/validation";
 import { rateLimit } from "@/lib/rate-limit";
+import { verifySkillSource } from "@/lib/source-verify";
 
 const VALID_TYPES = ["skill", "mcp-server", "agent"];
 const VALID_SOURCE_TYPES = ["github", "npm", "other"];
@@ -105,6 +106,21 @@ export async function POST(req: NextRequest) {
       authorId: session.user.id,
     },
   });
+
+  // Store skill content for paid skills
+  if (!body.isFree && body.skillContent) {
+    const content = body.skillContent.slice(0, 100_000); // 100KB max
+    await prisma.skillFile.create({
+      data: {
+        skillId: skill.id,
+        filename: "SKILL.md",
+        content,
+      },
+    });
+  }
+
+  // Auto-verify source in the background (non-blocking)
+  verifySkillSource(skill.id).catch(() => {});
 
   return NextResponse.json(skill, { status: 201 });
 }

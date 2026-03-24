@@ -1,3 +1,11 @@
+// Admin Users API
+// Auth: requires admin session (cookie-based via requireAdmin)
+// Future: add API key auth for external access (CI/CD, dashboards, etc.)
+//
+// GET  /api/admin/users           — List all users with skill/review counts
+// PATCH /api/admin/users          — Manage a user
+//   body: { id: string, action: "verify" | "unverify" }
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
