@@ -67,6 +67,7 @@ export default async function BrowsePage({ searchParams }: Props) {
         currentCategory={category}
         currentType={type}
         currentSort={sort}
+        currentListing={listing}
       />
 
       {skills.length === 0 ? (
