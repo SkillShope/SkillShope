@@ -25,6 +25,8 @@ type SkillCardProps = {
   compatibility: string;
   verified: boolean;
   sourceType: string;
+  listingType: string;
+  originalAuthor: string | null;
   authorName: string | null;
   authorImage: string | null;
 };
@@ -91,9 +93,14 @@ export function SkillCard(props: SkillCardProps) {
         <h3 className="mb-1.5 text-base font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
           {props.name}
         </h3>
-        <p className="mb-4 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+        <p className="mb-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
           {props.description}
         </p>
+        {props.listingType === "community" && props.originalAuthor && (
+          <p className="mb-3 text-xs text-[var(--text-secondary)]">
+            by <span className="text-[var(--text)]">{props.originalAuthor}</span>
+          </p>
+        )}
 
         <div className="mb-3 flex flex-wrap gap-1.5">
           <span className={`rounded-md px-2 py-0.5 text-[11px] font-medium ${colorClass}`}>

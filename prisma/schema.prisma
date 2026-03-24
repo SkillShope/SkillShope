@@ -86,8 +86,11 @@ model Skill {
   reviews       Review[]
   purchases     Purchase[]
   files         SkillFile[]
-  featured      Boolean  @default(false)
-  verified      Boolean  @default(false)
+  listingType     String   @default("original") // original | community
+  originalAuthor  String?  // attribution for community skills
+  originalUrl     String?  // canonical URL for community skills
+  featured        Boolean  @default(false)
+  verified        Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

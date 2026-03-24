@@ -113,6 +113,30 @@ export default async function SkillPage({ params }: Props) {
               <p className="mt-1 text-[var(--text-secondary)]">
                 {skill.description}
               </p>
+              {skill.listingType === "community" && (
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="rounded-full bg-[var(--accent-soft)] px-2.5 py-0.5 text-xs font-medium text-[var(--accent)]">
+                    Community
+                  </span>
+                  {skill.originalAuthor && (
+                    <span className="text-xs text-[var(--text-secondary)]">
+                      Originally by{" "}
+                      {skill.originalUrl ? (
+                        <a
+                          href={skill.originalUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[var(--accent)] hover:underline"
+                        >
+                          {skill.originalAuthor}
+                        </a>
+                      ) : (
+                        <span className="text-[var(--text)]">{skill.originalAuthor}</span>
+                      )}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

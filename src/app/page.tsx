@@ -144,6 +144,8 @@ export default async function HomePage() {
                 compatibility={skill.compatibility}
                 verified={skill.verified}
                 sourceType={skill.sourceType}
+                listingType={skill.listingType}
+                originalAuthor={skill.originalAuthor}
                 authorName={skill.author.name}
                 authorImage={skill.author.image}
               />

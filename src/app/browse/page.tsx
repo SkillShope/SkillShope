@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams: Promise<{ q?: string; category?: string; type?: string; sort?: string }>;
+  searchParams: Promise<{ q?: string; category?: string; type?: string; sort?: string; listing?: string }>;
 };
 
 export default async function BrowsePage({ searchParams }: Props) {
   const params = await searchParams;
-  const { q, category, type, sort } = params;
+  const { q, category, type, sort, listing } = params;
 
   const where: Record<string, unknown> = {};
   if (q) {
@@ -27,6 +27,8 @@ export default async function BrowsePage({ searchParams }: Props) {
   }
   if (category) where.category = category;
   if (type) where.type = type;
+  if (listing === "community") where.listingType = "community";
+  if (listing === "original") where.listingType = "original";
 
   let orderBy: Record<string, string> = { createdAt: "desc" };
   if (sort === "downloads") orderBy = { downloads: "desc" };
@@ -91,6 +93,8 @@ export default async function BrowsePage({ searchParams }: Props) {
               compatibility={skill.compatibility}
               verified={skill.verified}
               sourceType={skill.sourceType}
+              listingType={skill.listingType}
+              originalAuthor={skill.originalAuthor}
               authorName={skill.author.name}
               authorImage={skill.author.image}
             />

@@ -25,6 +25,8 @@ type Skill = {
   downloads: number;
   sourceStatus: string;
   sourceCheckedAt: string | null;
+  listingType: string;
+  originalAuthor: string | null;
   author: { name: string | null; email: string | null; publisherVerified: boolean };
 };
 

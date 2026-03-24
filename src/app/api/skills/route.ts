@@ -103,6 +103,9 @@ export async function POST(req: NextRequest) {
       sourceType: body.sourceType || "github",
       compatibility: (body.compatibility || "claude-code").slice(0, 200),
       tags: body.tags ? sanitize(body.tags).slice(0, 500) : null,
+      listingType: body.listingType === "community" ? "community" : "original",
+      originalAuthor: body.originalAuthor ? sanitize(body.originalAuthor).slice(0, 100) : null,
+      originalUrl: body.originalUrl ? body.originalUrl.slice(0, 500) : null,
       authorId: session.user.id,
     },
   });
