@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     { field: "slug", value: body.slug, required: true, minLength: 2, maxLength: 100 },
     { field: "description", value: body.description, required: true, minLength: 10, maxLength: 300 },
     { field: "category", value: body.category, required: true, maxLength: 50 },
-    { field: "sourceUrl", value: body.sourceUrl, required: true, maxLength: 500 },
+    { field: "sourceUrl", value: body.sourceUrl, required: false, maxLength: 500 },
   ]);
 
   if (!isValidSlug(body.slug || "")) {

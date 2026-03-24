@@ -325,7 +325,6 @@ export function PublishForm() {
           </div>
           <input
             type="url"
-            required
             value={form.sourceUrl}
             onChange={(e) => updateForm("sourceUrl", e.target.value)}
             placeholder={sourceTypes.find((s) => s.value === form.sourceType)?.placeholder}

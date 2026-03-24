@@ -3,7 +3,7 @@
   "title": "Skill Shope Listing",
   "description": "Schema for publishing a skill, MCP server, or agent on Skill Shope",
   "type": "object",
-  "required": ["name", "description", "category", "sourceUrl", "sourceType", "skillContent"],
+  "required": ["name", "description", "category", "skillContent"],
   "properties": {
     "name": {
       "type": "string",
@@ -45,7 +45,7 @@
     "sourceUrl": {
       "type": "string",
       "format": "uri",
-      "description": "Public URL to source (GitHub repo, npm package page, etc.)"
+      "description": "Optional public URL to source code or preview page (GitHub repo, npm package, etc.)"
     },
     "sourceType": {
       "type": "string",
