@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/sign-out-button";
 import { Analytics } from "@vercel/analytics/next";
 import { ConsentBanner } from "@/components/consent-banner";
+import { Happie } from "@/components/happie";
 import { Jaro, Space_Grotesk, Jacques_Francois } from "next/font/google";
 
 const jaro = Jaro({
@@ -78,6 +79,7 @@ export default async function RootLayout({
       <body className={`min-h-screen antialiased ${jaro.variable} ${spaceGrotesk.variable} ${jacquesFrancois.variable}`}>
         <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
+        <Happie />
         <Analytics />
         <ConsentBanner />
       </body>

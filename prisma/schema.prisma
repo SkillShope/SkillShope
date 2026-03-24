@@ -24,6 +24,7 @@ model User {
   reviews       Review[]
   purchases     Purchase[]
   apiKeys       ApiKey[]
+  projects      Project[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -95,6 +96,7 @@ model Skill {
   originalUrl     String?  // canonical URL for community skills
   dependencies    SkillDependency[] @relation("skillDeps")
   dependedOnBy    SkillDependency[] @relation("depOf")
+  projectSkills   ProjectSkill[]
   featured        Boolean  @default(false)
   verified        Boolean  @default(false)
   createdAt     DateTime @default(now())
@@ -190,4 +192,25 @@ model SkillDependency {
   versionReq  String?
 
   @@unique([skillId, dependsOnId])
+}
+
+model Project {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills      ProjectSkill[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model ProjectSkill {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  skillId   String
+  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, skillId])
 }
