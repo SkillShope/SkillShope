@@ -11,6 +11,7 @@ import {
   Package,
   CheckCircle,
   XCircle,
+  RefreshCw,
 } from "lucide-react";
 import { AdminConfirm } from "./admin-confirm";
 
@@ -22,6 +23,8 @@ type Skill = {
   featured: boolean;
   verified: boolean;
   downloads: number;
+  sourceStatus: string;
+  sourceCheckedAt: string | null;
   author: { name: string | null; email: string | null; publisherVerified: boolean };
 };
 
@@ -107,6 +110,20 @@ export function AdminPanel() {
     setLoading(false);
   };
 
+  const reverifySource = async (skillId: string) => {
+    await fetch("/api/admin/verify-source", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ skillId }),
+    });
+    loadData();
+  };
+
+  const reverifyAll = async () => {
+    await fetch("/api/admin/verify-source?all=true", { method: "POST" });
+    loadData();
+  };
+
   const requestAction = (type: "skill" | "user", id: string, action: string) => {
     const key = type === "user" ? `${action}-user` : action;
     const details = ACTION_DETAILS[key];
@@ -133,8 +150,9 @@ export function AdminPanel() {
         Manage skills, publishers, and platform content.
       </p>
 
-      {/* Tabs */}
-      <div className="mb-6 flex gap-1 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-1 w-fit">
+      {/* Tabs + Actions */}
+      <div className="mb-6 flex items-center justify-between">
+      <div className="flex gap-1 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-1 w-fit">
         <button
           onClick={() => setTab("skills")}
           className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
@@ -158,6 +176,16 @@ export function AdminPanel() {
           Users ({users.length})
         </button>
       </div>
+      {tab === "skills" && skills.length > 0 && (
+        <button
+          onClick={reverifyAll}
+          className="flex items-center gap-1.5 rounded-lg border border-[var(--border)] px-3 py-2 text-xs font-medium text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--text)] transition-colors"
+        >
+          <RefreshCw className="h-3.5 w-3.5" />
+          Verify All Sources
+        </button>
+      )}
+      </div>
 
       {loading ? (
         <p className="text-sm text-[var(--text-secondary)]">Loading...</p>
@@ -179,6 +207,7 @@ export function AdminPanel() {
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Publisher</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Type</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Downloads</th>
+                  <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Source</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Status</th>
                   <th className="px-4 py-3 text-right font-medium text-[var(--text-secondary)]">Actions</th>
                 </tr>
@@ -200,6 +229,30 @@ export function AdminPanel() {
                     </td>
                     <td className="px-4 py-3 text-[var(--text-secondary)]">
                       {skill.downloads.toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs ${
+                            skill.sourceStatus === "valid"
+                              ? "bg-[var(--green)]/15 text-[var(--green)]"
+                              : skill.sourceStatus === "invalid"
+                                ? "bg-red-500/15 text-red-400"
+                                : skill.sourceStatus === "error"
+                                  ? "bg-[var(--yellow)]/15 text-[var(--yellow)]"
+                                  : "bg-[var(--bg-secondary)] text-[var(--text-secondary)]"
+                          }`}
+                        >
+                          {skill.sourceStatus}
+                        </span>
+                        <button
+                          onClick={() => reverifySource(skill.id)}
+                          title="Re-verify source"
+                          className="rounded-md p-1 text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text)] transition-colors"
+                        >
+                          <RefreshCw className="h-3 w-3" />
+                        </button>
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1.5">

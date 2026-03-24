@@ -72,8 +72,10 @@ model Skill {
   price         Float    @default(0)
   isFree        Boolean  @default(true)
   installCmd    String?
-  sourceUrl     String   @default("")
-  sourceType    String   @default("github") // github | npm | other
+  sourceUrl         String   @default("")
+  sourceType        String   @default("github") // github | npm | other
+  sourceStatus      String   @default("pending") // pending | valid | invalid | error
+  sourceCheckedAt   DateTime?
   downloads     Int      @default(0)
   rating        Float    @default(0)
   reviewCount   Int      @default(0)
