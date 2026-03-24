@@ -24,6 +24,8 @@ type SkillCardProps = {
   reviewCount: number;
   compatibility: string;
   verified: boolean;
+  reviewStatus: string;
+  securityScore: number | null;
   sourceType: string;
   listingType: string;
   originalAuthor: string | null;
@@ -85,9 +87,25 @@ export function SkillCard(props: SkillCardProps) {
               {typeLabels[props.type] || props.type}
             </span>
           </div>
-          {props.verified && (
-            <Shield className="h-4 w-4 text-[var(--green)]" />
-          )}
+          <div className="flex items-center gap-1.5">
+            {props.securityScore !== null && (
+              <span
+                className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
+                  props.securityScore >= 90
+                    ? "bg-[var(--green)]/15 text-[var(--green)]"
+                    : props.securityScore >= 70
+                      ? "bg-[var(--yellow)]/15 text-[var(--yellow)]"
+                      : "bg-red-500/15 text-red-400"
+                }`}
+                title={`Security score: ${props.securityScore}/100`}
+              >
+                {props.securityScore}
+              </span>
+            )}
+            {props.verified && (
+              <Shield className="h-4 w-4 text-[var(--green)]" />
+            )}
+          </div>
         </div>
 
         <h3 className="mb-1.5 text-base font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">

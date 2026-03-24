@@ -17,7 +17,9 @@ export default async function BrowsePage({ searchParams }: Props) {
   const params = await searchParams;
   const { q, category, type, sort, listing } = params;
 
-  const where: Record<string, unknown> = {};
+  const where: Record<string, unknown> = {
+    reviewStatus: { in: ["approved", "pending"] }, // Show approved + legacy pending until backfill
+  };
   if (q) {
     where.OR = [
       { name: { contains: q } },
@@ -93,6 +95,8 @@ export default async function BrowsePage({ searchParams }: Props) {
               reviewCount={skill.reviewCount}
               compatibility={skill.compatibility}
               verified={skill.verified}
+              reviewStatus={skill.reviewStatus}
+              securityScore={skill.securityScore}
               sourceType={skill.sourceType}
               listingType={skill.listingType}
               originalAuthor={skill.originalAuthor}

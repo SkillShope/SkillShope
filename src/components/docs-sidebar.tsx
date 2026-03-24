@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { title: "Community Skills", href: "/docs/community-skills" },
   { title: "Versioning", href: "/docs/versioning" },
   { title: "Security", href: "/docs/security" },
+  { title: "Verification Process", href: "/docs/verification" },
   { title: "FAQ", href: "/docs/faq" },
 ];
 

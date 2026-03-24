@@ -17,7 +17,7 @@ import { Aurora } from "@/components/aurora";
 
 export default async function HomePage() {
   const featuredSkills = await prisma.skill.findMany({
-    where: { featured: true },
+    where: { featured: true, reviewStatus: { in: ["approved", "pending"] } },
     include: { author: true },
     take: 6,
     orderBy: { downloads: "desc" },
@@ -144,6 +144,8 @@ export default async function HomePage() {
                 reviewCount={skill.reviewCount}
                 compatibility={skill.compatibility}
                 verified={skill.verified}
+                reviewStatus={skill.reviewStatus}
+                securityScore={skill.securityScore}
                 sourceType={skill.sourceType}
                 listingType={skill.listingType}
                 originalAuthor={skill.originalAuthor}

@@ -106,6 +106,20 @@ export default async function SkillPage({ params }: Props) {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold sm:text-3xl">{skill.name}</h1>
+                {skill.securityScore !== null && (
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                      skill.securityScore >= 90
+                        ? "bg-[var(--green)]/15 text-[var(--green)]"
+                        : skill.securityScore >= 70
+                          ? "bg-[var(--yellow)]/15 text-[var(--yellow)]"
+                          : "bg-red-500/15 text-red-400"
+                    }`}
+                    title={`Security score: ${skill.securityScore}/100`}
+                  >
+                    {skill.securityScore}/100
+                  </span>
+                )}
                 {skill.verified && (
                   <Shield className="h-5 w-5 text-[var(--green)]" />
                 )}

@@ -97,6 +97,9 @@ model Skill {
   dependencies    SkillDependency[] @relation("skillDeps")
   dependedOnBy    SkillDependency[] @relation("depOf")
   projectSkills   ProjectSkill[]
+  reviewStatus    String   @default("pending") // pending | approved | flagged | rejected
+  securityScore   Int?
+  securityReports SecurityReport[]
   featured        Boolean  @default(false)
   verified        Boolean  @default(false)
   createdAt     DateTime @default(now())
@@ -223,4 +226,16 @@ model HappieEvent {
   createdAt DateTime @default(now())
 
   @@index([type, createdAt])
+}
+
+model SecurityReport {
+  id        String   @id @default(cuid())
+  skillId   String
+  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  status    String   // approved | flagged | rejected
+  score     Int
+  checks    String   // JSON stringified CheckResult[]
+  createdAt DateTime @default(now())
+
+  @@index([skillId, createdAt])
 }

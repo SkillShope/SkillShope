@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth";
 import { validate, sanitize, isValidUrl, isValidSlug } from "@/lib/validation";
 import { rateLimit } from "@/lib/rate-limit";
 import { verifySkillSource } from "@/lib/source-verify";
+import { runSecurityPipeline } from "@/lib/security";
+import type { SkillInput } from "@/lib/security/types";
 
 const VALID_TYPES = ["skill", "mcp-server", "agent"];
 const VALID_SOURCE_TYPES = ["github", "npm", "other"];
@@ -124,8 +126,36 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // Auto-verify source in the background (non-blocking)
-  verifySkillSource(skill.id).catch(() => {});
+  // Run security pipeline in the background (non-blocking)
+  const securityInput: SkillInput = {
+    id: skill.id,
+    slug: skill.slug,
+    name: skill.name,
+    sourceUrl: skill.sourceUrl,
+    sourceType: skill.sourceType,
+    content: body.skillContent || undefined,
+    installCmd: skill.installCmd || undefined,
+  };
+
+  runSecurityPipeline(securityInput)
+    .then(async (report) => {
+      await prisma.securityReport.create({
+        data: {
+          skillId: skill.id,
+          status: report.status,
+          score: report.score,
+          checks: JSON.stringify(report.checks),
+        },
+      });
+      await prisma.skill.update({
+        where: { id: skill.id },
+        data: {
+          reviewStatus: report.status,
+          securityScore: report.score,
+        },
+      });
+    })
+    .catch(() => {});
 
   return NextResponse.json(skill, { status: 201 });
 }
