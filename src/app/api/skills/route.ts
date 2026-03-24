@@ -86,7 +86,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const price = body.isFree ? 0 : Math.max(0.99, Number(body.price) || 0);
+  const isCommunity = body.listingType === "community";
+  const isFree = isCommunity ? true : (body.isFree ?? true);
+  const price = isFree ? 0 : Math.max(0.99, Number(body.price) || 0);
 
   const skill = await prisma.skill.create({
     data: {
@@ -97,7 +99,7 @@ export async function POST(req: NextRequest) {
       category: body.category.slice(0, 50),
       type: body.type || "skill",
       price,
-      isFree: body.isFree ?? true,
+      isFree,
       installCmd: body.installCmd ? sanitize(body.installCmd).slice(0, 500) : null,
       sourceUrl: body.sourceUrl.slice(0, 500),
       sourceType: body.sourceType || "github",

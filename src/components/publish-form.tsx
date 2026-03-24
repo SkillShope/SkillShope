@@ -330,42 +330,51 @@ export function PublishForm() {
         </div>
 
         {/* Pricing */}
-        <div>
-          <label className="mb-2 block text-sm font-medium">Pricing</label>
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                checked={form.isFree}
-                onChange={() => updateForm("isFree", true)}
-                className="accent-[var(--accent)]"
-              />
-              Free
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                checked={!form.isFree}
-                onChange={() => updateForm("isFree", false)}
-                className="accent-[var(--accent)]"
-              />
-              Paid
-            </label>
-            {!form.isFree && (
-              <div className="flex items-center gap-1">
-                <span className="text-sm text-[var(--text-secondary)]">$</span>
-                <input
-                  type="number"
-                  min="0.99"
-                  step="0.01"
-                  value={form.price}
-                  onChange={(e) => updateForm("price", parseFloat(e.target.value) || 0)}
-                  className="w-24 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-1.5 text-sm outline-none focus:border-[var(--accent)]"
-                />
-              </div>
-            )}
+        {form.listingType === "community" ? (
+          <div>
+            <label className="mb-2 block text-sm font-medium">Pricing</label>
+            <p className="text-sm text-[var(--text-secondary)]">
+              Community listings are always free.
+            </p>
           </div>
-        </div>
+        ) : (
+          <div>
+            <label className="mb-2 block text-sm font-medium">Pricing</label>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  checked={form.isFree}
+                  onChange={() => updateForm("isFree", true)}
+                  className="accent-[var(--accent)]"
+                />
+                Free
+              </label>
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  checked={!form.isFree}
+                  onChange={() => updateForm("isFree", false)}
+                  className="accent-[var(--accent)]"
+                />
+                Paid
+              </label>
+              {!form.isFree && (
+                <div className="flex items-center gap-1">
+                  <span className="text-sm text-[var(--text-secondary)]">$</span>
+                  <input
+                    type="number"
+                    min="0.99"
+                    step="0.01"
+                    value={form.price}
+                    onChange={(e) => updateForm("price", parseFloat(e.target.value) || 0)}
+                    className="w-24 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-1.5 text-sm outline-none focus:border-[var(--accent)]"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Source */}
         <div>
