@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Terminal, Server, Bot, Upload, Github, Package, Globe } from "lucide-react";
+import { Terminal, Server, Bot, Upload, Github, Package, Globe, FileUp } from "lucide-react";
 
 const categories = [
   "code-review",
@@ -92,12 +92,71 @@ export function PublishForm() {
     }
   };
 
+  const handleJsonUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target?.result as string);
+        setForm((prev) => ({
+          ...prev,
+          name: data.name ?? prev.name,
+          slug: data.slug ?? (data.name?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") ?? prev.slug),
+          description: data.description ?? prev.description,
+          longDescription: data.longDescription ?? prev.longDescription,
+          category: data.category ?? prev.category,
+          type: data.type ?? prev.type,
+          price: data.price ?? prev.price,
+          isFree: data.isFree ?? prev.isFree,
+          installCmd: data.installCmd ?? prev.installCmd,
+          sourceUrl: data.sourceUrl ?? prev.sourceUrl,
+          sourceType: data.sourceType ?? prev.sourceType,
+          compatibility: data.compatibility ?? prev.compatibility,
+          tags: data.tags ?? prev.tags,
+        }));
+        if (data.skillContent) setSkillContent(data.skillContent);
+        setError("");
+      } catch {
+        setError("Invalid JSON file");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <h1 className="mb-2 text-3xl font-bold">Publish a Skill</h1>
       <p className="mb-8 text-[var(--text-secondary)]">
         Share your AI skills, MCP servers, or agent configs with the community.
       </p>
+
+      {/* JSON Upload */}
+      <div className="mb-6">
+        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[var(--border)] bg-[var(--bg-secondary)] py-4 text-sm text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--text)] transition-colors">
+          <FileUp className="h-4 w-4" />
+          Upload JSON to auto-fill all fields
+          <input
+            type="file"
+            accept=".json"
+            onChange={handleJsonUpload}
+            className="hidden"
+          />
+        </label>
+        <p className="mt-2 text-center text-xs text-[var(--text-secondary)]">
+          See the{" "}
+          <a
+            href="/skill-schema.json"
+            target="_blank"
+            className="text-[var(--accent)] hover:underline"
+          >
+            JSON schema
+          </a>
+          {" "}for required fields and format.
+        </p>
+      </div>
 
       {error && (
         <p className="rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-400">

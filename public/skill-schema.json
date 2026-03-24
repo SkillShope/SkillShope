@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Skill Shope Listing",
+  "description": "Schema for publishing a skill, MCP server, or agent on Skill Shope",
+  "type": "object",
+  "required": ["name", "description", "category", "sourceUrl", "sourceType", "skillContent"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 100,
+      "description": "Display name of the skill"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "URL-friendly identifier. Auto-generated from name if omitted"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 300,
+      "description": "Short one-line description shown in search results"
+    },
+    "longDescription": {
+      "type": "string",
+      "maxLength": 5000,
+      "description": "Multi-paragraph description with features and usage details"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["skill", "mcp-server", "agent"],
+      "default": "skill",
+      "description": "Type of listing"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "code-review", "testing", "deployment", "documentation",
+        "security", "data-pipeline", "devops", "productivity",
+        "database", "api", "design"
+      ],
+      "description": "Primary category for browse filtering"
+    },
+    "sourceUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Public URL to source (GitHub repo, npm package page, etc.)"
+    },
+    "sourceType": {
+      "type": "string",
+      "enum": ["github", "npm", "other"],
+      "default": "github",
+      "description": "Type of source hosting"
+    },
+    "installCmd": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Command users run to install (e.g., npx skillshope install my-skill)"
+    },
+    "compatibility": {
+      "type": "string",
+      "default": "claude-code",
+      "description": "Comma-separated list of compatible tools (claude-code, codex, cursor)"
+    },
+    "tags": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Comma-separated keywords for search"
+    },
+    "isFree": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the skill is free or paid"
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0.99,
+      "description": "Price in USD (required if isFree is false)"
+    },
+    "skillContent": {
+      "type": "string",
+      "maxLength": 100000,
+      "description": "The actual SKILL.md content delivered to users via CLI"
+    }
+  }
+}
