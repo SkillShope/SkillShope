@@ -26,6 +26,10 @@ body {
   font-family: var(--font-display), system-ui, sans-serif;
 }
 
+.font-hero {
+  font-family: var(--font-hero), serif;
+}
+
 ::selection {
   background: var(--accent);
   color: var(--text);

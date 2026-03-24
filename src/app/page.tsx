@@ -51,7 +51,7 @@ export default async function HomePage() {
               <Zap className="h-3.5 w-3.5" />
               The marketplace for the agentic era
             </div>
-            <h1 className="font-display mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
+            <h1 className="font-hero mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
               Where builders share the tools{" "}
               <span className="bg-gradient-to-r from-[var(--accent)] to-[#8a9a7b] bg-clip-text text-transparent">
                 that make AI work
