@@ -4,7 +4,7 @@
   "longDescription": "Point MCP Forge at any API — OpenAPI spec, Swagger doc, or documentation URL — and get a complete, typed MCP server with tools, auth handling, error mapping, and configuration. Supports API key, OAuth, and basic auth patterns. Generates TypeScript with minimal dependencies for security. Ship MCP servers in minutes, not hours.",
   "type": "skill",
   "category": "api",
-  "sourceUrl": "https://github.com/arpethel/SkillShope/blob/main/skills/mcp-forge/README.md",
+  "sourceUrl": "https://github.com/SkillShope/SkillShope/blob/main/skills/mcp-forge/README.md",
   "sourceType": "github",
   "installCmd": "npx skillshope install mcp-forge",
   "compatibility": "claude-code,codex,cursor",
