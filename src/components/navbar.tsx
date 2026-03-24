@@ -35,32 +35,34 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
           <Image src="/logo.png" alt="Skill Shope" width={32} height={32} />
         </Link>
 
-        <form onSubmit={handleSearch} className="hidden sm:flex flex-1 max-w-md">
-          <div className="relative w-full">
+        <div className="hidden sm:flex flex-1 max-w-md items-center gap-2">
+          <form onSubmit={handleSearch} className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-secondary)]" />
             <input
               type="text"
-              placeholder="Search or ask Happie..."
+              placeholder="Search skills..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] py-2 pl-10 pr-20 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)] transition-colors"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] py-2 pl-10 pr-4 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)] transition-colors"
             />
-            {search.trim().split(" ").length >= 3 && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  openHappie(search);
-                  setSearch("");
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 rounded-md bg-[var(--accent-soft)] px-2 py-1 text-[10px] font-medium text-[var(--accent)] hover:bg-[var(--accent)]/20 transition-colors"
-              >
-                <Sparkles className="h-3 w-3" />
-                Ask Happie
-              </button>
-            )}
-          </div>
-        </form>
+          </form>
+          <button
+            type="button"
+            onClick={() => {
+              if (search.trim()) {
+                openHappie(search);
+                setSearch("");
+              } else {
+                openHappie("");
+              }
+            }}
+            className="flex h-9 items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-3 text-xs text-[var(--text-secondary)] hover:border-[var(--accent)]/40 hover:text-[var(--text)] transition-colors"
+            title="Ask Happie (⌘K)"
+          >
+            <Image src="/logo.png" alt="Happie" width={16} height={16} />
+            <span className="hidden lg:inline">Happie</span>
+          </button>
+        </div>
 
         <div className="flex items-center gap-3">
           <Link

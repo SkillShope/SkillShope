@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { usePathname } from "next/navigation";
-import { X, Send, Loader2 } from "lucide-react";
+import { X, Send, Loader2, Download, FileCode } from "lucide-react";
 import Image from "next/image";
 import { Markdown } from "./markdown";
 import { onHappieOpen } from "@/lib/happie-state";
@@ -17,6 +17,8 @@ export function Happie() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [generatedSkill, setGeneratedSkill] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
@@ -89,6 +91,39 @@ export function Happie() {
     }
 
     setLoading(false);
+  };
+
+  const generateSkill = async () => {
+    setGenerating(true);
+    setGeneratedSkill(null);
+    try {
+      const res = await fetch("/api/happie/generate-skill", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages, projectName: "My Project" }),
+      });
+      const data = await res.json();
+      if (data.skill) {
+        setGeneratedSkill(data.skill);
+      }
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Couldn't generate the skill. Try again." },
+      ]);
+    }
+    setGenerating(false);
+  };
+
+  const downloadSkill = () => {
+    if (!generatedSkill) return;
+    const blob = new Blob([generatedSkill], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "SKILL.md";
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -194,6 +229,51 @@ export function Happie() {
 
               <div ref={messagesEndRef} />
             </div>
+
+            {/* Generate skill / Download */}
+            {messages.length >= 2 && !generatedSkill && (
+              <div className="border-t border-[var(--border)] px-4 py-2">
+                <button
+                  onClick={generateSkill}
+                  disabled={generating}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--accent)]/30 bg-[var(--accent-soft)] py-2 text-xs font-medium text-[var(--accent)] hover:bg-[var(--accent)]/20 transition-colors disabled:opacity-50"
+                >
+                  {generating ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      Generating your skill...
+                    </>
+                  ) : (
+                    <>
+                      <FileCode className="h-3.5 w-3.5" />
+                      Generate a SKILL.md for my project
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+            {generatedSkill && (
+              <div className="border-t border-[var(--border)] px-4 py-2">
+                <div className="rounded-lg border border-[var(--green)]/30 bg-[var(--green)]/5 p-3">
+                  <p className="mb-2 text-xs font-medium">Your personal skill is ready</p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={downloadSkill}
+                      className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[var(--accent)] py-2 text-xs font-medium text-white hover:bg-[var(--accent-hover)] transition-colors"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      Download SKILL.md
+                    </button>
+                    <button
+                      onClick={() => setGeneratedSkill(null)}
+                      className="rounded-lg border border-[var(--border)] px-3 py-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Input */}
             <div className="border-t border-[var(--border)] px-4 py-3">
