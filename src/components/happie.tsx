@@ -103,8 +103,22 @@ export function Happie() {
         body: JSON.stringify({ messages, projectName: "My Project" }),
       });
       const data = await res.json();
-      if (data.skill) {
+      if (data.requiresAuth) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "I can create a tailored SKILL.md for your project from our conversation! [Create an account or sign in](/auth/signin) so we can get started.",
+          },
+        ]);
+      } else if (data.skill) {
         setGeneratedSkill(data.skill);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: data.error || "Couldn't generate the skill. Try again." },
+        ]);
       }
     } catch {
       setMessages((prev) => [

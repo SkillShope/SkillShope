@@ -22,9 +22,16 @@ Output ONLY the SKILL.md content — no explanation, no markdown code fences wra
 
 export async function POST(req: NextRequest) {
   const session = await auth();
-  const userId = session?.user?.id || "anonymous";
 
-  const { allowed } = rateLimit(`happie-gen:${userId}`, 5, 60_000);
+  // Require auth for skill generation
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { error: "Sign in required to generate a personal skill.", requiresAuth: true },
+      { status: 401 }
+    );
+  }
+
+  const { allowed } = rateLimit(`happie-gen:${session.user.id}`, 5, 60_000);
   if (!allowed) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
@@ -34,6 +41,11 @@ export async function POST(req: NextRequest) {
   if (!Array.isArray(messages) || messages.length === 0) {
     return NextResponse.json({ error: "Conversation context required" }, { status: 400 });
   }
+
+  // Track analytics
+  prisma.happieEvent.create({
+    data: { type: "generate-skill", userId: session.user.id },
+  }).catch(() => {});
 
   // Get skill catalog for context
   const skills = await prisma.skill.findMany({

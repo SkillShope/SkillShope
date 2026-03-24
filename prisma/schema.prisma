@@ -214,3 +214,13 @@ model ProjectSkill {
 
   @@unique([projectId, skillId])
 }
+
+model HappieEvent {
+  id        String   @id @default(cuid())
+  type      String   // message | generate-skill | open
+  userId    String?
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+}

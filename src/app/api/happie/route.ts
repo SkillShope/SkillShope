@@ -82,6 +82,15 @@ export async function POST(req: NextRequest) {
     userContext += `\nUser's project: ${context.projectDescription}`;
   }
 
+  // Track analytics (non-blocking)
+  prisma.happieEvent.create({
+    data: {
+      type: "message",
+      userId: session?.user?.id || null,
+      message: message.slice(0, 500),
+    },
+  }).catch(() => {});
+
   try {
     const response = await client.messages.create({
       model: "claude-sonnet-4-20250514",
