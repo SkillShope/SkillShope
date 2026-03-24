@@ -34,7 +34,7 @@ type User = {
   email: string | null;
   publisherVerified: boolean;
   isAdmin: boolean;
-  stripeAccountId: string | null;
+  hasStripeAccount: string | null;
   createdAt: string;
   _count: { skills: number; reviews: number };
 };
@@ -342,7 +342,7 @@ export function AdminPanel() {
                           Verified
                         </span>
                       )}
-                      {user.stripeAccountId && (
+                      {user.hasStripeAccount && (
                         <span className="rounded-full bg-[var(--blue)]/15 px-2 py-0.5 text-xs text-[var(--blue)]">
                           Stripe
                         </span>

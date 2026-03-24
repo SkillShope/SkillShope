@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 import { rateLimit } from "@/lib/rate-limit";
+import { getSafeOrigin } from "@/lib/origin";
 import Stripe from "stripe";
 
 const PLATFORM_FEE_PERCENT = 15;
@@ -43,7 +44,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Already purchased" }, { status: 409 });
   }
 
-  const origin = req.headers.get("origin") || "http://localhost:3000";
+  const origin = getSafeOrigin(req.headers.get("origin"));
   const amountCents = Math.round(skill.price * 100);
   const feeCents = Math.round(amountCents * (PLATFORM_FEE_PERCENT / 100));
 

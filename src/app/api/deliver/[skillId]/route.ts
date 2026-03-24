@@ -10,6 +10,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { timingSafeEqual } from "crypto";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function GET(
   req: NextRequest,
@@ -32,14 +34,31 @@ export async function GET(
     let authorized = false;
 
     if (token) {
-      const downloadToken = await prisma.downloadToken.findUnique({
-        where: { token },
+      // Rate limit token attempts per IP
+      const ip = req.headers.get("x-forwarded-for") || "unknown";
+      const { allowed } = rateLimit(`deliver:${ip}`, 10, 60_000);
+      if (!allowed) {
+        return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+      }
+
+      // Look up all tokens for this skill to do constant-time comparison
+      const tokens = await prisma.downloadToken.findMany({
+        where: { purchase: { skillId } },
         include: { purchase: true },
       });
 
-      if (downloadToken && downloadToken.purchase.skillId === skillId) {
-        if (!downloadToken.expiresAt || downloadToken.expiresAt > new Date()) {
-          authorized = true;
+      for (const dt of tokens) {
+        try {
+          const a = Buffer.from(token);
+          const b = Buffer.from(dt.token);
+          if (a.length === b.length && timingSafeEqual(a, b)) {
+            if (!dt.expiresAt || dt.expiresAt > new Date()) {
+              authorized = true;
+            }
+            break;
+          }
+        } catch {
+          // Length mismatch — not a match
         }
       }
     } else {

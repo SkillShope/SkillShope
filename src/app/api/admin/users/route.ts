@@ -31,7 +31,13 @@ export async function GET() {
     orderBy: { createdAt: "desc" },
   });
 
-  return NextResponse.json(users);
+  // Redact stripeAccountId to boolean
+  const sanitized = users.map(({ stripeAccountId, ...user }) => ({
+    ...user,
+    hasStripeAccount: !!stripeAccountId,
+  }));
+
+  return NextResponse.json(sanitized);
 }
 
 export async function PATCH(req: NextRequest) {

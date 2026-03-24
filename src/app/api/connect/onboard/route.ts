@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 import { rateLimit } from "@/lib/rate-limit";
+import { getSafeOrigin } from "@/lib/origin";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  const origin = req.headers.get("origin") || "http://localhost:3000";
+  const origin = getSafeOrigin(req.headers.get("origin"));
 
   try {
     // Create or retrieve Stripe connected account
@@ -52,8 +53,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ url: accountLink.url });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Stripe Connect error";
-    return NextResponse.json({ error: message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: "Failed to set up Connect. Please try again." }, { status: 500 });
   }
 }
