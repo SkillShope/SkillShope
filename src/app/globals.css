@@ -6,11 +6,11 @@
   --bg-card: #161616;
   --bg-card-hover: #1a1a1a;
   --border: #222222;
-  --text: #ededed;
+  --text: #D1D2BD;
   --text-secondary: #888888;
-  --accent: #7c3aed;
-  --accent-hover: #6d28d9;
-  --accent-soft: rgba(124, 58, 237, 0.15);
+  --accent: #4a5d4f;
+  --accent-hover: #303A34;
+  --accent-soft: rgba(74, 93, 79, 0.2);
   --green: #22c55e;
   --yellow: #eab308;
   --blue: #3b82f6;
@@ -19,10 +19,18 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
 }
 
 ::selection {
   background: var(--accent);
-  color: white;
+  color: var(--text);
+}
+
+.text-white {
+  color: #D1D2BD !important;
 }

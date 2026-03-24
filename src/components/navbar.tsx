@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Search, Plus, Sparkles, LayoutDashboard, User, ShieldCheck } from "lucide-react";
+import Image from "next/image";
+import { Search, Plus, LayoutDashboard, User, ShieldCheck } from "lucide-react";
 import { useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
@@ -29,11 +30,8 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
   return (
     <nav className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <Sparkles className="h-6 w-6 text-[var(--accent)]" />
-          <span className="text-lg font-bold tracking-tight">
-            Skill Shope
-          </span>
+        <Link href="/" className="shrink-0">
+          <Image src="/logo.png" alt="Skill Shope" width={32} height={32} />
         </Link>
 
         <form onSubmit={handleSearch} className="hidden sm:flex flex-1 max-w-md">
