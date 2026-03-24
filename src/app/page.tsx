@@ -24,7 +24,7 @@ export default async function HomePage() {
 
   const stats = {
     skills: await prisma.skill.count(),
-    users: await prisma.user.count(),
+    users: await prisma.user.count({ where: { skills: { some: {} } } }),
     downloads: await prisma.skill.aggregate({ _sum: { downloads: true } }),
   };
 
