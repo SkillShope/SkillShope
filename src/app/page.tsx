@@ -52,14 +52,14 @@ export default async function HomePage() {
               The marketplace for the agentic era
             </div>
             <h1 className="font-display mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
-              Find it. Install it.{" "}
+              Where builders share the tools{" "}
               <span className="bg-gradient-to-r from-[var(--accent)] to-[#8a9a7b] bg-clip-text text-transparent">
-                Get paid.
+                that make AI work
               </span>
             </h1>
             <p className="mb-10 text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
-              The marketplace for AI skills, MCP servers, and agent configs.
-              Developers install in one command. Publishers earn 85% of every sale.
+              A growing registry of skills, MCP servers, and agents — built by
+              the community, installed in one command.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
