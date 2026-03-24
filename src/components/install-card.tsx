@@ -151,7 +151,7 @@ export function InstallCard({
         )
       ) : null}
 
-      {/* Source link */}
+      {/* Source link — optional, for publishers who want to show code */}
       {sourceUrl && (
         <a
           href={sourceUrl}
@@ -160,7 +160,7 @@ export function InstallCard({
           className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border border-[var(--border)] py-2.5 text-sm text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--text)] transition-colors"
         >
           <ExternalLink className="h-3.5 w-3.5" />
-          {isFree ? "View Source" : "View Preview"}
+          View Source
         </a>
       )}
     </div>
