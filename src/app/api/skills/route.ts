@@ -107,8 +107,8 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Store skill content for paid skills
-  if (!body.isFree && body.skillContent) {
+  // Store skill content for CLI delivery
+  if (body.skillContent) {
     const content = body.skillContent.slice(0, 100_000); // 100KB max
     await prisma.skillFile.create({
       data: {
