@@ -92,11 +92,17 @@ export async function GET(
     );
   }
 
-  // Increment download count
-  await prisma.skill.update({
-    where: { id: skillId },
-    data: { downloads: { increment: 1 } },
-  });
+  // Track install
+  const source = req.nextUrl.searchParams.get("source") || "web";
+  await Promise.all([
+    prisma.skill.update({
+      where: { id: skillId },
+      data: { downloads: { increment: 1 } },
+    }),
+    prisma.installEvent.create({
+      data: { skillId, source: source.slice(0, 20) },
+    }),
+  ]);
 
   return NextResponse.json({ files });
 }

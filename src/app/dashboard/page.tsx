@@ -33,7 +33,13 @@ export default async function DashboardPage() {
     skills.length > 0
       ? skills.reduce((sum, s) => sum + s.rating, 0) / skills.length
       : 0;
-  const totalRevenue = purchases.reduce((sum, p) => sum + p.amount, 0);
+
+  // Revenue = purchases of skills this user authored (money earned, not spent)
+  const sales = await prisma.purchase.findMany({
+    where: { skill: { authorId: session.user.id } },
+    select: { amount: true },
+  });
+  const totalRevenue = sales.reduce((sum, s) => sum + s.amount * 0.85, 0);
 
   return (
     <DashboardClient

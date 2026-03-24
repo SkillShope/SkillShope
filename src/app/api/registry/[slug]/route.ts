@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { detectFormats } from "@/lib/formats";
 
 export async function GET(
   _req: NextRequest,
@@ -24,7 +25,10 @@ export async function GET(
       sourceUrl: true,
       compatibility: true,
       verified: true,
+      currentVersion: true,
       files: { select: { filename: true } },
+      versions: { select: { version: true, changelog: true, createdAt: true }, orderBy: { createdAt: "desc" as const }, take: 5 },
+      dependencies: { select: { dependsOn: { select: { slug: true, name: true, id: true } } } },
       author: { select: { name: true, publisherVerified: true } },
     },
   });
@@ -33,9 +37,13 @@ export async function GET(
     return NextResponse.json({ error: "Skill not found" }, { status: 404 });
   }
 
+  const filenames = skill.files.map((f) => f.filename);
+
   return NextResponse.json({
     ...skill,
-    files: skill.files.map((f) => f.filename),
+    files: filenames,
+    formats: detectFormats(filenames),
+    dependencies: skill.dependencies.map((d) => d.dependsOn),
     downloadUrl: `/api/deliver/${skill.id}`,
   });
 }

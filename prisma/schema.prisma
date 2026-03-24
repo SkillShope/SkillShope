@@ -23,6 +23,7 @@ model User {
   skills        Skill[]
   reviews       Review[]
   purchases     Purchase[]
+  apiKeys       ApiKey[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -85,10 +86,15 @@ model Skill {
   author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   reviews       Review[]
   purchases     Purchase[]
-  files         SkillFile[]
+  currentVersion  String   @default("1.0.0")
+  files           SkillFile[]
+  versions        SkillVersion[]
+  installEvents   InstallEvent[]
   listingType     String   @default("original") // original | community
   originalAuthor  String?  // attribution for community skills
   originalUrl     String?  // canonical URL for community skills
+  dependencies    SkillDependency[] @relation("skillDeps")
+  dependedOnBy    SkillDependency[] @relation("depOf")
   featured        Boolean  @default(false)
   verified        Boolean  @default(false)
   createdAt     DateTime @default(now())
@@ -111,13 +117,27 @@ model Purchase {
 }
 
 model SkillFile {
-  id        String @id @default(cuid())
+  id        String        @id @default(cuid())
   skillId   String
-  skill     Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  skill     Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  versionId String?
+  version   SkillVersion? @relation(fields: [versionId], references: [id], onDelete: SetNull)
   filename  String
-  content   String // file content (markdown, JSON, etc.)
+  content   String
 
-  @@unique([skillId, filename])
+  @@unique([skillId, filename, versionId])
+}
+
+model SkillVersion {
+  id        String     @id @default(cuid())
+  skillId   String
+  skill     Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  version   String
+  changelog String?
+  files     SkillFile[]
+  createdAt DateTime   @default(now())
+
+  @@unique([skillId, version])
 }
 
 model DownloadToken {
@@ -129,6 +149,16 @@ model DownloadToken {
   createdAt  DateTime @default(now())
 }
 
+model ApiKey {
+  id        String    @id @default(cuid())
+  keyHash   String    @unique
+  name      String
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lastUsed  DateTime?
+  createdAt DateTime  @default(now())
+}
+
 model Review {
   id        String   @id @default(cuid())
   rating    Int
@@ -138,4 +168,26 @@ model Review {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+}
+
+model InstallEvent {
+  id        String   @id @default(cuid())
+  skillId   String
+  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  source    String   @default("cli") // cli | web | api
+  version   String?
+  createdAt DateTime @default(now())
+
+  @@index([skillId, createdAt])
+}
+
+model SkillDependency {
+  id          String @id @default(cuid())
+  skillId     String
+  skill       Skill  @relation("skillDeps", fields: [skillId], references: [id], onDelete: Cascade)
+  dependsOnId String
+  dependsOn   Skill  @relation("depOf", fields: [dependsOnId], references: [id], onDelete: Cascade)
+  versionReq  String?
+
+  @@unique([skillId, dependsOnId])
 }
