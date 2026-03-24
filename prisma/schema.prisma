@@ -89,6 +89,7 @@ model Skill {
   currentVersion  String   @default("1.0.0")
   files           SkillFile[]
   versions        SkillVersion[]
+  installEvents   InstallEvent[]
   listingType     String   @default("original") // original | community
   originalAuthor  String?  // attribution for community skills
   originalUrl     String?  // canonical URL for community skills
@@ -165,4 +166,15 @@ model Review {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+}
+
+model InstallEvent {
+  id        String   @id @default(cuid())
+  skillId   String
+  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  source    String   @default("cli") // cli | web | api
+  version   String?
+  createdAt DateTime @default(now())
+
+  @@index([skillId, createdAt])
 }
