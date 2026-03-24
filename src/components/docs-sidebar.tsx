@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { title: "Community Skills", href: "/docs/community-skills" },
   { title: "Versioning", href: "/docs/versioning" },
   { title: "Security", href: "/docs/security" },
+  { title: "FAQ", href: "/docs/faq" },
 ];
 
 function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {

@@ -177,6 +177,60 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="border-t border-[var(--border)]">
+        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+          <h2 className="font-display mb-8 text-center text-2xl font-bold">
+            Common questions
+          </h2>
+          <div className="space-y-3">
+            {[
+              {
+                q: "How do I install a skill?",
+                a: "Run npx skillshope install <slug> from your terminal. Free skills install instantly. Paid skills require a purchase and download token.",
+              },
+              {
+                q: "How much do publishers earn?",
+                a: "85% of every sale. Stripe processing fees are on us. Payouts are automatic via Stripe Connect.",
+              },
+              {
+                q: "What tools are supported?",
+                a: "Claude Code, Codex, Cursor, Windsurf, and any MCP-compatible AI assistant. Skills are cross-platform.",
+              },
+              {
+                q: "Is it free to publish?",
+                a: "Yes. Publishing is free. We only take a 15% fee when you make a paid sale.",
+              },
+              {
+                q: "Is my paid content protected?",
+                a: "Yes. Paid content is delivered via our infrastructure with download tokens. Your source URL is just a preview.",
+              },
+            ].map((faq, i) => (
+              <details
+                key={i}
+                className="group rounded-xl border border-[var(--border)] bg-[var(--bg-card)] transition-colors open:border-[var(--accent)]/30"
+              >
+                <summary className="flex cursor-pointer items-center justify-between px-5 py-4 text-sm font-semibold [&::-webkit-details-marker]:hidden">
+                  {faq.q}
+                  <span className="ml-4 shrink-0 text-lg text-[var(--text-secondary)] transition-transform group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <div className="border-t border-[var(--border)] px-5 py-4 text-sm leading-relaxed text-[var(--text-secondary)]">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
+          </div>
+          <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
+            More questions?{" "}
+            <Link href="/docs/faq" className="text-[var(--accent)] hover:underline">
+              See the full FAQ
+            </Link>
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="border-t border-[var(--border)]">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
