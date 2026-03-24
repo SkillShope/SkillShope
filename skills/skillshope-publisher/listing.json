@@ -4,7 +4,7 @@
   "longDescription": "A comprehensive skill that guides developers through the full publisher journey on Skill Shope. Covers creating your first listing, setting up Stripe Connect for automatic payouts, hosting your source code, and optimizing your listing for discovery. Whether you're publishing a free skill or monetizing an MCP server, this guide walks you through every step.",
   "type": "skill",
   "category": "productivity",
-  "sourceUrl": "https://github.com/arpethel/SkillShope/tree/main/skills/skillshope-publisher",
+  "sourceUrl": "https://github.com/SkillShope/SkillShope/tree/main/skills/skillshope-publisher",
   "sourceType": "github",
   "installCmd": "npx skillshope install skill-shope-publisher-guide",
   "compatibility": "claude-code,codex,cursor",

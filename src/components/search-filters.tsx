@@ -7,6 +7,7 @@ type Props = {
   currentCategory?: string;
   currentType?: string;
   currentSort?: string;
+  currentListing?: string;
 };
 
 export function SearchFilters({
@@ -14,6 +15,7 @@ export function SearchFilters({
   currentCategory,
   currentType,
   currentSort,
+  currentListing,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,6 +45,27 @@ export function SearchFilters({
             onClick={() => updateParam("type", t.value || null)}
             className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
               (currentType || "") === t.value
+                ? "bg-[var(--accent)] text-white"
+                : "text-[var(--text-secondary)] hover:text-[var(--text)]"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Listing type filter */}
+      <div className="flex gap-1 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-1">
+        {[
+          { label: "All", value: "" },
+          { label: "Original", value: "original" },
+          { label: "Community", value: "community" },
+        ].map((t) => (
+          <button
+            key={t.value}
+            onClick={() => updateParam("listing", t.value || null)}
+            className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+              (currentListing || "") === t.value
                 ? "bg-[var(--accent)] text-white"
                 : "text-[var(--text-secondary)] hover:text-[var(--text)]"
             }`}
