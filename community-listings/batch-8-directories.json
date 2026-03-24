@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Awesome Claude Skills",
+    "description": "Best curated skill list for Claude. 22k+ stars. Community-maintained directory of top skills.",
+    "type": "skill",
+    "category": "productivity",
+    "sourceUrl": "https://github.com/travisvn/awesome-claude-skills",
+    "sourceType": "github",
+    "installCmd": "npx skills add https://github.com/travisvn/awesome-claude-skills",
+    "compatibility": "claude-code",
+    "tags": "awesome-list,directory,curated,claude,skills",
+    "isFree": true,
+    "listingType": "community",
+    "originalAuthor": "Travis VN",
+    "originalUrl": "https://github.com/travisvn"
+  },
+  {
+    "name": "Anthropic Skills Repo",
+    "description": "Official reference implementations from Anthropic. The canonical skill examples.",
+    "type": "skill",
+    "category": "developer-tools",
+    "sourceUrl": "https://github.com/anthropics/skills",
+    "sourceType": "github",
+    "installCmd": "npx skills add --all https://github.com/anthropics/skills",
+    "compatibility": "claude-code",
+    "tags": "official,anthropic,reference,examples",
+    "isFree": true,
+    "listingType": "community",
+    "originalAuthor": "Anthropic",
+    "originalUrl": "https://github.com/anthropics"
+  },
+  {
+    "name": "Awesome Agents",
+    "description": "100+ open-source agent tools. Comprehensive directory of AI agent frameworks and libraries.",
+    "type": "agent",
+    "category": "developer-tools",
+    "sourceUrl": "https://github.com/kyrolabs/awesome-agents",
+    "sourceType": "github",
+    "installCmd": "",
+    "compatibility": "claude-code,codex,cursor",
+    "tags": "awesome-list,agents,directory,frameworks,open-source",
+    "isFree": true,
+    "listingType": "community",
+    "originalAuthor": "Kyro Labs",
+    "originalUrl": "https://github.com/kyrolabs"
+  },
+  {
+    "name": "MAGI//ARCHIVE",
+    "description": "Daily feed of fresh AI repos. Stay on top of the latest tools, agents, and skills.",
+    "type": "skill",
+    "category": "productivity",
+    "sourceUrl": "https://tom-doerr.github.io/repo_posts/",
+    "sourceType": "other",
+    "installCmd": "",
+    "compatibility": "claude-code,codex,cursor",
+    "tags": "feed,daily,repos,discovery,trending",
+    "isFree": true,
+    "listingType": "community",
+    "originalAuthor": "Tom Doerr",
+    "originalUrl": "https://github.com/tom-doerr"
+  }
+]

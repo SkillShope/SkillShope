@@ -13,6 +13,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { SkillCard } from "@/components/skill-card";
 import { Starfield } from "@/components/starfield";
+import { Aurora } from "@/components/aurora";
 
 export default async function HomePage() {
   const featuredSkills = await prisma.skill.findMany({
@@ -42,6 +43,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-[var(--border)]">
         <Starfield />
+        <Aurora />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--accent)]/5 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32">
           <div className="mx-auto max-w-3xl text-center">
@@ -50,15 +52,14 @@ export default async function HomePage() {
               The marketplace for the agentic era
             </div>
             <h1 className="font-display mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
-              Discover & Share{" "}
+              Find it. Install it.{" "}
               <span className="bg-gradient-to-r from-[var(--accent)] to-[#8a9a7b] bg-clip-text text-transparent">
-                AI Skills
+                Get paid.
               </span>
             </h1>
             <p className="mb-10 text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
-              The registry for AI skills, MCP servers, and agent
-              configurations. Discover verified tools from trusted publishers
-              for Claude Code, Codex, Cursor, and more.
+              The marketplace for AI skills, MCP servers, and agent configs.
+              Developers install in one command. Publishers earn 85% of every sale.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
@@ -181,11 +182,11 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-display mb-4 text-3xl font-bold">
-              Ready to list your skills?
+              Build tools. Get paid.
             </h2>
             <p className="mb-8 text-lg text-[var(--text-secondary)]">
-              Join the registry. List your AI skills and MCP servers.
-              Reach developers and earn from your work.
+              List your AI skills and MCP servers. Set your price, connect
+              Stripe, and earn 85% of every sale. We handle the rest.
             </p>
             <Link
               href="/publish"
@@ -222,6 +223,20 @@ export default async function HomePage() {
                 Terms
               </Link>
             </div>
+          </div>
+          <div className="mt-6 border-t border-[var(--border)] pt-6">
+            <p className="text-center text-xs leading-relaxed text-[var(--text-secondary)]/60">
+              Skill Shope is a registry — we do not host, execute, or guarantee the safety of
+              third-party skills, MCP servers, or agent configurations. Always review source
+              code and run security checks before installing any tool. Install at your own risk.
+              See our{" "}
+              <Link href="/terms" className="underline hover:text-[var(--text-secondary)]">
+                Terms
+              </Link>{" "}and{" "}
+              <Link href="/privacy" className="underline hover:text-[var(--text-secondary)]">
+                Privacy Policy
+              </Link>.
+            </p>
           </div>
         </div>
       </footer>
