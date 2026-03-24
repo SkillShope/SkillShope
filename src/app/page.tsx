@@ -213,6 +213,9 @@ export default async function HomePage() {
               <Link href="/terms" className="hover:text-[var(--text)]">
                 Terms
               </Link>
+              <Link href="/privacy" className="hover:text-[var(--text)]">
+                Privacy
+              </Link>
             </div>
           </div>
         </div>

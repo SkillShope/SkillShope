@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/sign-out-button";
 import { Analytics } from "@vercel/analytics/next";
+import { ConsentBanner } from "@/components/consent-banner";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://skillshope.com";
 
@@ -58,6 +59,7 @@ export default async function RootLayout({
         <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
         <Analytics />
+        <ConsentBanner />
       </body>
     </html>
   );
