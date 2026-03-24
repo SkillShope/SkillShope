@@ -6,6 +6,19 @@ import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/sign-out-button";
 import { Analytics } from "@vercel/analytics/next";
 import { ConsentBanner } from "@/components/consent-banner";
+import { Jaro, Space_Grotesk } from "next/font/google";
+
+const jaro = Jaro({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://skillshope.com";
 
@@ -55,7 +68,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className="min-h-screen antialiased">
+      <body className={`min-h-screen antialiased ${jaro.variable} ${spaceGrotesk.variable}`}>
         <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
         <Analytics />

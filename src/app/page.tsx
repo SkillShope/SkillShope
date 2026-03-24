@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   Terminal,
@@ -48,9 +49,9 @@ export default async function HomePage() {
               <Zap className="h-3.5 w-3.5" />
               The marketplace for the agentic era
             </div>
-            <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
+            <h1 className="font-display mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
               Discover & Share{" "}
-              <span className="bg-gradient-to-r from-[var(--accent)] to-purple-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[var(--accent)] to-[#8a9a7b] bg-clip-text text-transparent">
                 AI Skills
               </span>
             </h1>
@@ -118,7 +119,7 @@ export default async function HomePage() {
       {featuredSkills.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Featured Skills</h2>
+            <h2 className="font-display text-2xl font-bold">Featured Skills</h2>
             <Link
               href="/browse"
               className="flex items-center gap-1 text-sm text-[var(--accent)] hover:underline"
@@ -153,7 +154,7 @@ export default async function HomePage() {
 
       {/* Categories */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <h2 className="mb-8 text-2xl font-bold">Browse by Category</h2>
+        <h2 className="font-display mb-8 text-2xl font-bold">Browse by Category</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((cat) => (
             <Link key={cat.slug} href={`/browse?category=${cat.slug}`}>
@@ -177,7 +178,7 @@ export default async function HomePage() {
       <section className="border-t border-[var(--border)]">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="mb-4 text-3xl font-bold">
+            <h2 className="font-display mb-4 text-3xl font-bold">
               Ready to list your skills?
             </h2>
             <p className="mb-8 text-lg text-[var(--text-secondary)]">
@@ -198,10 +199,13 @@ export default async function HomePage() {
       {/* Footer */}
       <footer className="border-t border-[var(--border)] bg-[var(--bg-secondary)]">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm text-[var(--text-secondary)]">
-              &copy; 2026 Skill Shope. The AI skills marketplace.
-            </p>
+          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+            <div className="flex items-center gap-2">
+              <Image src="/logo.png" alt="Skill Shope" width={20} height={20} />
+              <span className="text-sm text-[var(--text-secondary)]">
+                &copy; 2026 Skill Shope
+              </span>
+            </div>
             <div className="flex gap-6 text-sm text-[var(--text-secondary)]">
               <Link href="/browse" className="hover:text-[var(--text)]">
                 Browse

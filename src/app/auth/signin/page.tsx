@@ -1,5 +1,5 @@
 import { signIn } from "@/lib/auth";
-import { Sparkles } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function SignInPage() {
@@ -9,7 +9,7 @@ export default function SignInPage() {
     return (
       <div className="flex min-h-[80vh] items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
-          <Sparkles className="mx-auto mb-4 h-10 w-10 text-[var(--accent)]" />
+          <Image src="/logo.png" alt="Skill Shope" width={48} height={48} className="mx-auto mb-4" />
           <h1 className="text-2xl font-bold">Coming Soon</h1>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
             Skill Shope is getting ready for launch. Sign-up will be available
@@ -30,7 +30,7 @@ export default function SignInPage() {
     <div className="flex min-h-[80vh] items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <Sparkles className="mx-auto mb-4 h-10 w-10 text-[var(--accent)]" />
+          <Image src="/logo.png" alt="Skill Shope" width={48} height={48} className="mx-auto mb-4" />
           <h1 className="text-2xl font-bold">Sign in to Skill Shope</h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">
             Discover, review, and publish AI skills.
