@@ -1,11 +1,11 @@
 // Skill Delivery API
-// Serves paid skill content to verified purchasers.
+// Serves skill content to users.
 //
-// Auth methods (checked in order):
-// 1. Download token: ?token=<download-token> (for CLI/automation)
-// 2. Session: logged-in user with a valid purchase (for browser)
+// Free skills: open access, no auth required
+// Paid skills: requires download token (?token=xxx) or authenticated session with purchase
 //
-// Free skills return a redirect to the source URL.
+// GET /api/deliver/[skillId]
+// GET /api/deliver/[skillId]?token=<download-token>
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
@@ -19,53 +19,45 @@ export async function GET(
 
   const skill = await prisma.skill.findUnique({
     where: { id: skillId },
-    select: { id: true, isFree: true, sourceUrl: true, slug: true },
+    select: { id: true, isFree: true, slug: true },
   });
 
   if (!skill) {
     return NextResponse.json({ error: "Skill not found" }, { status: 404 });
   }
 
-  // Free skills — redirect to source
-  if (skill.isFree) {
-    if (skill.sourceUrl) {
-      return NextResponse.redirect(skill.sourceUrl);
-    }
-    return NextResponse.json({ error: "No source URL" }, { status: 404 });
-  }
-
   // Paid skills — verify access
-  const token = req.nextUrl.searchParams.get("token");
-  let authorized = false;
+  if (!skill.isFree) {
+    const token = req.nextUrl.searchParams.get("token");
+    let authorized = false;
 
-  if (token) {
-    // Token-based auth (CLI)
-    const downloadToken = await prisma.downloadToken.findUnique({
-      where: { token },
-      include: { purchase: true },
-    });
+    if (token) {
+      const downloadToken = await prisma.downloadToken.findUnique({
+        where: { token },
+        include: { purchase: true },
+      });
 
-    if (downloadToken && downloadToken.purchase.skillId === skillId) {
-      if (!downloadToken.expiresAt || downloadToken.expiresAt > new Date()) {
-        authorized = true;
+      if (downloadToken && downloadToken.purchase.skillId === skillId) {
+        if (!downloadToken.expiresAt || downloadToken.expiresAt > new Date()) {
+          authorized = true;
+        }
+      }
+    } else {
+      const session = await auth();
+      if (session?.user?.id) {
+        const purchase = await prisma.purchase.findUnique({
+          where: { userId_skillId: { userId: session.user.id, skillId } },
+        });
+        authorized = !!purchase;
       }
     }
-  } else {
-    // Session-based auth (browser)
-    const session = await auth();
-    if (session?.user?.id) {
-      const purchase = await prisma.purchase.findUnique({
-        where: { userId_skillId: { userId: session.user.id, skillId } },
-      });
-      authorized = !!purchase;
-    }
-  }
 
-  if (!authorized) {
-    return NextResponse.json(
-      { error: "Purchase required", purchaseUrl: `/skills/${skill.slug}` },
-      { status: 403 }
-    );
+    if (!authorized) {
+      return NextResponse.json(
+        { error: "Purchase required", purchaseUrl: `/skills/${skill.slug}` },
+        { status: 403 }
+      );
+    }
   }
 
   // Fetch and serve skill files
@@ -76,7 +68,7 @@ export async function GET(
 
   if (files.length === 0) {
     return NextResponse.json(
-      { error: "No content uploaded for this skill" },
+      { error: "No content available for this skill" },
       { status: 404 }
     );
   }

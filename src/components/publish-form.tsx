@@ -73,7 +73,7 @@ export function PublishForm() {
     try {
       const payload = {
         ...form,
-        ...((!form.isFree && skillContent) ? { skillContent } : {}),
+        ...(skillContent ? { skillContent } : {}),
       };
       const res = await fetch("/api/skills", {
         method: "POST",
@@ -297,25 +297,23 @@ export function PublishForm() {
           </p>
         </div>
 
-        {/* Skill Content (paid skills only) */}
-        {!form.isFree && (
-          <div>
-            <label className="mb-1.5 block text-sm font-medium">
-              Skill Content
-            </label>
-            <p className="mb-2 text-xs text-[var(--text-secondary)]">
-              Paste your SKILL.md content here. This is what buyers receive after purchase.
-              The source URL above serves as a preview/README — this is the actual deliverable.
-            </p>
-            <textarea
-              rows={12}
-              value={skillContent}
-              onChange={(e) => setSkillContent(e.target.value)}
-              placeholder="---&#10;name: your-skill&#10;description: >-&#10;  Your skill description...&#10;---&#10;&#10;Your skill content here..."
-              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-2.5 font-mono text-sm outline-none focus:border-[var(--accent)]"
-            />
-          </div>
-        )}
+        {/* Skill Content */}
+        <div>
+          <label className="mb-1.5 block text-sm font-medium">
+            Skill Content
+          </label>
+          <p className="mb-2 text-xs text-[var(--text-secondary)]">
+            Paste your SKILL.md content here. This is what users receive when they install
+            via the CLI. The source URL above serves as a preview page.
+          </p>
+          <textarea
+            rows={12}
+            value={skillContent}
+            onChange={(e) => setSkillContent(e.target.value)}
+            placeholder="---&#10;name: your-skill&#10;description: >-&#10;  Your skill description...&#10;---&#10;&#10;Your skill content here..."
+            className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-2.5 font-mono text-sm outline-none focus:border-[var(--accent)]"
+          />
+        </div>
 
         {/* Tags */}
         <div>
