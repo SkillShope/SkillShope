@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { SkillCard } from "@/components/skill-card";
+import { Starfield } from "@/components/starfield";
 
 export default async function HomePage() {
   const featuredSkills = await prisma.skill.findMany({
@@ -39,6 +40,7 @@ export default async function HomePage() {
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-[var(--border)]">
+        <Starfield />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--accent)]/5 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32">
           <div className="mx-auto max-w-3xl text-center">
@@ -212,9 +214,6 @@ export default async function HomePage() {
               </Link>
               <Link href="/terms" className="hover:text-[var(--text)]">
                 Terms
-              </Link>
-              <Link href="/privacy" className="hover:text-[var(--text)]">
-                Privacy
               </Link>
             </div>
           </div>
