@@ -170,7 +170,7 @@ export function Happie() {
                 <div className="flex h-full flex-col items-center justify-center text-center">
                   <Image src="/logo.png" alt="Happie" width={40} height={40} className="mb-4 opacity-40" />
                   <p className="mb-2 text-sm font-medium">
-                    Hey! I&apos;m Happie.
+                    Happie to Help!
                   </p>
                   <p className="mb-6 text-xs leading-relaxed text-[var(--text-secondary)]">
                     Tell me what you&apos;re building and I&apos;ll recommend
