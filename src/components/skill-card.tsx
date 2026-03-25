@@ -3,12 +3,16 @@ import {
   Download,
   Star,
   Shield,
+  ShieldCheck,
+  ShieldAlert,
   Terminal,
   Server,
   Bot,
   Github,
   Package,
   Globe,
+  GitFork,
+  Clock,
 } from "lucide-react";
 
 type SkillCardProps = {
@@ -29,6 +33,10 @@ type SkillCardProps = {
   sourceType: string;
   listingType: string;
   originalAuthor: string | null;
+  githubStars?: number | null;
+  githubForks?: number | null;
+  lastUpdated?: string | null;
+  variant?: "default" | "featured";
   authorName: string | null;
   authorImage: string | null;
 };
@@ -69,6 +77,18 @@ function formatDownloads(n: number): string {
   return n.toString();
 }
 
+function formatDate(date: string): string {
+  const d = new Date(date);
+  const now = new Date();
+  const diffMs = now.getTime() - d.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return "today";
+  if (diffDays === 1) return "1d ago";
+  if (diffDays < 30) return `${diffDays}d ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)}mo ago`;
+  return `${Math.floor(diffDays / 365)}y ago`;
+}
+
 export function SkillCard(props: SkillCardProps) {
   const TypeIcon = typeIcons[props.type] || Terminal;
   const SourceIcon = sourceIcons[props.sourceType] || Globe;
@@ -88,22 +108,15 @@ export function SkillCard(props: SkillCardProps) {
             </span>
           </div>
           <div className="flex items-center gap-1.5">
-            {props.securityScore !== null && (
-              <span
-                className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
-                  props.securityScore >= 90
-                    ? "bg-[var(--green)]/15 text-[var(--green)]"
-                    : props.securityScore >= 70
-                      ? "bg-[var(--yellow)]/15 text-[var(--yellow)]"
-                      : "bg-red-500/15 text-red-400"
-                }`}
-                title={`Security score: ${props.securityScore}/100`}
-              >
-                {props.securityScore}
-              </span>
-            )}
+            {props.securityScore !== null && props.securityScore >= 90 ? (
+              <span title="Security verified"><ShieldCheck className="h-4 w-4 text-[var(--green)]" /></span>
+            ) : props.securityScore !== null && props.securityScore >= 70 ? (
+              <span title="Minor warnings"><Shield className="h-4 w-4 text-[var(--yellow)]" /></span>
+            ) : props.securityScore !== null ? (
+              <span title="Security concerns"><ShieldAlert className="h-4 w-4 text-red-400" /></span>
+            ) : null}
             {props.verified && (
-              <Shield className="h-4 w-4 text-[var(--green)]" />
+              <span title="Verified by Skill Shope"><Shield className="h-4 w-4 text-[var(--blue)]" /></span>
             )}
           </div>
         </div>
@@ -135,16 +148,31 @@ export function SkillCard(props: SkillCardProps) {
         </div>
 
         <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
-          <div className="flex items-center gap-3 text-xs text-[var(--text-secondary)]">
-            <span className="flex items-center gap-1">
-              <Star className="h-3.5 w-3.5 text-[var(--yellow)]" />
-              {props.rating.toFixed(1)}
-            </span>
-            <span className="flex items-center gap-1">
-              <Download className="h-3.5 w-3.5" />
-              {formatDownloads(props.downloads)}
-            </span>
-            <SourceIcon className="h-3.5 w-3.5" />
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--text-secondary)]">
+            {props.githubStars != null && props.githubStars > 0 && (
+              <span className="flex items-center gap-1">
+                <Star className="h-3.5 w-3.5 text-[var(--yellow)]" />
+                {formatDownloads(props.githubStars)}
+              </span>
+            )}
+            {props.variant !== "featured" && props.githubForks != null && props.githubForks > 0 && (
+              <span className="flex items-center gap-1">
+                <GitFork className="h-3.5 w-3.5" />
+                {formatDownloads(props.githubForks)}
+              </span>
+            )}
+            {props.lastUpdated && (
+              <span className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {formatDate(props.lastUpdated)}
+              </span>
+            )}
+            {!props.githubStars && (
+              <span className="flex items-center gap-1">
+                <Download className="h-3.5 w-3.5" />
+                {formatDownloads(props.downloads)}
+              </span>
+            )}
           </div>
           <span
             className={`text-sm font-semibold ${

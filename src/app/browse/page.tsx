@@ -99,6 +99,9 @@ export default async function BrowsePage({ searchParams }: Props) {
               securityScore={skill.securityScore}
               sourceType={skill.sourceType}
               listingType={skill.listingType}
+              githubStars={skill.githubStars}
+              githubForks={skill.githubForks}
+              lastUpdated={skill.lastUpdated?.toISOString() ?? null}
               originalAuthor={skill.originalAuthor}
               authorName={skill.author.name}
               authorImage={skill.author.image}

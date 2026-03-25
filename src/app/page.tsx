@@ -148,6 +148,9 @@ export default async function HomePage() {
                 securityScore={skill.securityScore}
                 sourceType={skill.sourceType}
                 listingType={skill.listingType}
+                githubStars={skill.githubStars}
+                lastUpdated={skill.lastUpdated?.toISOString() ?? null}
+                variant="featured"
                 originalAuthor={skill.originalAuthor}
                 authorName={skill.author.name}
                 authorImage={skill.author.image}
