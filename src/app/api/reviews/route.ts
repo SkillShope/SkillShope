@@ -50,6 +50,19 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Require purchase to review paid skills
+  if (!skill.isFree) {
+    const purchase = await prisma.purchase.findUnique({
+      where: { userId_skillId: { userId: session.user.id, skillId: body.skillId } },
+    });
+    if (!purchase) {
+      return NextResponse.json(
+        { errors: [{ field: "skillId", message: "Purchase this skill before reviewing" }] },
+        { status: 403 }
+      );
+    }
+  }
+
   // Prevent duplicate reviews
   const existingReview = await prisma.review.findFirst({
     where: { skillId: body.skillId, userId: session.user.id },

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 import { randomBytes } from "crypto";
 import Stripe from "stripe";
+import { DOWNLOAD_TOKEN_EXPIRY_DAYS } from "@/lib/constants";
 
 function generateToken(): string {
   return randomBytes(32).toString("hex");
@@ -51,6 +52,7 @@ export async function POST(req: NextRequest) {
         create: {
           purchaseId: purchase.id,
           token: generateToken(),
+          expiresAt: new Date(Date.now() + DOWNLOAD_TOKEN_EXPIRY_DAYS * 24 * 60 * 60 * 1000),
         },
         update: {},
       });

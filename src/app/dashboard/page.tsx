@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { DashboardClient } from "@/components/dashboard-client";
+import { PUBLISHER_PAYOUT_PERCENT } from "@/lib/constants";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -39,7 +40,7 @@ export default async function DashboardPage() {
     where: { skill: { authorId: session.user.id } },
     select: { amount: true },
   });
-  const totalRevenue = sales.reduce((sum, s) => sum + s.amount * 0.85, 0);
+  const totalRevenue = sales.reduce((sum, s) => sum + s.amount * (PUBLISHER_PAYOUT_PERCENT / 100), 0);
 
   return (
     <DashboardClient
