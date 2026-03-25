@@ -5,8 +5,8 @@ export default function DocsPage() {
     <>
       <h1 className="font-display mb-4 text-3xl font-bold">Getting Started</h1>
       <p className="mb-6 leading-relaxed text-[var(--text-secondary)]">
-        Skill Shope is the marketplace for AI skills, MCP servers, and agent configurations.
-        Developers install tools in one command. Publishers earn 85% of every sale.
+        Skill Shope is the registry for AI skills, MCP servers, and agent configurations.
+        Developers install tools in one command. Publishers share their work with the community.
       </p>
 
       <h2 className="mb-3 mt-8 text-xl font-bold">What is Skill Shope?</h2>
@@ -47,7 +47,7 @@ export default function DocsPage() {
       <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
         <li><Link href="/docs/installing" className="text-[var(--accent)] hover:underline">Installing Skills</Link> — CLI usage and download tokens</li>
         <li><Link href="/docs/publishing" className="text-[var(--accent)] hover:underline">Publishing</Link> — how to list your tools</li>
-        <li><Link href="/docs/pricing" className="text-[var(--accent)] hover:underline">Pricing & Payouts</Link> — how you earn</li>
+        <li><Link href="/docs/pricing" className="text-[var(--accent)] hover:underline">Pricing & Payouts</Link> — free and paid options</li>
         <li><Link href="/docs/api-reference" className="text-[var(--accent)] hover:underline">API Reference</Link> — programmatic access</li>
       </ul>
     </>

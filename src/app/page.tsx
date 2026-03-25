@@ -195,8 +195,8 @@ export default async function HomePage() {
                 a: "Run npx skillshope install <slug> from your terminal. Free skills install instantly. Paid skills require a purchase and download token.",
               },
               {
-                q: "How much do publishers earn?",
-                a: "85% of every sale. Stripe processing fees are on us. Payouts are automatic via Stripe Connect.",
+                q: "Is publishing free?",
+                a: "Yes. Publishing is free. If you choose to sell a premium skill, you keep 85% of every sale.",
               },
               {
                 q: "What tools are supported?",
@@ -241,11 +241,11 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-display mb-4 text-3xl font-bold">
-              Build tools. Get paid.
+              Share what you&apos;ve built
             </h2>
             <p className="mb-8 text-lg text-[var(--text-secondary)]">
-              List your AI skills and MCP servers. Set your price, connect
-              Stripe, and earn 85% of every sale. We handle the rest.
+              Publish your AI skills and MCP servers for the community.
+              Free or paid — you decide. We handle distribution, security, and reviews.
             </p>
             <Link
               href="/publish"
