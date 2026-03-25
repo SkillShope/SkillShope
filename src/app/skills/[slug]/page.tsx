@@ -106,20 +106,6 @@ export default async function SkillPage({ params }: Props) {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold sm:text-3xl">{skill.name}</h1>
-                {skill.securityScore !== null && (
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                      skill.securityScore >= 90
-                        ? "bg-[var(--green)]/15 text-[var(--green)]"
-                        : skill.securityScore >= 70
-                          ? "bg-[var(--yellow)]/15 text-[var(--yellow)]"
-                          : "bg-red-500/15 text-red-400"
-                    }`}
-                    title={`Security score: ${skill.securityScore}/100`}
-                  >
-                    {skill.securityScore}/100
-                  </span>
-                )}
                 {skill.verified && (
                   <Shield className="h-5 w-5 text-[var(--green)]" />
                 )}
@@ -218,6 +204,48 @@ export default async function SkillPage({ params }: Props) {
                     {p}
                   </p>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Security */}
+          {skill.securityScore !== null && (
+            <div className="mt-8">
+              <h2 className="mb-4 text-lg font-semibold">Security</h2>
+              <div className={`rounded-xl border p-4 ${
+                skill.securityScore >= 90
+                  ? "border-[var(--green)]/30 bg-[var(--green)]/5"
+                  : skill.securityScore >= 70
+                    ? "border-[var(--yellow)]/30 bg-[var(--yellow)]/5"
+                    : "border-red-500/30 bg-red-500/5"
+              }`}>
+                <div className="flex items-center gap-3 mb-2">
+                  {skill.securityScore >= 90 ? (
+                    <ShieldCheck className="h-5 w-5 text-[var(--green)]" />
+                  ) : skill.securityScore >= 70 ? (
+                    <Shield className="h-5 w-5 text-[var(--yellow)]" />
+                  ) : (
+                    <Shield className="h-5 w-5 text-red-400" />
+                  )}
+                  <span className="text-sm font-semibold">
+                    {skill.securityScore >= 90
+                      ? "Passed security verification"
+                      : skill.securityScore >= 70
+                        ? "Passed with minor warnings"
+                        : "Security concerns detected"}
+                  </span>
+                </div>
+                <p className="text-xs leading-relaxed text-[var(--text-secondary)]">
+                  {skill.securityScore >= 90
+                    ? "This artifact was automatically scanned for malicious patterns, credential access, code execution risks, and source authenticity. All checks passed."
+                    : skill.securityScore >= 70
+                      ? "This artifact was scanned and passed most checks. Minor warnings were detected (e.g., missing license). Review the source before installing."
+                      : "This artifact has security concerns. Review the source code carefully before installing."}
+                  {" "}
+                  <a href="/docs/verification" className="text-[var(--accent)] hover:underline">
+                    Learn about our verification process
+                  </a>.
+                </p>
               </div>
             </div>
           )}
