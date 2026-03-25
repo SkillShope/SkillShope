@@ -14,6 +14,7 @@ import {
   User,
   ExternalLink,
   ShieldCheck,
+  GitFork,
 } from "lucide-react";
 import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
@@ -142,18 +143,33 @@ export default async function SkillPage({ params }: Props) {
 
           {/* Metadata */}
           <div className="mt-6 flex flex-wrap gap-4 text-sm text-[var(--text-secondary)]">
-            <span className="flex items-center gap-1.5">
-              <Star className="h-4 w-4 text-[var(--yellow)]" />
-              {skill.rating.toFixed(1)} ({skill.reviewCount} reviews)
-            </span>
+            {skill.githubStars != null && skill.githubStars > 0 && (
+              <span className="flex items-center gap-1.5">
+                <Star className="h-4 w-4 text-[var(--yellow)]" />
+                {skill.githubStars.toLocaleString()} stars
+              </span>
+            )}
+            {skill.githubForks != null && skill.githubForks > 0 && (
+              <span className="flex items-center gap-1.5">
+                <GitFork className="h-4 w-4" />
+                {skill.githubForks.toLocaleString()} forks
+              </span>
+            )}
             <span className="flex items-center gap-1.5">
               <Download className="h-4 w-4" />
               {skill.downloads.toLocaleString()} installs
             </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4" />
-              {new Date(skill.createdAt).toLocaleDateString()}
-            </span>
+            {skill.lastUpdated ? (
+              <span className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                Updated {new Date(skill.lastUpdated).toLocaleDateString()}
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                Listed {new Date(skill.createdAt).toLocaleDateString()}
+              </span>
+            )}
           </div>
 
           {/* Compatibility */}
