@@ -32,18 +32,31 @@ export default async function BrowsePage({ searchParams }: Props) {
   if (listing === "community") where.listingType = "community";
   if (listing === "original") where.listingType = "original";
 
-  let orderBy: Record<string, string> = { createdAt: "desc" };
+  let orderBy: Record<string, string> = {};
   if (sort === "downloads") orderBy = { downloads: "desc" };
-  if (sort === "rating") orderBy = { rating: "desc" };
-  if (sort === "price-low") orderBy = { price: "asc" };
-  if (sort === "price-high") orderBy = { price: "desc" };
+  else if (sort === "rating") orderBy = { rating: "desc" };
+  else if (sort === "price-low") orderBy = { price: "asc" };
+  else if (sort === "price-high") orderBy = { price: "desc" };
+  else if (sort === "newest") orderBy = { createdAt: "desc" };
 
-  const skills = await prisma.skill.findMany({
+  const rawSkills = await prisma.skill.findMany({
     where,
     include: { author: true },
-    orderBy,
+    ...(Object.keys(orderBy).length > 0 ? { orderBy } : {}),
     take: 50,
   });
+
+  // Default sort: skills with GitHub stars first (highest to lowest), then the rest by newest
+  const skills = Object.keys(orderBy).length > 0
+    ? rawSkills
+    : rawSkills.sort((a, b) => {
+        const aStars = a.githubStars ?? -1;
+        const bStars = b.githubStars ?? -1;
+        if (aStars > 0 && bStars <= 0) return -1;
+        if (bStars > 0 && aStars <= 0) return 1;
+        if (aStars > 0 && bStars > 0) return bStars - aStars;
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
 
   const categories = await prisma.skill.groupBy({
     by: ["category"],

@@ -95,7 +95,8 @@ export function SearchFilters({
         onChange={(e) => updateParam("sort", e.target.value || null)}
         className="rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-2 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
       >
-        <option value="">Newest</option>
+        <option value="">Popular</option>
+        <option value="newest">Newest</option>
         <option value="downloads">Most Downloaded</option>
         <option value="rating">Highest Rated</option>
         <option value="price-low">Price: Low to High</option>
