@@ -19,9 +19,10 @@ export async function GET(req: NextRequest) {
   const where: Record<string, unknown> = {};
   if (q) {
     where.OR = [
-      { name: { contains: q } },
-      { description: { contains: q } },
-      { tags: { contains: q } },
+      { name: { contains: q, mode: "insensitive" } },
+      { slug: { contains: q, mode: "insensitive" } },
+      { description: { contains: q, mode: "insensitive" } },
+      { tags: { contains: q, mode: "insensitive" } },
     ];
   }
   if (category) where.category = category;
