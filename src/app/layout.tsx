@@ -7,13 +7,7 @@ import { SignOutButton } from "@/components/sign-out-button";
 import { Analytics } from "@vercel/analytics/next";
 import { ConsentBanner } from "@/components/consent-banner";
 import { Happie } from "@/components/happie";
-import { Jaro, Space_Grotesk, Jacques_Francois } from "next/font/google";
-
-const jaro = Jaro({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});
+import { Space_Grotesk, Jacques_Francois } from "next/font/google";
 
 const jacquesFrancois = Jacques_Francois({
   weight: "400",
@@ -76,7 +70,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`min-h-screen antialiased ${jaro.variable} ${spaceGrotesk.variable} ${jacquesFrancois.variable}`}>
+      <body className={`min-h-screen antialiased ${spaceGrotesk.variable} ${jacquesFrancois.variable}`}>
         <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
         <Happie isSignedIn={!!session?.user} />
