@@ -14,6 +14,7 @@ import { prisma } from "@/lib/prisma";
 import { SkillCard } from "@/components/skill-card";
 import { Starfield } from "@/components/starfield";
 import { Aurora } from "@/components/aurora";
+import { HeroSearch } from "@/components/hero-search";
 
 export default async function HomePage() {
   const featuredSkills = await prisma.skill.findMany({
@@ -61,27 +62,7 @@ export default async function HomePage() {
               A growing registry of skills, MCP servers, and agents — built by
               the community, installed in one command.
             </p>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
-                href="/browse"
-                className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-8 py-3.5 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
-              >
-                Browse Skills
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/publish"
-                className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-8 py-3.5 text-base font-semibold text-[var(--text)] hover:border-[var(--accent)]/40 transition-colors"
-              >
-                Publish a Skill
-              </Link>
-            </div>
-
-            {/* Install snippet */}
-            <div className="mx-auto mt-10 max-w-md rounded-lg border border-[var(--border)] bg-[var(--bg-card)] px-5 py-3 font-mono text-sm text-[var(--text-secondary)]">
-              <span className="text-[var(--green)]">$</span> claude skill add
-              code-reviewer
-            </div>
+            <HeroSearch />
           </div>
         </div>
       </section>
