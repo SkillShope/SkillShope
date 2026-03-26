@@ -32,9 +32,24 @@ export default function SignInPage() {
         <div className="mb-8 text-center">
           <Logo width={48} height={48} className="mx-auto mb-4" />
           <h1 className="text-2xl font-bold">Sign in to Skill Shope</h1>
-          <p className="mt-2 text-sm text-[var(--text-secondary)]">
-            Discover, review, and publish AI skills.
+          <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+            Install skills from the registry, publish your own tools,
+            and get personalized recommendations from Happie.
           </p>
+        </div>
+
+        <div className="mb-6 space-y-2 text-xs text-[var(--text-secondary)]">
+          {[
+            "Install and manage AI skills from your dashboard",
+            "Publish skills, MCP servers, and agents",
+            "Get personalized SKILL.md files from Happie",
+            "Leave reviews and help the community",
+          ].map((item) => (
+            <div key={item} className="flex items-center gap-2">
+              <span className="text-[var(--green)]">✓</span>
+              {item}
+            </div>
+          ))}
         </div>
 
         <form
