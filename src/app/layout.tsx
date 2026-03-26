@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   description:
     "Discover, review, and install AI skills, MCP servers, and agent configurations. The registry for the agentic era.",
   metadataBase: new URL(siteUrl),
-  icons: { icon: "/logo.png" },
+  icons: { icon: "/logo-dark.svg" },
   openGraph: {
     type: "website",
     siteName: "Skill Shope",

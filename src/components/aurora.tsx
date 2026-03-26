@@ -29,12 +29,20 @@ export function Aurora() {
       time += 0.003;
       ctx.clearRect(0, 0, w, h);
 
+      const isLight = document.documentElement.getAttribute("data-theme") === "light";
+
       // Draw 3 aurora bands with different phases
-      const bands = [
-        { color: [74, 93, 79], offset: 0, amplitude: 40, y: 0.2, opacity: 0.06 },
-        { color: [100, 130, 90], offset: 2, amplitude: 50, y: 0.25, opacity: 0.04 },
-        { color: [60, 80, 70], offset: 4, amplitude: 35, y: 0.15, opacity: 0.05 },
-      ];
+      const bands = isLight
+        ? [
+            { color: [50, 80, 55], offset: 0, amplitude: 40, y: 0.2, opacity: 0.08 },
+            { color: [70, 110, 65], offset: 2, amplitude: 50, y: 0.25, opacity: 0.06 },
+            { color: [40, 65, 50], offset: 4, amplitude: 35, y: 0.15, opacity: 0.07 },
+          ]
+        : [
+            { color: [74, 93, 79], offset: 0, amplitude: 40, y: 0.2, opacity: 0.06 },
+            { color: [100, 130, 90], offset: 2, amplitude: 50, y: 0.25, opacity: 0.04 },
+            { color: [60, 80, 70], offset: 4, amplitude: 35, y: 0.15, opacity: 0.05 },
+          ];
 
       for (const band of bands) {
         const baseY = h * band.y;

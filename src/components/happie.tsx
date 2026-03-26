@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { X, Send, Loader2, Download, FileCode, ChevronDown } from "lucide-react";
-import Image from "next/image";
 import { Markdown } from "./markdown";
+import { Logo } from "./logo";
 import { onHappieOpen } from "@/lib/happie-state";
 
 type Message = {
@@ -149,7 +149,7 @@ export function Happie({ isSignedIn = false }: { isSignedIn?: boolean }) {
           style={{ WebkitTapHighlightColor: "transparent" }}
           title="Ask Happie (⌘K)"
         >
-          <Image src="/logo.png" alt="Happie" width={28} height={28} />
+          <img src="/logo-dark.svg" alt="Happie" width={28} height={28} />
         </button>
       )}
 
@@ -173,7 +173,7 @@ export function Happie({ isSignedIn = false }: { isSignedIn?: boolean }) {
             {/* Header — sticky, always visible */}
             <div className="flex shrink-0 items-center justify-between border-b border-[var(--border)] px-4 py-3">
               <div className="flex items-center gap-2">
-                <Image src="/logo.png" alt="Happie" width={20} height={20} />
+                <Logo width={20} height={20} alt="Happie" />
                 <span className="font-display text-sm font-bold">Happie</span>
                 <span className="rounded-full bg-[var(--accent-soft)] px-2 py-0.5 text-[10px] font-medium text-[var(--accent)]">
                   AI Assistant
@@ -193,7 +193,7 @@ export function Happie({ isSignedIn = false }: { isSignedIn?: boolean }) {
             <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
               {!isSignedIn ? (
                 <div className="flex h-full flex-col items-center justify-center px-2 text-center">
-                  <Image src="/logo.png" alt="Happie" width={40} height={40} className="mb-4 opacity-40" />
+                  <Logo width={40} height={40} alt="Happie" className="mb-4 opacity-40" />
                   <p className="mb-2 text-sm font-medium">Happie to Help!</p>
                   <p className="mb-4 text-xs leading-relaxed text-[var(--text-secondary)]">
                     I can recommend the perfect skills, MCP servers, and agents
@@ -211,7 +211,7 @@ export function Happie({ isSignedIn = false }: { isSignedIn?: boolean }) {
                 </div>
               ) : messages.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center px-2 text-center">
-                  <Image src="/logo.png" alt="Happie" width={40} height={40} className="mb-4 opacity-40" />
+                  <Logo width={40} height={40} alt="Happie" className="mb-4 opacity-40" />
                   <p className="mb-2 text-sm font-medium">Happie to Help!</p>
                   <p className="mb-6 text-xs leading-relaxed text-[var(--text-secondary)]">
                     Tell me what you&apos;re building and I&apos;ll recommend the right skills, MCP servers, and agents.
