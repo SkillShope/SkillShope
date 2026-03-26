@@ -21,7 +21,7 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-[var(--border)]/50 bg-[var(--bg)]/60 backdrop-blur-2xl backdrop-saturate-150">
+    <nav className="sticky top-0 z-50 border-b border-[var(--border)]/50 bg-[var(--bg)]/10 backdrop-blur-2xl backdrop-saturate-150">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="shrink-0">
           <Image src="/logo.png" alt="Skill Shope" width={32} height={32} />
