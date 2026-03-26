@@ -85,6 +85,9 @@ export function ConnectBanner() {
           )}
         </button>
       </div>
+      {error && (
+        <p className="mt-3 text-xs text-red-400">{error}</p>
+      )}
     </div>
   );
 }

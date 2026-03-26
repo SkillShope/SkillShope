@@ -44,6 +44,24 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Verify the account still exists on Stripe
+    try {
+      await stripe.accounts.retrieve(accountId);
+    } catch {
+      // Account was deleted or invalid — create a new one
+      const account = await stripe.accounts.create({
+        type: "express",
+        email: user.email || undefined,
+        metadata: { userId: user.id },
+      });
+      accountId = account.id;
+
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { stripeAccountId: accountId },
+      });
+    }
+
     // Create onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: accountId,
@@ -53,7 +71,10 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ url: accountLink.url });
-  } catch {
-    return NextResponse.json({ error: "Failed to set up Connect. Please try again." }, { status: 500 });
+  } catch (err) {
+    console.error("Stripe Connect onboard error:", err);
+    const message =
+      err instanceof Error ? err.message : "Failed to set up Connect. Please try again.";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
