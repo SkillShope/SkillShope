@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { SkillCard } from "@/components/skill-card";
-import { Starfield } from "@/components/starfield";
 import { Aurora } from "@/components/aurora";
 import { HeroSearch } from "@/components/hero-search";
 import { Logo } from "@/components/logo";
