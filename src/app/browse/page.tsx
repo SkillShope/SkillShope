@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { SkillCard } from "@/components/skill-card";
 import { SearchFilters } from "@/components/search-filters";
 
@@ -10,12 +11,13 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams: Promise<{ q?: string; category?: string; type?: string; sort?: string; listing?: string }>;
+  searchParams: Promise<{ q?: string; category?: string; type?: string; sort?: string; listing?: string; owned?: string }>;
 };
 
 export default async function BrowsePage({ searchParams }: Props) {
   const params = await searchParams;
-  const { q, category, type, sort, listing } = params;
+  const { q, category, type, sort, listing, owned } = params;
+  const session = await auth();
 
   const where: Record<string, unknown> = {
     reviewStatus: { in: ["approved", "pending"] }, // Show approved + legacy pending until backfill
@@ -32,6 +34,15 @@ export default async function BrowsePage({ searchParams }: Props) {
   if (type) where.type = type;
   if (listing === "community") where.listingType = "community";
   if (listing === "original") where.listingType = "original";
+
+  // Filter to only purchased skills
+  if (owned === "true" && session?.user?.id) {
+    const purchases = await prisma.purchase.findMany({
+      where: { userId: session.user.id },
+      select: { skillId: true },
+    });
+    where.id = { in: purchases.map((p) => p.skillId) };
+  }
 
   let orderBy: Record<string, string> = {};
   if (sort === "downloads") orderBy = { downloads: "desc" };
@@ -85,6 +96,8 @@ export default async function BrowsePage({ searchParams }: Props) {
         currentType={type}
         currentSort={sort}
         currentListing={listing}
+        currentOwned={owned}
+        isSignedIn={!!session?.user}
       />
 
       {skills.length === 0 ? (

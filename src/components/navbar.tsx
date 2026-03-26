@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { Logo } from "./logo";
 import { Plus, LayoutDashboard, User, ShieldCheck, Menu, X } from "lucide-react";
-import { useState, ReactNode } from "react";
+import { useState, ReactNode, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -88,8 +89,8 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
 
       </div>
 
-      {/* Mobile nav overlay — outside flex container */}
-      {mobileNav && (
+      {/* Mobile nav overlay — portaled to body to escape nav stacking context */}
+      {mobileNav && typeof document !== "undefined" && createPortal(
         <>
           <div className="fixed inset-0 top-16 z-[60] bg-black/40 backdrop-blur-sm md:hidden" onClick={() => setMobileNav(false)} />
           <div className="fixed right-0 top-16 z-[70] w-64 border-l border-[var(--border)] bg-[var(--bg)] p-4 md:hidden" style={{ height: "calc(100dvh - 4rem)" }}>
@@ -135,7 +136,8 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
               )}
             </nav>
           </div>
-        </>
+        </>,
+        document.body
       )}
     </nav>
   );

@@ -11,6 +11,8 @@ type Props = {
   currentType?: string;
   currentSort?: string;
   currentListing?: string;
+  currentOwned?: string;
+  isSignedIn?: boolean;
 };
 
 export function SearchFilters({
@@ -20,6 +22,8 @@ export function SearchFilters({
   currentType,
   currentSort,
   currentListing,
+  currentOwned,
+  isSignedIn,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -127,6 +131,20 @@ export function SearchFilters({
           </button>
         ))}
       </div>
+
+      {/* My Purchases toggle */}
+      {isSignedIn && (
+        <button
+          onClick={() => updateParam("owned", currentOwned === "true" ? null : "true")}
+          className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+            currentOwned === "true"
+              ? "bg-[var(--accent)] text-white"
+              : "border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text)]"
+          }`}
+        >
+          My Purchases
+        </button>
+      )}
 
       {/* Category filter */}
       <select
