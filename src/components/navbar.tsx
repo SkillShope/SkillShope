@@ -81,56 +81,57 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
           {mobileNav ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
 
-        {/* Mobile nav overlay */}
-        {mobileNav && (
-          <>
-            <div className="fixed inset-0 top-16 z-[60] bg-black/40 backdrop-blur-sm md:hidden" onClick={() => setMobileNav(false)} />
-            <div className="fixed right-0 top-16 z-[70] w-64 border-l border-[var(--border)] bg-[var(--bg)] p-4 md:hidden" style={{ height: "calc(100dvh - 4rem)" }}>
-              <nav className="space-y-1">
-                {[
-                  { href: "/browse", label: "Browse" },
-                  { href: "/bundles", label: "Bundles" },
-                  { href: "/docs", label: "Docs" },
-                  { href: "/about", label: "About" },
-                  ...(user ? [
-                    { href: "/dashboard", label: "Dashboard" },
-                    { href: "/publish", label: "Publish" },
-                    { href: "/profile", label: "Profile" },
-                    ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
-                  ] : []),
-                ].map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileNav(false)}
-                    className={`block rounded-lg px-3 py-2.5 text-sm transition-colors ${
-                      pathname === item.href
-                        ? "bg-[var(--accent-soft)] text-[var(--text)]"
-                        : "text-[var(--text-secondary)] hover:bg-[var(--bg-card)] hover:text-[var(--text)]"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                {!user && (
-                  <Link
-                    href="/auth/signin"
-                    onClick={() => setMobileNav(false)}
-                    className="mt-2 block rounded-lg bg-[var(--accent)] px-3 py-2.5 text-center text-sm font-medium text-white"
-                  >
-                    Sign In
-                  </Link>
-                )}
-                {user && (
-                  <div className="mt-2 border-t border-[var(--border)] pt-2">
-                    {signOutButton}
-                  </div>
-                )}
-              </nav>
-            </div>
-          </>
-        )}
       </div>
+
+      {/* Mobile nav overlay — outside flex container */}
+      {mobileNav && (
+        <>
+          <div className="fixed inset-0 top-16 z-[60] bg-black/40 backdrop-blur-sm md:hidden" onClick={() => setMobileNav(false)} />
+          <div className="fixed right-0 top-16 z-[70] w-64 border-l border-[var(--border)] bg-[var(--bg)] p-4 md:hidden" style={{ height: "calc(100dvh - 4rem)" }}>
+            <nav className="space-y-1">
+              {[
+                { href: "/browse", label: "Browse" },
+                { href: "/bundles", label: "Bundles" },
+                { href: "/docs", label: "Docs" },
+                { href: "/about", label: "About" },
+                ...(user ? [
+                  { href: "/dashboard", label: "Dashboard" },
+                  { href: "/publish", label: "Publish" },
+                  { href: "/profile", label: "Profile" },
+                  ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
+                ] : []),
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileNav(false)}
+                  className={`block rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                    pathname === item.href
+                      ? "bg-[var(--accent-soft)] text-[var(--text)]"
+                      : "text-[var(--text-secondary)] hover:bg-[var(--bg-card)] hover:text-[var(--text)]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              {!user && (
+                <Link
+                  href="/auth/signin"
+                  onClick={() => setMobileNav(false)}
+                  className="mt-2 block rounded-lg bg-[var(--accent)] px-3 py-2.5 text-center text-sm font-medium text-white"
+                >
+                  Sign In
+                </Link>
+              )}
+              {user && (
+                <div className="mt-2 border-t border-[var(--border)] pt-2">
+                  {signOutButton}
+                </div>
+              )}
+            </nav>
+          </div>
+        </>
+      )}
     </nav>
   );
 }
