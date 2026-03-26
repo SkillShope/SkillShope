@@ -43,7 +43,6 @@ export default async function HomePage() {
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-[var(--border)]">
-        <Starfield />
         <Aurora />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--accent)]/5 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32">
