@@ -23,13 +23,13 @@ export default async function HomePage() {
     orderBy: { downloads: "desc" },
   });
 
-  // Fetch install commands for free/community skills to show in typing animation
+  // Fetch skillshope install commands for the typing animation
   const installSkills = await prisma.skill.findMany({
     where: {
       hidden: false,
       isFree: true,
       reviewStatus: { in: ["approved", "pending"] },
-      installCmd: { not: null },
+      installCmd: { startsWith: "npx skillshope" },
     },
     select: { installCmd: true },
     orderBy: { downloads: "desc" },

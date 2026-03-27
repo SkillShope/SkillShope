@@ -19,7 +19,7 @@ export function Happie({ isSignedIn = false }: { isSignedIn?: boolean }) {
   const [loading, setLoading] = useState(false);
   const [generatedSkill, setGeneratedSkill] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const pathname = usePathname();
 
   // Listen for external open events
@@ -270,19 +270,28 @@ export function Happie({ isSignedIn = false }: { isSignedIn?: boolean }) {
 
             {/* Input — pinned to bottom, above safe area (hidden when not signed in) */}
             {isSignedIn && <div className="shrink-0 border-t border-[var(--border)] px-4 py-3">
-              <div className="flex items-center gap-2">
-                <input
+              <div className="flex items-end gap-2">
+                <textarea
                   ref={inputRef}
-                  type="text"
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && send()}
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                    // Auto-resize
+                    e.target.style.height = "auto";
+                    e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      send();
+                    }
+                  }}
                   placeholder="Describe what you're building..."
                   maxLength={2000}
-                  enterKeyHint="send"
+                  rows={1}
                   autoComplete="off"
                   autoCorrect="off"
-                  className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-3 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] focus:border-[var(--accent)] focus:outline-none"
+                  className="flex-1 resize-none rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-3 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] focus:border-[var(--accent)] focus:outline-none"
                 />
                 <button
                   onClick={send}
