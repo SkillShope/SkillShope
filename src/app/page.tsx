@@ -25,13 +25,21 @@ export default async function HomePage() {
 
   const featuredCommand = "npx skillshope install skill-shope-publisher-guide";
 
+  // Dynamic category counts
+  const categoryCounts = await prisma.skill.groupBy({
+    by: ["category"],
+    where: { hidden: false, reviewStatus: { in: ["approved", "pending"] } },
+    _count: true,
+  });
+  const countMap = Object.fromEntries(categoryCounts.map((c) => [c.category, c._count]));
+
   const categories = [
-    { name: "Code Review", slug: "code-review", icon: Terminal, count: 0 },
-    { name: "Testing", slug: "testing", icon: Shield, count: 0 },
-    { name: "DevOps", slug: "devops", icon: Server, count: 0 },
-    { name: "Data Pipeline", slug: "data-pipeline", icon: Bot, count: 0 },
-    { name: "Security", slug: "security", icon: Shield, count: 0 },
-    { name: "Productivity", slug: "productivity", icon: Zap, count: 0 },
+    { name: "Code Review", slug: "code-review", icon: Terminal, count: countMap["code-review"] || 0 },
+    { name: "Testing", slug: "testing", icon: Shield, count: countMap["testing"] || 0 },
+    { name: "DevOps", slug: "devops", icon: Server, count: countMap["devops"] || 0 },
+    { name: "Data Pipeline", slug: "data-pipeline", icon: Bot, count: countMap["data-pipeline"] || 0 },
+    { name: "Security", slug: "security", icon: Shield, count: countMap["security"] || 0 },
+    { name: "Productivity", slug: "productivity", icon: Zap, count: countMap["productivity"] || 0 },
   ];
 
   return (
@@ -44,17 +52,18 @@ export default async function HomePage() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent-soft)] px-4 py-1.5 text-sm text-[var(--accent)]">
               <Zap className="h-3.5 w-3.5" />
-              The marketplace for the agentic era
+              Stop giving your tools away for free
             </div>
             <h1 className="font-hero mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
-              Where builders share the tools{" "}
+              You built it.{" "}
               <span className="bg-gradient-to-r from-[var(--accent)] to-[#8a9a7b] bg-clip-text text-transparent">
-                that make AI work
+                Now get paid for it.
               </span>
             </h1>
             <p className="mb-10 text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
-              A growing registry of skills, MCP servers, and agents — built by
-              the community, installed in one command.
+              The giants ship models. You build the tools that make them useful.
+              Skill Shope is where your AI skills, MCP servers, and agents earn
+              what they deserve — distributed in one command, protected by default.
             </p>
             <HeroSearch />
           </div>
@@ -130,7 +139,7 @@ export default async function HomePage() {
                 <div>
                   <h3 className="font-semibold">{cat.name}</h3>
                   <p className="text-sm text-[var(--text-secondary)]">
-                    Browse skills
+                    {cat.count} {cat.count === 1 ? "skill" : "skills"}
                   </p>
                 </div>
               </div>
@@ -150,24 +159,24 @@ export default async function HomePage() {
           <div className="space-y-3">
             {[
               {
-                q: "How do I install a skill?",
-                a: "Run npx skillshope install <slug> from your terminal. Free skills install instantly. Paid skills require a purchase and download token.",
+                q: "How is this different from GitHub?",
+                a: "GitHub hosts code. We handle discovery, security verification, paid distribution with IP protection, and one-command installs. Your users don't need to clone repos or read READMEs.",
               },
               {
-                q: "Is publishing free?",
-                a: "Yes. Publishing is free. If you choose to sell a premium skill, you keep 85% of every sale.",
+                q: "Why not just use an official vendor repo?",
+                a: "You can. But you can't charge for your work, get install analytics, or control distribution. Skill Shope gives you the creator economics that vendor repos don't.",
               },
               {
-                q: "What tools are supported?",
-                a: "Claude Code, Codex, Cursor, Windsurf, and any MCP-compatible AI assistant. Skills are cross-platform.",
-              },
-              {
-                q: "Is it free to publish?",
-                a: "Yes. Publishing is free. We only take a 15% fee when you make a paid sale.",
+                q: "How much do I keep?",
+                a: "85% of every sale. Publishing is free. We only take a 15% platform fee when you make a paid sale. Free skills cost you nothing.",
               },
               {
                 q: "Is my paid content protected?",
-                a: "Yes. Paid content is delivered via our infrastructure with download tokens. Your source URL is just a preview.",
+                a: "Yes. Paid skills are delivered via time-limited, cryptographically-signed download tokens. The code is never exposed publicly. You set the price, we protect the distribution.",
+              },
+              {
+                q: "What tools are supported?",
+                a: "Claude Code, Codex, Cursor, Windsurf, and any MCP-compatible AI assistant. Skills are vendor-neutral and cross-platform.",
               },
             ].map((faq, i) => (
               <details
@@ -202,17 +211,21 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-display mb-4 text-3xl font-bold">
-              Share what you&apos;ve built
+              Your code. Your rules. Your revenue.
             </h2>
-            <p className="mb-8 text-lg text-[var(--text-secondary)]">
-              Publish your AI skills and MCP servers for the community.
-              Free or paid — you decide. We handle distribution, security, and reviews.
+            <p className="mb-4 text-lg text-[var(--text-secondary)]">
+              Every skill you publish stays yours. Set your price — or give it away.
+              We handle distribution, security scanning, and payouts. You keep 85%.
+              The giants keep zero.
+            </p>
+            <p className="mb-8 text-sm text-[var(--text-secondary)]">
+              Free to publish. No approval queue. Live in minutes.
             </p>
             <Link
               href="/publish"
               className="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-8 py-3.5 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
             >
-              Start Publishing
+              Start Earning
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
