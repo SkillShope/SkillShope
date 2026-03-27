@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { auth } from "@/lib/auth";
@@ -58,6 +59,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Reading headers forces dynamic rendering — required for per-request CSP nonces
+  await headers();
   const session = await auth();
 
   let isAdmin = false;

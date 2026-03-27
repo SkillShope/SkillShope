@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
@@ -58,6 +59,7 @@ const typeIcons: Record<string, typeof Terminal> = {
 };
 
 export default async function SkillPage({ params }: Props) {
+  const nonce = (await headers()).get("x-nonce") ?? "";
   const { slug } = await params;
   const session = await auth();
 
@@ -108,7 +110,7 @@ export default async function SkillPage({ params }: Props) {
 
   return (
     <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+    <script nonce={nonce} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <Link
         href="/browse"
