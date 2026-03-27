@@ -1,37 +1,37 @@
 import type { Metadata } from "next";
-import { Shield, Search, CreditCard, Users, Zap, ArrowRight } from "lucide-react";
+import { Shield, Lock, Terminal, Globe, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Skill Shope is the registry for AI skills, MCP servers, and agent configurations. We connect developers to tools — discover, review, and install from verified publishers.",
+    "Skill Shope is the independent registry where AI skill creators set their price, keep their IP, and get 85% of every sale.",
 };
 
 const values = [
   {
-    icon: Search,
-    title: "Discovery",
-    description:
-      "We make it easy to find the right AI tools. Search, filter, and browse skills curated by the community.",
-  },
-  {
     icon: Shield,
-    title: "Trust",
+    title: "Creators first",
     description:
-      "Verified publishers, honest reviews, and transparent ratings so you know what you're installing.",
+      "85% payout on every sale. No approval queue. No gatekeepers. Publish and go live in minutes.",
   },
   {
-    icon: CreditCard,
-    title: "Fair Monetization",
+    icon: Lock,
+    title: "Your IP, protected",
     description:
-      "Publishers set their own prices. We handle payments so builders can focus on building.",
+      "Paid skills are delivered via time-limited download tokens. Your code is never exposed publicly.",
   },
   {
-    icon: Users,
-    title: "Community",
+    icon: Terminal,
+    title: "One command",
     description:
-      "A growing ecosystem of developers sharing tools for Claude Code, Codex, Cursor, and more.",
+      "npx skillshope install <slug>. That's it. No cloning repos, no reading READMEs, no dependency hell.",
+  },
+  {
+    icon: Globe,
+    title: "Vendor neutral",
+    description:
+      "Works with Claude Code, Codex, Cursor, Windsurf, and any MCP-compatible client. No walled gardens.",
   },
 ];
 
@@ -40,18 +40,29 @@ export default function AboutPage() {
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       {/* Header */}
       <div className="mb-12">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent-soft)] px-4 py-1.5 text-sm text-[var(--accent)]">
-          <Zap className="h-3.5 w-3.5" />
-          About Skill Shope
-        </div>
         <h1 className="mb-4 text-3xl font-bold sm:text-4xl">
-          The registry for the agentic era
+          Built by a builder who got tired of building for free.
         </h1>
-        <p className="text-lg leading-relaxed text-[var(--text-secondary)]">
-          Skill Shope is where developers discover, review, and install AI
-          skills, MCP servers, and agent configurations. We don&apos;t host
-          the tools — we connect you to them. Think of us as the catalog,
-          not the warehouse.
+        <div className="space-y-4 text-lg leading-relaxed text-[var(--text-secondary)]">
+          <p>
+            You spend weeks building an AI skill that saves developers hours.
+            You publish it on GitHub. A giant forks it, ships it in their
+            marketplace, and you get a star.
+          </p>
+          <p>
+            We think you deserve more than a star.
+          </p>
+        </div>
+      </div>
+
+      {/* The problem / solution */}
+      <div className="mb-12 rounded-xl border border-[var(--accent)]/20 bg-[var(--accent-soft)] p-6">
+        <h2 className="mb-3 text-xl font-bold">The deal</h2>
+        <p className="leading-relaxed text-[var(--text-secondary)]">
+          Skill Shope is the independent registry where creators set their price,
+          keep their IP, and get 85% of every sale. One-command installs. Security
+          scanning. Download token protection. No approval queues. No vendor lock-in.
+          Your work earns what it deserves.
         </p>
       </div>
 
@@ -62,18 +73,18 @@ export default function AboutPage() {
           {[
             {
               step: "1",
-              title: "Publishers list their tools",
-              desc: "Point to a GitHub repo, npm package, or any URL. Add a description, install command, and set a price (or keep it free).",
+              title: "Publish your skill",
+              desc: "Import from GitHub or paste a URL. Set your price or keep it free. We run a security scan and you're live in minutes.",
             },
             {
               step: "2",
-              title: "Developers discover and review",
-              desc: "Browse by category, search by keyword, read reviews from other developers. Find the right tool fast.",
+              title: "Developers find and install",
+              desc: "Browse, search, read reviews. One command to install. Free skills are instant. Paid skills use download tokens — your code stays protected.",
             },
             {
               step: "3",
-              title: "Install from the source",
-              desc: "Copy the install command and run it in your terminal. The tool comes directly from the publisher — we just helped you find it.",
+              title: "You get paid",
+              desc: "85% of every sale hits your Stripe account directly. We handle the checkout, delivery, and support infrastructure. You keep building.",
             },
           ].map((item) => (
             <div
@@ -96,7 +107,7 @@ export default function AboutPage() {
 
       {/* Values */}
       <div className="mb-12">
-        <h2 className="mb-6 text-xl font-bold">What we care about</h2>
+        <h2 className="mb-6 text-xl font-bold">What we stand for</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {values.map((v) => (
             <div
@@ -115,24 +126,24 @@ export default function AboutPage() {
 
       {/* CTA */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-8 text-center">
-        <h2 className="mb-2 text-xl font-bold">Join the registry</h2>
+        <h2 className="mb-2 text-xl font-bold">Your code. Your rules. Your revenue.</h2>
         <p className="mb-6 text-sm text-[var(--text-secondary)]">
-          Whether you&apos;re looking for tools or building them, there&apos;s
-          a place for you here.
+          Whether you&apos;re looking for tools or building them — there&apos;s
+          a place for you here. And if you built it, you should get paid for it.
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
-            href="/browse"
+            href="/publish"
             className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
           >
-            Browse Skills
+            Start Earning
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
-            href="/publish"
+            href="/browse"
             className="flex items-center gap-2 rounded-lg border border-[var(--border)] px-6 py-2.5 text-sm font-semibold hover:border-[var(--accent)]/40 transition-colors"
           >
-            Start Publishing
+            Browse Skills
           </Link>
         </div>
       </div>
