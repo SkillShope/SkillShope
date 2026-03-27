@@ -220,47 +220,6 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-[var(--border)] bg-[var(--bg-secondary)]">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <div className="flex items-center gap-2">
-              <Logo width={20} height={20} />
-              <span className="text-sm text-[var(--text-secondary)]">
-                &copy; 2026 Skill Shope
-              </span>
-            </div>
-            <div className="flex gap-6 text-sm text-[var(--text-secondary)]">
-              <Link href="/browse" className="hover:text-[var(--text)]">
-                Browse
-              </Link>
-              <Link href="/publish" className="hover:text-[var(--text)]">
-                Publish
-              </Link>
-              <Link href="/about" className="hover:text-[var(--text)]">
-                About
-              </Link>
-              <Link href="/terms" className="hover:text-[var(--text)]">
-                Terms
-              </Link>
-            </div>
-          </div>
-          <div className="mt-6 border-t border-[var(--border)] pt-6">
-            <p className="text-center text-xs leading-relaxed text-[var(--text-secondary)]/60">
-              Skill Shope is a registry — we do not host, execute, or guarantee the safety of
-              third-party skills, MCP servers, or agent configurations. Always review source
-              code and run security checks before installing any tool. Install at your own risk.
-              See our{" "}
-              <Link href="/terms" className="underline hover:text-[var(--text-secondary)]">
-                Terms
-              </Link>{" "}and{" "}
-              <Link href="/privacy" className="underline hover:text-[var(--text-secondary)]">
-                Privacy Policy
-              </Link>.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

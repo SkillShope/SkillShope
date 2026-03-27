@@ -9,6 +9,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { ConsentBanner } from "@/components/consent-banner";
 import { Happie } from "@/components/happie";
 import { ServiceWorkerRegister } from "@/components/sw-register";
+import { Footer } from "@/components/footer";
 import { Space_Grotesk, Jacques_Francois } from "next/font/google";
 
 const jacquesFrancois = Jacques_Francois({
@@ -80,6 +81,7 @@ export default async function RootLayout({
       <body className={`min-h-screen antialiased ${spaceGrotesk.variable} ${jacquesFrancois.variable}`}>
         <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
+        <Footer />
         <Happie isSignedIn={!!session?.user} />
         <Analytics />
         <ServiceWorkerRegister />
