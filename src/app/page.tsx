@@ -13,7 +13,7 @@ import { SkillCard } from "@/components/skill-card";
 import { Aurora } from "@/components/aurora";
 import { HeroSearch } from "@/components/hero-search";
 import { Logo } from "@/components/logo";
-import { TypingCommands } from "@/components/typing-commands";
+import { CopyButton } from "@/components/copy-button";
 
 export default async function HomePage() {
   const featuredSkills = await prisma.skill.findMany({
@@ -23,21 +23,7 @@ export default async function HomePage() {
     orderBy: { downloads: "desc" },
   });
 
-  // Fetch skillshope install commands for the typing animation
-  const installSkills = await prisma.skill.findMany({
-    where: {
-      hidden: false,
-      isFree: true,
-      reviewStatus: { in: ["approved", "pending"] },
-      installCmd: { startsWith: "npx skillshope" },
-    },
-    select: { installCmd: true },
-    orderBy: { downloads: "desc" },
-    take: 10,
-  });
-  const installCommands = installSkills
-    .map((s) => s.installCmd!)
-    .filter((cmd) => cmd.length > 0);
+  const featuredCommand = "npx skillshope install skill-shope-publisher-guide";
 
   const categories = [
     { name: "Code Review", slug: "code-review", icon: Terminal, count: 0 },
@@ -75,14 +61,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Install command showcase */}
-      {installCommands.length > 0 && (
-        <section className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-            <TypingCommands commands={installCommands} />
-          </div>
-        </section>
-      )}
+      {/* Featured install command */}
+      <section className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-4 py-5 sm:px-6">
+          <Terminal className="h-4 w-4 shrink-0 text-[var(--accent)]" />
+          <code className="font-mono text-sm text-[var(--text)]">{featuredCommand}</code>
+          <CopyButton text={featuredCommand} />
+        </div>
+      </section>
 
       {/* Featured Skills */}
       {featuredSkills.length > 0 && (
