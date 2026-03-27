@@ -21,6 +21,7 @@ export default async function BrowsePage({ searchParams }: Props) {
 
   const where: Record<string, unknown> = {
     reviewStatus: { in: ["approved", "pending"] }, // Show approved + legacy pending until backfill
+    hidden: false,
   };
   if (q) {
     where.OR = [

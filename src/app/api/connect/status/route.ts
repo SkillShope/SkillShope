@@ -19,10 +19,19 @@ export async function GET() {
   }
 
   const account = await stripe.accounts.retrieve(user.stripeAccountId);
+  const payoutsEnabled = account.payouts_enabled ?? false;
+
+  // Auto-unhide skills when Stripe payouts become enabled
+  if (payoutsEnabled) {
+    await prisma.skill.updateMany({
+      where: { authorId: session.user.id, hidden: true },
+      data: { hidden: false },
+    });
+  }
 
   return NextResponse.json({
     connected: true,
-    payoutsEnabled: account.payouts_enabled ?? false,
+    payoutsEnabled,
     chargesEnabled: account.charges_enabled ?? false,
   });
 }

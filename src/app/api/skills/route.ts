@@ -89,9 +89,20 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Check if publisher has Stripe connected
+  const publisher = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { stripeAccountId: true, isAdmin: true },
+  });
+  const hasStripe = !!publisher?.stripeAccountId;
+  const isAdmin = publisher?.isAdmin ?? false;
+
   const isCommunity = body.listingType === "community";
-  const isFree = isCommunity ? true : (body.isFree ?? true);
+  // Force free if no Stripe connected (admins exempt — platform skills)
+  const isFree = isCommunity ? true : (!hasStripe && !isAdmin) ? true : (body.isFree ?? true);
   const price = isFree ? 0 : Math.max(0.99, Number(body.price) || 0);
+  // Hide skills from publishers without Stripe (admins exempt)
+  const hidden = !hasStripe && !isAdmin;
 
   const skill = await prisma.skill.create({
     data: {
@@ -103,6 +114,7 @@ export async function POST(req: NextRequest) {
       type: body.type || "skill",
       price,
       isFree,
+      hidden,
       installCmd: body.installCmd ? sanitize(body.installCmd).slice(0, 500) : null,
       sourceUrl: body.sourceUrl.slice(0, 500),
       sourceType: body.sourceType || "github",

@@ -8,7 +8,11 @@ export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/signin");
 
-  const [skills, reviews, purchases] = await Promise.all([
+  const [user, skills, reviews, purchases] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { stripeAccountId: true },
+    }),
     prisma.skill.findMany({
       where: { authorId: session.user.id },
       orderBy: { createdAt: "desc" },
@@ -42,6 +46,8 @@ export default async function DashboardPage() {
   });
   const totalRevenue = sales.reduce((sum, s) => sum + s.amount * (PUBLISHER_PAYOUT_PERCENT / 100), 0);
 
+  const hasStripe = !!user?.stripeAccountId;
+
   return (
     <DashboardClient
       skills={skills.map((s) => ({
@@ -53,6 +59,7 @@ export default async function DashboardPage() {
         rating: s.rating,
         isFree: s.isFree,
         price: s.price,
+        hidden: s.hidden,
       }))}
       reviews={reviews.map((r) => ({
         id: r.id,
@@ -72,6 +79,7 @@ export default async function DashboardPage() {
         skillCount: skills.length,
         totalRevenue,
       }}
+      hasStripe={hasStripe}
     />
   );
 }

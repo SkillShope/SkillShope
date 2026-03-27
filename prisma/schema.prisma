@@ -102,6 +102,7 @@ model Skill {
   dependedOnBy    SkillDependency[] @relation("depOf")
   projectSkills   ProjectSkill[]
   bundleSkills    BundleSkill[]
+  hidden          Boolean  @default(false) // hidden until publisher connects Stripe
   reviewStatus    String   @default("pending") // pending | approved | flagged | rejected
   securityScore   Int?
   securityReports SecurityReport[]

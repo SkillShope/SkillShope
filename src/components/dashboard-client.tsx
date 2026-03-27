@@ -12,9 +12,14 @@ import {
   X,
   Package,
   Search,
+  Eye,
+  EyeOff,
+  Pencil,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { CopyButton } from "@/components/copy-button";
 import { ConnectBanner } from "@/components/connect-banner";
@@ -28,6 +33,7 @@ type Skill = {
   rating: number;
   isFree: boolean;
   price: number;
+  hidden: boolean;
 };
 
 type Review = {
@@ -58,20 +64,26 @@ const typeIcons: Record<string, typeof Terminal> = {
 };
 
 export function DashboardClient({
-  skills,
+  skills: initialSkills,
   reviews,
   purchases,
   stats,
+  hasStripe,
 }: {
   skills: Skill[];
   reviews: Review[];
   purchases: Purchase[];
   stats: Stats;
+  hasStripe: boolean;
 }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const purchasedSlug = searchParams.get("purchased");
   const [showBanner, setShowBanner] = useState(!!purchasedSlug);
   const [skillSearch, setSkillSearch] = useState("");
+  const [skills, setSkills] = useState(initialSkills);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   const purchasedSkill = purchasedSlug
     ? purchases.find((p) => p.skillSlug === purchasedSlug) ?? {
@@ -80,6 +92,36 @@ export function DashboardClient({
         installCmd: null,
       }
     : null;
+
+  const hiddenCount = skills.filter((s) => s.hidden).length;
+
+  const toggleVisibility = async (id: string, hidden: boolean) => {
+    setActionLoading(id);
+    try {
+      const res = await fetch(`/api/skills/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hidden }),
+      });
+      if (res.ok) {
+        setSkills((prev) => prev.map((s) => (s.id === id ? { ...s, hidden } : s)));
+      }
+    } catch {}
+    setActionLoading(null);
+  };
+
+  const deleteSkill = async (id: string) => {
+    setActionLoading(id);
+    try {
+      const res = await fetch(`/api/skills/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setSkills((prev) => prev.filter((s) => s.id !== id));
+        setConfirmDelete(null);
+        router.refresh();
+      }
+    } catch {}
+    setActionLoading(null);
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -122,6 +164,24 @@ export function DashboardClient({
       <div className="mb-8">
         <ConnectBanner />
       </div>
+
+      {/* Hidden skills warning — only show if user has skills but no Stripe */}
+      {!hasStripe && hiddenCount > 0 && (
+        <div className="mb-8 rounded-xl border border-[var(--yellow)]/30 bg-[var(--yellow)]/5 p-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-[var(--yellow)]" />
+            <div>
+              <p className="text-sm font-medium">
+                {hiddenCount} skill{hiddenCount !== 1 ? "s" : ""} hidden from the public
+              </p>
+              <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                Connect your Stripe account above to make your skills visible and offer paid products.
+                Until then, all your skills are hidden from the browse page and set to free.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -205,6 +265,8 @@ export function DashboardClient({
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Downloads</th>
                   <th className="hidden px-4 py-3 text-left font-medium text-[var(--text-secondary)] md:table-cell">Rating</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Price</th>
+                  <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Status</th>
+                  <th className="px-4 py-3 text-right font-medium text-[var(--text-secondary)]">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -242,6 +304,63 @@ export function DashboardClient({
                         <span className={skill.isFree ? "text-[var(--green)]" : "text-[var(--text)]"}>
                           {skill.isFree ? "Free" : `$${skill.price.toFixed(2)}`}
                         </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        {skill.hidden ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--yellow)]/10 px-2 py-0.5 text-xs text-[var(--yellow)]">
+                            <EyeOff className="h-3 w-3" /> Hidden
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--green)]/10 px-2 py-0.5 text-xs text-[var(--green)]">
+                            <Eye className="h-3 w-3" /> Visible
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-end gap-1">
+                          <Link
+                            href={`/skills/${skill.slug}/edit`}
+                            className="rounded-lg p-1.5 text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text)] transition-colors"
+                            title="Edit"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Link>
+                          <button
+                            onClick={() => toggleVisibility(skill.id, !skill.hidden)}
+                            disabled={actionLoading === skill.id}
+                            className="rounded-lg p-1.5 text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text)] transition-colors disabled:opacity-50"
+                            title={skill.hidden ? "Make visible" : "Hide"}
+                          >
+                            {skill.hidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+                          </button>
+                          {confirmDelete === skill.id ? (
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() => deleteSkill(skill.id)}
+                                disabled={actionLoading === skill.id}
+                                className="rounded-lg p-1.5 text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                                title="Confirm delete"
+                              >
+                                <Check className="h-3.5 w-3.5" />
+                              </button>
+                              <button
+                                onClick={() => setConfirmDelete(null)}
+                                className="rounded-lg p-1.5 text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] transition-colors"
+                                title="Cancel"
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => setConfirmDelete(skill.id)}
+                              className="rounded-lg p-1.5 text-[var(--text-secondary)] hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                              title="Delete"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
