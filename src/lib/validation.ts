@@ -53,9 +53,13 @@ export function validate(rules: Rule[]): ValidationError[] {
   return errors;
 }
 
-// Strip HTML tags to prevent XSS in user-generated text fields
+// Strip HTML tags and dangerous patterns to prevent XSS in user-generated text fields
 export function sanitize(str: string): string {
-  return str.replace(/<[^>]*>/g, "").trim();
+  return str
+    .replace(/<[^>]*>?/g, "")  // Strip tags including malformed (no closing >)
+    .replace(/on\w+\s*=/gi, "") // Strip event handlers like onerror=
+    .replace(/javascript\s*:/gi, "") // Strip javascript: protocol
+    .trim();
 }
 
 // Validate URL format

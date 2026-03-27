@@ -108,7 +108,7 @@ export default async function SkillPage({ params }: Props) {
 
   return (
     <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <Link
         href="/browse"
