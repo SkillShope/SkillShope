@@ -36,6 +36,10 @@ TODO.md
 SCALING.md
 CLAUDE.md
 
+# packages (monorepo)
+packages/*/node_modules
+packages/*/dist
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
