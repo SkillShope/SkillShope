@@ -76,7 +76,7 @@ async function verifyNpm(url: string): Promise<VerifyResult> {
 }
 
 // Block SSRF: reject private IPs, localhost, and cloud metadata endpoints
-function isPrivateUrl(url: string): boolean {
+export function isPrivateUrl(url: string): boolean {
   let hostname: string;
   try {
     hostname = new URL(url).hostname.toLowerCase();
