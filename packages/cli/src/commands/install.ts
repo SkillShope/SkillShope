@@ -1,4 +1,4 @@
-import { join } from "path";
+import { join, resolve, relative } from "path";
 import { mkdirSync, writeFileSync, existsSync } from "fs";
 import { fetchSkillMeta, fetchDownloadToken, fetchFiles } from "../api.js";
 
@@ -49,7 +49,14 @@ export async function install(slug: string | undefined): Promise<void> {
   mkdirSync(targetDir, { recursive: true });
 
   for (const file of files) {
-    const filePath = join(targetDir, file.filename);
+    // Prevent path traversal — ensure file stays within target directory
+    const safeName = file.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const filePath = resolve(targetDir, safeName);
+    const rel = relative(targetDir, filePath);
+    if (rel.startsWith("..") || resolve(filePath) !== filePath) {
+      console.error(`  Skipping unsafe filename: ${file.filename}`);
+      continue;
+    }
     writeFileSync(filePath, file.content, "utf-8");
   }
 
