@@ -58,7 +58,7 @@ export function DocsSidebar() {
       {/* Mobile toggle */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--accent)] text-white shadow-lg md:hidden"
+        className="fixed bottom-24 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text)] shadow-lg md:hidden"
       >
         <Menu className="h-5 w-5" />
       </button>
