@@ -20,7 +20,16 @@ type NavbarProps = {
 export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
+  const [mobileClosing, setMobileClosing] = useState(false);
   const pathname = usePathname();
+
+  const handleMobileClose = () => {
+    setMobileClosing(true);
+    setTimeout(() => {
+      setMobileNav(false);
+      setMobileClosing(false);
+    }, 250);
+  };
 
   return (
     <nav className="sticky top-0 z-50 border-b border-[var(--border)]/50 bg-[var(--bg)]/10 backdrop-blur-2xl backdrop-saturate-150">
@@ -80,10 +89,10 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
         <div className="flex items-center gap-1 md:hidden">
           <ThemeToggle />
           <button
-            onClick={() => setMobileNav(!mobileNav)}
+            onClick={() => mobileNav ? handleMobileClose() : setMobileNav(true)}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors"
           >
-            {mobileNav ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileNav && !mobileClosing ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
@@ -92,8 +101,21 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
       {/* Mobile nav overlay — portaled to body to escape nav stacking context */}
       {mobileNav && typeof document !== "undefined" && createPortal(
         <>
-          <div className="fixed inset-0 top-16 z-[60] bg-black/40 backdrop-blur-sm md:hidden" onClick={() => setMobileNav(false)} />
-          <div className="fixed right-0 top-16 z-[70] w-64 border-l border-[var(--border)] bg-[var(--bg)] p-4 md:hidden" style={{ height: "calc(100dvh - 4rem)" }}>
+          <div
+            className={`fixed inset-0 top-16 z-[60] bg-black/40 backdrop-blur-sm md:hidden transition-opacity duration-250 ${
+              mobileClosing ? "opacity-0" : "opacity-100"
+            }`}
+            onClick={handleMobileClose}
+          />
+          <div
+            className={`fixed right-0 top-16 z-[70] w-64 border-l border-[var(--border)] bg-[var(--bg)] p-4 md:hidden transition-transform duration-250 ease-out ${
+              mobileClosing ? "translate-x-full" : "translate-x-0"
+            }`}
+            style={{
+              height: "calc(100dvh - 4rem)",
+              animation: mobileClosing ? undefined : "slideInRight 250ms ease-out",
+            }}
+          >
             <nav className="space-y-1">
               {[
                 { href: "/browse", label: "Browse" },
@@ -110,7 +132,7 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileNav(false)}
+                  onClick={handleMobileClose}
                   className={`block rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     pathname === item.href
                       ? "bg-[var(--accent-soft)] text-[var(--text)]"
@@ -123,7 +145,7 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
               {!user && (
                 <Link
                   href="/auth/signin"
-                  onClick={() => setMobileNav(false)}
+                  onClick={handleMobileClose}
                   className="mt-2 block rounded-lg bg-[var(--accent)] px-3 py-2.5 text-center text-sm font-medium text-white"
                 >
                   Sign In

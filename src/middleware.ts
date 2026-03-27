@@ -14,10 +14,16 @@ const PROTECTED_ROUTES = [
   "/api/keys",
 ];
 
+const isDev = process.env.NODE_ENV === "development";
+
 function buildCspHeader(nonce: string): string {
+  const scriptSrc = isDev
+    ? `script-src 'self' 'unsafe-eval' 'nonce-${nonce}' 'strict-dynamic' https://checkout.stripe.com`
+    : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://checkout.stripe.com`;
+
   return [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://checkout.stripe.com`,
+    scriptSrc,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' https://avatars.githubusercontent.com data:",
     "connect-src 'self' https://checkout.stripe.com https://api.stripe.com https://va.vercel-scripts.com",

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Menu, X, Search } from "lucide-react";
+import { BookOpen, X, Search } from "lucide-react";
 
 const NAV_ITEMS = [
   { title: "Getting Started", href: "/docs" },
@@ -51,36 +51,52 @@ function NavLinks({ pathname, onNavigate, filter }: { pathname: string; onNaviga
 export function DocsSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [docSearch, setDocSearch] = useState("");
+
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, 250);
+  };
 
   return (
     <>
-      {/* Mobile toggle */}
+      {/* Mobile toggle — bottom-left, same size as Happie */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-24 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text)] shadow-lg md:hidden"
+        className="fixed bottom-6 left-6 z-30 flex h-14 w-14 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text)] shadow-lg active:scale-95 transition-transform md:hidden"
       >
-        <Menu className="h-5 w-5" />
+        <BookOpen className="h-6 w-6" />
       </button>
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay + sliding panel */}
       {open && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
-            onClick={() => setOpen(false)}
+            className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden transition-opacity duration-250 ${
+              closing ? "opacity-0" : "opacity-100"
+            }`}
+            onClick={handleClose}
           />
-          <div className="fixed left-0 top-0 bottom-0 z-50 w-64 border-r border-[var(--border)] bg-[var(--bg)] p-4 md:hidden">
+          <div
+            className={`fixed left-0 top-0 bottom-0 z-50 w-64 border-r border-[var(--border)] bg-[var(--bg)] p-4 md:hidden transition-transform duration-250 ease-out ${
+              closing ? "-translate-x-full" : "translate-x-0"
+            }`}
+            style={{ animation: closing ? undefined : "slideInLeft 250ms ease-out" }}
+          >
             <div className="mb-4 flex items-center justify-between">
               <span className="text-sm font-semibold">Documentation</span>
               <button
-                onClick={() => setOpen(false)}
+                onClick={handleClose}
                 className="text-[var(--text-secondary)] hover:text-[var(--text)]"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <NavLinks pathname={pathname} onNavigate={() => setOpen(false)} />
+            <NavLinks pathname={pathname} onNavigate={handleClose} />
           </div>
         </>
       )}
