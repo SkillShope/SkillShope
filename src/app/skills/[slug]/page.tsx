@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
@@ -21,6 +20,7 @@ import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
 import { ReviewForm } from "@/components/review-form";
 import { InstallCard } from "@/components/install-card";
+import { ShareButton } from "@/components/share-button";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -41,14 +41,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!skill) return { title: "Not Found" };
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://skillshope.com";
   const title = `${skill.name} — ${typeLabels[skill.type] || "Skill"}`;
   const description = `${skill.description} — ${skill.rating.toFixed(1)} stars, ${skill.downloads.toLocaleString()} installs.`;
+  const ogImage = `${siteUrl}/api/og?name=${encodeURIComponent(skill.name)}&description=${encodeURIComponent(skill.description)}&type=${skill.type}&rating=${skill.rating}&downloads=${skill.downloads}`;
 
   return {
     title,
     description,
-    openGraph: { title, description },
-    twitter: { title, description },
+    openGraph: { title, description, images: [{ url: ogImage, width: 1200, height: 630 }] },
+    twitter: { card: "summary_large_image", title, description, images: [ogImage] },
   };
 }
 
@@ -59,7 +61,6 @@ const typeIcons: Record<string, typeof Terminal> = {
 };
 
 export default async function SkillPage({ params }: Props) {
-  const nonce = (await headers()).get("x-nonce") ?? "";
   const { slug } = await params;
   const session = await auth();
 
@@ -110,7 +111,7 @@ export default async function SkillPage({ params }: Props) {
 
   return (
     <>
-    <script nonce={nonce} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <Link
         href="/browse"
@@ -132,6 +133,7 @@ export default async function SkillPage({ params }: Props) {
                 {skill.verified && (
                   <Shield className="h-5 w-5 text-[var(--green)]" />
                 )}
+                <ShareButton slug={skill.slug} name={skill.name} description={skill.description} />
               </div>
               <p className="mt-1 text-[var(--text-secondary)]">
                 {skill.description}

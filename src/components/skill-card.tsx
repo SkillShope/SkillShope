@@ -14,6 +14,7 @@ import {
   GitFork,
   Clock,
 } from "lucide-react";
+import { ShareButton } from "./share-button";
 
 type SkillCardProps = {
   slug: string;
@@ -118,6 +119,7 @@ export function SkillCard(props: SkillCardProps) {
             {props.verified && (
               <span title="Verified by Skill Shope"><Shield className="h-4 w-4 text-[var(--blue)]" /></span>
             )}
+            <ShareButton slug={props.slug} name={props.name} description={props.description} />
           </div>
         </div>
 
