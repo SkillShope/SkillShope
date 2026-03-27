@@ -11,10 +11,11 @@ const typeLabels: Record<string, string> = {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const name = searchParams.get("name") || "Untitled";
-  const description = searchParams.get("description") || "";
+  // Truncate inputs to prevent abuse
+  const name = (searchParams.get("name") || "Untitled").slice(0, 100);
+  const description = (searchParams.get("description") || "").slice(0, 300);
   const type = searchParams.get("type") || "skill";
-  const category = searchParams.get("category") || "";
+  const category = (searchParams.get("category") || "").slice(0, 50);
   const rating = searchParams.get("rating") || "0";
   const downloads = searchParams.get("downloads") || "0";
   const isFree = searchParams.get("isFree") !== "false";
@@ -132,6 +133,10 @@ export async function GET(req: NextRequest) {
         </div>
       </div>
     ),
-    { width: 1200, height: 630 }
+    {
+      width: 1200,
+      height: 630,
+      headers: { "Cache-Control": "public, max-age=86400, s-maxage=86400" },
+    }
   );
 }

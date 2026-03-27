@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { User, Mail, FileText } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, Mail, FileText, Key, Plus, Trash2, Copy, Check, Eye, EyeOff } from "lucide-react";
 
 type Props = {
   name: string;
@@ -16,6 +16,55 @@ export function ProfileForm({ name: initialName, email, image, bio: initialBio, 
   const [bio, setBio] = useState(initialBio);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // API Keys
+  const [keys, setKeys] = useState<{ id: string; name: string; lastUsed: string | null; createdAt: string }[]>([]);
+  const [newKeyName, setNewKeyName] = useState("");
+  const [creatingKey, setCreatingKey] = useState(false);
+  const [newKey, setNewKey] = useState<string | null>(null);
+  const [keyCopied, setKeyCopied] = useState(false);
+  const [showNewKey, setShowNewKey] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/api-keys").then((r) => r.json()).then(setKeys).catch(() => {});
+  }, []);
+
+  const createKey = async () => {
+    if (!newKeyName.trim()) return;
+    setCreatingKey(true);
+    try {
+      const res = await fetch("/api/api-keys", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newKeyName.trim() }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setNewKey(data.key);
+        setNewKeyName("");
+        // Refresh key list
+        const updated = await fetch("/api/api-keys").then((r) => r.json());
+        setKeys(updated);
+      }
+    } catch {}
+    setCreatingKey(false);
+  };
+
+  const deleteKey = async (id: string) => {
+    await fetch("/api/api-keys", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    setKeys((prev) => prev.filter((k) => k.id !== id));
+  };
+
+  const copyKey = async () => {
+    if (!newKey) return;
+    await navigator.clipboard.writeText(newKey);
+    setKeyCopied(true);
+    setTimeout(() => setKeyCopied(false), 2000);
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -143,6 +192,94 @@ export function ProfileForm({ name: initialName, email, image, bio: initialBio, 
               Active
             </span>
           </div>
+        </div>
+
+        {/* API Keys */}
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-6">
+          <div className="mb-4 flex items-center gap-2">
+            <Key className="h-4 w-4 text-[var(--text-secondary)]" />
+            <h2 className="text-sm font-semibold">API Keys</h2>
+          </div>
+          <p className="mb-4 text-xs text-[var(--text-secondary)]">
+            Use API keys to authenticate the CLI and API. Keys are shown once when created — save them securely.
+          </p>
+
+          {/* New key created — show once */}
+          {newKey && (
+            <div className="mb-4 rounded-lg border border-[var(--green)]/30 bg-[var(--green)]/5 p-3">
+              <p className="mb-2 text-xs font-medium text-[var(--green)]">
+                Key created — copy it now. You won&apos;t see it again.
+              </p>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 rounded bg-[var(--bg)] px-3 py-2 font-mono text-xs text-[var(--text)] select-all">
+                  {showNewKey ? newKey : newKey.slice(0, 7) + "..." + newKey.slice(-4)}
+                </code>
+                <button
+                  onClick={() => setShowNewKey(!showNewKey)}
+                  className="rounded-lg p-2 text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] transition-colors"
+                  title={showNewKey ? "Hide" : "Show"}
+                >
+                  {showNewKey ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                </button>
+                <button
+                  onClick={copyKey}
+                  className="rounded-lg p-2 text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] transition-colors"
+                  title="Copy"
+                >
+                  {keyCopied ? <Check className="h-3.5 w-3.5 text-[var(--green)]" /> : <Copy className="h-3.5 w-3.5" />}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Create new key */}
+          <div className="mb-4 flex gap-2">
+            <input
+              type="text"
+              value={newKeyName}
+              onChange={(e) => setNewKeyName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && createKey()}
+              placeholder="Key name (e.g., my-laptop)"
+              maxLength={100}
+              className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] focus:border-[var(--accent)] focus:outline-none"
+            />
+            <button
+              onClick={createKey}
+              disabled={creatingKey || !newKeyName.trim()}
+              className="flex shrink-0 items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-50"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Create
+            </button>
+          </div>
+
+          {/* Key list */}
+          {keys.length > 0 ? (
+            <div className="space-y-2">
+              {keys.map((k) => (
+                <div key={k.id} className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2.5">
+                  <div>
+                    <p className="text-sm font-medium">{k.name}</p>
+                    <p className="text-xs text-[var(--text-secondary)]">
+                      Created {new Date(k.createdAt).toLocaleDateString()}
+                      {k.lastUsed && ` · Last used ${new Date(k.lastUsed).toLocaleDateString()}`}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => deleteKey(k.id)}
+                    className="rounded-lg p-1.5 text-[var(--text-secondary)] hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                    title="Revoke"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-[var(--text-secondary)]">
+              No API keys yet. Create one to use the CLI.
+            </p>
+          )}
         </div>
       </div>
     </div>

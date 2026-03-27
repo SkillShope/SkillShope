@@ -1,0 +1,20 @@
+{
+  "name": "skillshope",
+  "version": "0.2.1",
+  "description": "Install AI skills, MCP servers, and agents from Skill Shope",
+  "bin": {
+    "skillshope": "./dist/index.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["ai", "skills", "mcp", "agents", "claude", "registry"],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "@types/node": "^22.0.0"
+  }
+}

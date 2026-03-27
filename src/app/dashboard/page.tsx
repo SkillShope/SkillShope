@@ -48,6 +48,35 @@ export default async function DashboardPage() {
 
   const hasStripe = user?.stripePayoutsEnabled ?? false;
 
+  // Install analytics per skill
+  const skillIds = skills.map((s) => s.id);
+  const [installsBySource, installs7d] = await Promise.all([
+    prisma.installEvent.groupBy({
+      by: ["skillId", "source"],
+      where: { skillId: { in: skillIds } },
+      _count: true,
+    }),
+    prisma.installEvent.groupBy({
+      by: ["skillId"],
+      where: {
+        skillId: { in: skillIds },
+        createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
+      },
+      _count: true,
+    }),
+  ]);
+
+  // Build lookup maps
+  const sourceMap: Record<string, Record<string, number>> = {};
+  for (const row of installsBySource) {
+    if (!sourceMap[row.skillId]) sourceMap[row.skillId] = {};
+    sourceMap[row.skillId][row.source] = row._count;
+  }
+  const weekMap: Record<string, number> = {};
+  for (const row of installs7d) {
+    weekMap[row.skillId] = row._count;
+  }
+
   return (
     <DashboardClient
       skills={skills.map((s) => ({
@@ -60,6 +89,8 @@ export default async function DashboardPage() {
         isFree: s.isFree,
         price: s.price,
         hidden: s.hidden,
+        installs7d: weekMap[s.id] || 0,
+        installsBySource: sourceMap[s.id] || {},
       }))}
       reviews={reviews.map((r) => ({
         id: r.id,

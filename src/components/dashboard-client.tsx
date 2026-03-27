@@ -34,6 +34,8 @@ type Skill = {
   isFree: boolean;
   price: number;
   hidden: boolean;
+  installs7d: number;
+  installsBySource: Record<string, number>;
 };
 
 type Review = {
@@ -262,7 +264,7 @@ export function DashboardClient({
                 <tr className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Skill</th>
                   <th className="hidden px-4 py-3 text-left font-medium text-[var(--text-secondary)] sm:table-cell">Type</th>
-                  <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Downloads</th>
+                  <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Installs</th>
                   <th className="hidden px-4 py-3 text-left font-medium text-[var(--text-secondary)] md:table-cell">Rating</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Price</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Status</th>
@@ -291,8 +293,23 @@ export function DashboardClient({
                           {skill.type}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-[var(--text-secondary)]">
-                        {skill.downloads.toLocaleString()}
+                      <td className="px-4 py-3">
+                        <div className="text-[var(--text)]">{skill.downloads.toLocaleString()}</div>
+                        {skill.installs7d > 0 && (
+                          <div className="flex items-center gap-1 text-xs text-[var(--green)]">
+                            <TrendingUp className="h-3 w-3" />
+                            {skill.installs7d} this week
+                          </div>
+                        )}
+                        {Object.keys(skill.installsBySource).length > 0 && (
+                          <div className="mt-0.5 flex gap-1">
+                            {Object.entries(skill.installsBySource).map(([source, count]) => (
+                              <span key={source} className="rounded bg-[var(--bg-secondary)] px-1.5 py-0.5 text-[10px] text-[var(--text-secondary)]">
+                                {source} {count}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </td>
                       <td className="hidden px-4 py-3 md:table-cell">
                         <span className="flex items-center gap-1">

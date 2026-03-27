@@ -405,7 +405,8 @@ export function PublishForm() {
 
         {/* Name */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium">Name</label>
+          <label className="mb-1 block text-sm font-medium">Name</label>
+          <p className="mb-1.5 text-xs text-[var(--text-secondary)]">The display name users will see. Keep it short and descriptive.</p>
           <input
             type="text"
             required
@@ -416,22 +417,23 @@ export function PublishForm() {
           />
           {form.slug && (
             <p className="mt-1 text-xs text-[var(--text-secondary)]">
-              Slug: {form.slug}
+              URL slug: <code className="rounded bg-[var(--bg-secondary)] px-1">{form.slug}</code>
             </p>
           )}
         </div>
 
         {/* Description */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium">
             Short Description
           </label>
+          <p className="mb-1.5 text-xs text-[var(--text-secondary)]">One sentence that explains what your skill does. This appears in search results and cards.</p>
           <input
             type="text"
             required
             value={form.description}
             onChange={(e) => updateForm("description", e.target.value)}
-            placeholder="One-line description of what this skill does"
+            placeholder="e.g., Automated code review with security and performance checks"
             maxLength={200}
             className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-2.5 text-sm outline-none focus:border-[var(--accent)]"
           />
@@ -439,9 +441,10 @@ export function PublishForm() {
 
         {/* Long Description */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium">
             Full Description
           </label>
+          <p className="mb-1.5 text-xs text-[var(--text-secondary)]">Explain what your skill does, how it works, and why someone should use it. Shown on the detail page.</p>
           <textarea
             rows={5}
             value={form.longDescription}
@@ -454,7 +457,8 @@ export function PublishForm() {
         {/* Category + Compatibility */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-1.5 block text-sm font-medium">Category</label>
+            <label className="mb-1 block text-sm font-medium">Category</label>
+            <p className="mb-1.5 text-xs text-[var(--text-secondary)]">Primary category for browsing.</p>
             <select
               value={form.category}
               onChange={(e) => updateForm("category", e.target.value)}
@@ -468,9 +472,10 @@ export function PublishForm() {
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">
+            <label className="mb-1 block text-sm font-medium">
               Compatibility
             </label>
+            <p className="mb-1.5 text-xs text-[var(--text-secondary)]">Which AI tools work with this?</p>
             <input
               type="text"
               value={form.compatibility}
@@ -530,7 +535,8 @@ export function PublishForm() {
 
         {/* Source */}
         <div>
-          <label className="mb-2 block text-sm font-medium">Source</label>
+          <label className="mb-1 block text-sm font-medium">Source</label>
+          <p className="mb-2 text-xs text-[var(--text-secondary)]">Where is the source code hosted? This link appears on your skill page so users can review the code.</p>
           <div className="mb-3 grid grid-cols-3 gap-3">
             {sourceTypes.map((s) => (
               <button
@@ -559,9 +565,10 @@ export function PublishForm() {
 
         {/* Install command */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium">
             Install Command
           </label>
+          <p className="mb-1.5 text-xs text-[var(--text-secondary)]">The command users will run to install your skill. Use <code className="rounded bg-[var(--bg-secondary)] px-1">npx skillshope install {form.slug || "your-slug"}</code> for Skill Shope distribution.</p>
           <input
             type="text"
             value={form.installCmd}
@@ -575,19 +582,16 @@ export function PublishForm() {
             }
             className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-2.5 font-mono text-sm outline-none focus:border-[var(--accent)]"
           />
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
-            The command users will run to install from the source.
-          </p>
         </div>
 
         {/* Skill Content */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium">
             Skill Content
           </label>
-          <p className="mb-2 text-xs text-[var(--text-secondary)]">
-            Paste your SKILL.md content here. This is what users receive when they install
-            via the CLI. The source URL above serves as a preview page.
+          <p className="mb-1.5 text-xs text-[var(--text-secondary)]">
+            The actual SKILL.md content delivered to users when they install via the CLI.
+            This is your skill&apos;s instructions, prompts, or configuration — the thing that makes AI do the work. The source URL above is just a preview page.
           </p>
           <textarea
             rows={12}
@@ -600,7 +604,8 @@ export function PublishForm() {
 
         {/* Tags */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium">Tags</label>
+          <label className="mb-1 block text-sm font-medium">Tags</label>
+          <p className="mb-1.5 text-xs text-[var(--text-secondary)]">Comma-separated keywords to help users find your skill in search.</p>
           <input
             type="text"
             value={form.tags}

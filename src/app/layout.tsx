@@ -9,6 +9,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { ConsentBanner } from "@/components/consent-banner";
 import { Happie } from "@/components/happie";
 import { ServiceWorkerRegister } from "@/components/sw-register";
+import { Footer } from "@/components/footer";
 import { Space_Grotesk, Jacques_Francois } from "next/font/google";
 
 const jacquesFrancois = Jacques_Francois({
@@ -28,11 +29,11 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://skillshope.com";
 
 export const metadata: Metadata = {
   title: {
-    default: "Skill Shope — The AI Skills Registry",
+    default: "Skill Shope — You Built It. Now Get Paid For It.",
     template: "%s | Skill Shope",
   },
   description:
-    "Discover, review, and install AI skills, MCP servers, and agent configurations. The registry for the agentic era.",
+    "The registry where AI skill creators keep 85%. Publish your skills, MCP servers, and agents — distributed in one command, protected by default.",
   metadataBase: new URL(siteUrl),
   manifest: "/manifest.json",
   icons: { icon: "/logo-dark.svg", apple: "/icons/icon-192x192.png" },
@@ -40,16 +41,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Skill Shope",
-    title: "Skill Shope — The AI Skills Registry",
+    title: "Skill Shope — You Built It. Now Get Paid For It.",
     description:
-      "Discover, review, and install AI skills, MCP servers, and agent configurations from verified publishers.",
+      "The registry where AI skill creators keep 85%. Publish your skills, MCP servers, and agents — distributed in one command, protected by default.",
     url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Skill Shope — The AI Skills Registry",
+    title: "Skill Shope — You Built It. Now Get Paid For It.",
     description:
-      "Discover, review, and install AI skills, MCP servers, and agent configurations from verified publishers.",
+      "The registry where AI skill creators keep 85%. Publish your skills, MCP servers, and agents — distributed in one command, protected by default.",
   },
   robots: {
     index: true,
@@ -80,6 +81,7 @@ export default async function RootLayout({
       <body className={`min-h-screen antialiased ${spaceGrotesk.variable} ${jacquesFrancois.variable}`}>
         <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
+        <Footer />
         <Happie isSignedIn={!!session?.user} />
         <Analytics />
         <ServiceWorkerRegister />

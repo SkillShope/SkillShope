@@ -1,7 +1,7 @@
 {
   "name": "Skill Shope",
   "short_name": "Skill Shope",
-  "description": "Discover, review, and install AI skills, MCP servers, and agent configurations.",
+  "description": "The registry where AI skill creators keep 85%. You built it. Now get paid for it.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#353D37",

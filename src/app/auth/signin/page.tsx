@@ -4,6 +4,28 @@ import { Logo } from "@/components/logo";
 
 export default function SignInPage() {
   const authEnabled = process.env.AUTH_ENABLED === "true";
+  const maintenance = process.env.MAINTENANCE_MODE === "true";
+
+  if (maintenance) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center px-4">
+        <div className="w-full max-w-sm text-center">
+          <Logo width={48} height={48} className="mx-auto mb-4" />
+          <h1 className="text-2xl font-bold">We&apos;ll be right back</h1>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+            Skill Shope is undergoing a quick security update.
+            Sign-in will be available again shortly.
+          </p>
+          <Link
+            href="/browse"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
+          >
+            Browse Skills
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!authEnabled) {
     return (
