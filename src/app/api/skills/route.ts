@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
       tags: body.tags ? sanitize(body.tags).slice(0, 500) : null,
       listingType: body.listingType === "community" ? "community" : "original",
       originalAuthor: body.originalAuthor ? sanitize(body.originalAuthor).slice(0, 100) : null,
-      originalUrl: body.originalUrl ? body.originalUrl.slice(0, 500) : null,
+      originalUrl: body.originalUrl && isValidUrl(body.originalUrl) ? body.originalUrl.slice(0, 500) : null,
       authorId: session.user.id,
     },
   });
@@ -156,7 +156,9 @@ export async function POST(req: NextRequest) {
         },
       });
     })
-    .catch(() => {});
+    .catch((err) => {
+      console.error(`Security pipeline failed for skill ${skill.id}:`, err);
+    });
 
   return NextResponse.json(skill, { status: 201 });
 }

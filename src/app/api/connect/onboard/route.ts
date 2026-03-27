@@ -73,8 +73,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ url: accountLink.url });
   } catch (err) {
     console.error("Stripe Connect onboard error:", err);
-    const message =
-      err instanceof Error ? err.message : "Failed to set up Connect. Please try again.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to set up Connect. Please try again." },
+      { status: 500 }
+    );
   }
 }

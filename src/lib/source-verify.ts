@@ -75,13 +75,54 @@ async function verifyNpm(url: string): Promise<VerifyResult> {
   };
 }
 
+// Block SSRF: reject private IPs, localhost, and cloud metadata endpoints
+function isPrivateUrl(url: string): boolean {
+  let hostname: string;
+  try {
+    hostname = new URL(url).hostname.toLowerCase();
+  } catch {
+    return true; // Malformed URL — block it
+  }
+
+  // Block localhost variants
+  if (hostname === "localhost" || hostname === "[::1]") return true;
+
+  // Block cloud metadata endpoints
+  if (hostname === "169.254.169.254" || hostname === "metadata.google.internal") return true;
+
+  // Block private IP ranges
+  const parts = hostname.split(".").map(Number);
+  if (parts.length === 4 && parts.every((n) => !isNaN(n))) {
+    if (parts[0] === 10) return true;
+    if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return true;
+    if (parts[0] === 192 && parts[1] === 168) return true;
+    if (parts[0] === 127) return true;
+    if (parts[0] === 0) return true;
+  }
+
+  return false;
+}
+
 // Verify any URL is reachable
 async function verifyUrl(url: string): Promise<VerifyResult> {
+  if (isPrivateUrl(url)) {
+    return { status: "invalid", details: "URL points to a private or reserved address" };
+  }
+
   try {
-    const res = await fetch(url, { method: "HEAD", redirect: "follow" });
+    const res = await fetch(url, { method: "HEAD", redirect: "manual" });
 
     if (res.ok) {
       return { status: "valid", details: `URL is reachable (${res.status})` };
+    }
+
+    // For redirects, validate the target before following
+    if (res.status >= 300 && res.status < 400) {
+      const location = res.headers.get("location");
+      if (location && isPrivateUrl(location)) {
+        return { status: "invalid", details: "URL redirects to a private address" };
+      }
+      return { status: "valid", details: `URL is reachable (redirects to ${location || "unknown"})` };
     }
 
     return { status: "invalid", details: `URL returned ${res.status}` };
