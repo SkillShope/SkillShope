@@ -25,8 +25,10 @@ export default async function HomePage() {
   });
 
   const stats = {
-    skills: await prisma.skill.count(),
-    users: await prisma.user.count({ where: { skills: { some: {} } } }),
+    skills: await prisma.skill.count({ where: { hidden: false, reviewStatus: { in: ["approved", "pending"] } } }),
+    users: await prisma.user.count({
+      where: { skills: { some: { hidden: false, reviewStatus: { in: ["approved", "pending"] } } } },
+    }),
     downloads: await prisma.skill.aggregate({ _sum: { downloads: true } }),
   };
 
