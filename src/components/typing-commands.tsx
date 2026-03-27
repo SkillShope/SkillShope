@@ -31,9 +31,9 @@ export function TypingCommands({ commands }: { commands: string[] }) {
 
   useEffect(() => {
     const delay =
-      phase === "typing" ? 50 + Math.random() * 40 :
-      phase === "pause" ? 2000 :
-      25;
+      phase === "typing" ? 25 + Math.random() * 15 :
+      phase === "pause" ? 1200 :
+      12;
     const timer = setTimeout(tick, delay);
     return () => clearTimeout(timer);
   }, [tick, phase]);
