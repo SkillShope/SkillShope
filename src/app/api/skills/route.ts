@@ -89,12 +89,12 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Check if publisher has Stripe connected
+  // Check if publisher has Stripe payouts enabled (not just account created)
   const publisher = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { stripeAccountId: true, isAdmin: true },
+    select: { stripePayoutsEnabled: true, isAdmin: true },
   });
-  const hasStripe = !!publisher?.stripeAccountId;
+  const hasStripe = publisher?.stripePayoutsEnabled ?? false;
   const isAdmin = publisher?.isAdmin ?? false;
 
   const isCommunity = body.listingType === "community";

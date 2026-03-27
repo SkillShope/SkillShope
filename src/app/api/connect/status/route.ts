@@ -11,27 +11,39 @@ export async function GET() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { stripeAccountId: true },
+    select: { stripeAccountId: true, stripePayoutsEnabled: true },
   });
 
   if (!user?.stripeAccountId) {
     return NextResponse.json({ connected: false, payoutsEnabled: false });
   }
 
-  const account = await stripe.accounts.retrieve(user.stripeAccountId);
-  const payoutsEnabled = account.payouts_enabled ?? false;
+  try {
+    const account = await stripe.accounts.retrieve(user.stripeAccountId);
+    const payoutsEnabled = account.payouts_enabled ?? false;
 
-  // Auto-unhide skills when Stripe payouts become enabled
-  if (payoutsEnabled) {
-    await prisma.skill.updateMany({
-      where: { authorId: session.user.id, hidden: true },
-      data: { hidden: false },
+    // Sync payout status to database
+    if (payoutsEnabled !== user.stripePayoutsEnabled) {
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { stripePayoutsEnabled: payoutsEnabled },
+      });
+    }
+
+    // Auto-unhide skills when payouts become enabled
+    if (payoutsEnabled && !user.stripePayoutsEnabled) {
+      await prisma.skill.updateMany({
+        where: { authorId: session.user.id, hidden: true },
+        data: { hidden: false },
+      });
+    }
+
+    return NextResponse.json({
+      connected: true,
+      payoutsEnabled,
+      chargesEnabled: account.charges_enabled ?? false,
     });
+  } catch {
+    return NextResponse.json({ connected: false, payoutsEnabled: false });
   }
-
-  return NextResponse.json({
-    connected: true,
-    payoutsEnabled,
-    chargesEnabled: account.charges_enabled ?? false,
-  });
 }

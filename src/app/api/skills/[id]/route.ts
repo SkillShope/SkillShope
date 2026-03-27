@@ -68,9 +68,9 @@ export async function PATCH(
   if (body.isFree !== undefined || body.price !== undefined) {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { stripeAccountId: true, isAdmin: true },
+      select: { stripePayoutsEnabled: true, isAdmin: true },
     });
-    const hasStripe = !!user?.stripeAccountId;
+    const hasStripe = user?.stripePayoutsEnabled ?? false;
     const isAdmin = user?.isAdmin ?? false;
 
     if (body.isFree === false && !hasStripe && !isAdmin) {

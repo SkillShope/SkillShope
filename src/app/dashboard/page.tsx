@@ -11,7 +11,7 @@ export default async function DashboardPage() {
   const [user, skills, reviews, purchases] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { stripeAccountId: true },
+      select: { stripePayoutsEnabled: true },
     }),
     prisma.skill.findMany({
       where: { authorId: session.user.id },
@@ -46,7 +46,7 @@ export default async function DashboardPage() {
   });
   const totalRevenue = sales.reduce((sum, s) => sum + s.amount * (PUBLISHER_PAYOUT_PERCENT / 100), 0);
 
-  const hasStripe = !!user?.stripeAccountId;
+  const hasStripe = user?.stripePayoutsEnabled ?? false;
 
   return (
     <DashboardClient

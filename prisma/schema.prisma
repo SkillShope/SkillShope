@@ -17,7 +17,8 @@ model User {
   isAdmin           Boolean   @default(false)
   publisherVerified Boolean   @default(false)
   githubUsername    String?
-  stripeAccountId   String?
+  stripeAccountId       String?
+  stripePayoutsEnabled  Boolean   @default(false)
   accounts          Account[]
   sessions      Session[]
   skills        Skill[]
