@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Terminal, Server, Bot, Upload, Github, Package, Globe, FileUp } from "lucide-react";
+import { Terminal, Server, Bot, Upload, Github, Package, Globe, FileUp, Loader2 } from "lucide-react";
 
 const categories = [
   "code-review",
@@ -32,8 +32,10 @@ const sourceTypes = [
 export function PublishForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [importing, setImporting] = useState(false);
   const [error, setError] = useState("");
   const [skillContent, setSkillContent] = useState("");
+  const [githubUrl, setGithubUrl] = useState("");
   const [form, setForm] = useState({
     name: "",
     slug: "",
@@ -129,12 +131,82 @@ export function PublishForm() {
     e.target.value = "";
   };
 
+  const handleGitHubImport = async () => {
+    if (!githubUrl.includes("github.com")) {
+      setError("Please enter a valid GitHub URL");
+      return;
+    }
+    setImporting(true);
+    setError("");
+    try {
+      const res = await fetch("/api/github-import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: githubUrl }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Failed to import from GitHub");
+        return;
+      }
+      setForm((prev) => ({
+        ...prev,
+        name: data.name || prev.name,
+        slug: (data.name || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, ""),
+        description: data.description || prev.description,
+        longDescription: data.longDescription || prev.longDescription,
+        sourceUrl: data.sourceUrl || prev.sourceUrl,
+        sourceType: "github",
+        tags: data.tags || prev.tags,
+        ...(data.category ? { category: data.category } : {}),
+      }));
+      if (data.skillContent) setSkillContent(data.skillContent);
+      setGithubUrl("");
+    } catch {
+      setError("Failed to import from GitHub");
+    } finally {
+      setImporting(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <h1 className="mb-2 text-3xl font-bold">Publish a Skill</h1>
       <p className="mb-8 text-[var(--text-secondary)]">
         Share your AI skills, MCP servers, or agent configs with the community.
       </p>
+
+      {/* GitHub Import */}
+      <div className="mb-4">
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Github className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-secondary)]" />
+            <input
+              type="url"
+              value={githubUrl}
+              onChange={(e) => setGithubUrl(e.target.value)}
+              placeholder="https://github.com/owner/repo"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[var(--accent)]"
+              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleGitHubImport())}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={handleGitHubImport}
+            disabled={importing || !githubUrl}
+            className="flex shrink-0 items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-50"
+          >
+            {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />}
+            Import
+          </button>
+        </div>
+        <p className="mt-1.5 text-center text-xs text-[var(--text-secondary)]">
+          Paste a GitHub repo URL to auto-fill name, description, tags, and SKILL.md content.
+        </p>
+      </div>
 
       {/* JSON Upload */}
       <div className="mb-6">
@@ -151,8 +223,7 @@ export function PublishForm() {
         <p className="mt-2 text-center text-xs text-[var(--text-secondary)]">
           See the{" "}
           <a
-            href="/skill-schema.json"
-            target="_blank"
+            href="/docs/json-schema"
             className="text-[var(--accent)] hover:underline"
           >
             JSON schema

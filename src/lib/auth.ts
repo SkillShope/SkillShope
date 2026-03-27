@@ -54,14 +54,22 @@ const encryptedAdapter: Adapter = {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: encryptedAdapter,
+  session: { strategy: "jwt" },
   providers: [GitHub],
   pages: {
     signIn: "/auth/signin",
   },
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    async jwt({ token, user }) {
+      // On initial sign-in, persist the user ID into the JWT
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
       return session;
     },

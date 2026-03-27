@@ -1,4 +1,13 @@
+import { CopyButton } from "@/components/copy-button";
+import { readFileSync } from "fs";
+import { join } from "path";
+
 export default function JsonSchemaPage() {
+  const schemaContent = readFileSync(
+    join(process.cwd(), "public/skill-schema.json"),
+    "utf-8"
+  );
+
   const fields = [
     { name: "name", type: "string", required: true, desc: "Display name (2-100 chars)" },
     { name: "slug", type: "string", required: false, desc: "URL identifier. Auto-generated from name if omitted" },
@@ -26,10 +35,6 @@ export default function JsonSchemaPage() {
       <h1 className="font-display mb-4 text-3xl font-bold">JSON Schema</h1>
       <p className="mb-6 leading-relaxed text-[var(--text-secondary)]">
         Field reference for <code className="rounded bg-[var(--bg-secondary)] px-1.5 py-0.5 text-sm">listing.json</code> files.
-        Download the full schema at{" "}
-        <a href="/skill-schema.json" target="_blank" className="text-[var(--accent)] hover:underline">
-          /skill-schema.json
-        </a>.
       </p>
 
       <div className="overflow-x-auto">
@@ -55,6 +60,17 @@ export default function JsonSchemaPage() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Full schema with copy button */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold">Full Schema</h2>
+          <CopyButton text={schemaContent} />
+        </div>
+        <pre className="overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4 text-xs leading-relaxed">
+          <code>{schemaContent}</code>
+        </pre>
       </div>
     </>
   );
