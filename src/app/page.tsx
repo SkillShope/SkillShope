@@ -54,10 +54,10 @@ export default async function HomePage() {
               <Zap className="h-3.5 w-3.5" />
               Stop giving your tools away for free
             </div>
-            <h1 className="font-hero mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
+            <h1 className="font-hero mb-6 text-4xl font-bold tracking-tight sm:text-6xl text-balance">
               You built it.{" "}
               <span className="bg-gradient-to-r from-[var(--accent)] to-[#8a9a7b] bg-clip-text text-transparent">
-                Now get paid for it.
+                Now get paid for&nbsp;it.
               </span>
             </h1>
             <p className="mb-10 text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
