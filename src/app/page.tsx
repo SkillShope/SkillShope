@@ -5,8 +5,6 @@ import {
   Terminal,
   Server,
   Bot,
-  Download,
-  Users,
   Shield,
   Zap,
 } from "lucide-react";
@@ -15,6 +13,7 @@ import { SkillCard } from "@/components/skill-card";
 import { Aurora } from "@/components/aurora";
 import { HeroSearch } from "@/components/hero-search";
 import { Logo } from "@/components/logo";
+import { TypingCommands } from "@/components/typing-commands";
 
 export default async function HomePage() {
   const featuredSkills = await prisma.skill.findMany({
@@ -24,13 +23,21 @@ export default async function HomePage() {
     orderBy: { downloads: "desc" },
   });
 
-  const stats = {
-    skills: await prisma.skill.count({ where: { hidden: false, reviewStatus: { in: ["approved", "pending"] } } }),
-    users: await prisma.user.count({
-      where: { skills: { some: { hidden: false, reviewStatus: { in: ["approved", "pending"] } } } },
-    }),
-    downloads: await prisma.skill.aggregate({ _sum: { downloads: true } }),
-  };
+  // Fetch install commands for free/community skills to show in typing animation
+  const installSkills = await prisma.skill.findMany({
+    where: {
+      hidden: false,
+      isFree: true,
+      reviewStatus: { in: ["approved", "pending"] },
+      installCmd: { not: null },
+    },
+    select: { installCmd: true },
+    orderBy: { downloads: "desc" },
+    take: 10,
+  });
+  const installCommands = installSkills
+    .map((s) => s.installCmd!)
+    .filter((cmd) => cmd.length > 0);
 
   const categories = [
     { name: "Code Review", slug: "code-review", icon: Terminal, count: 0 },
@@ -68,35 +75,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
-        <div className="mx-auto grid max-w-7xl grid-cols-3 divide-x divide-[var(--border)] px-4 py-8 sm:px-6">
-          <div className="text-center">
-            <div className="text-2xl font-bold sm:text-3xl">
-              {stats.skills.toLocaleString()}
-            </div>
-            <div className="mt-1 text-sm text-[var(--text-secondary)]">
-              Skills Listed
-            </div>
+      {/* Install command showcase */}
+      {installCommands.length > 0 && (
+        <section className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+            <TypingCommands commands={installCommands} />
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold sm:text-3xl">
-              {stats.users.toLocaleString()}
-            </div>
-            <div className="mt-1 text-sm text-[var(--text-secondary)]">
-              Publishers
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold sm:text-3xl">
-              {formatNumber(stats.downloads._sum.downloads || 0)}
-            </div>
-            <div className="mt-1 text-sm text-[var(--text-secondary)]">
-              Installs
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Featured Skills */}
       {featuredSkills.length > 0 && (
@@ -291,10 +277,4 @@ export default async function HomePage() {
       </footer>
     </div>
   );
-}
-
-function formatNumber(n: number): string {
-  if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
-  return n.toString();
 }
