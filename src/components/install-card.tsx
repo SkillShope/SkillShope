@@ -74,7 +74,7 @@ export function InstallCard({
         )}
       </div>
 
-      {estimatedTokens != null && (
+      {estimatedTokens != null ? (
         <div className="mb-4 flex items-center gap-2 rounded-lg bg-[var(--bg-secondary)] px-3 py-2 text-sm">
           <Terminal className="h-4 w-4 text-[var(--text-secondary)]" />
           <span>
@@ -82,6 +82,10 @@ export function InstallCard({
             <span className="text-[var(--text-secondary)]"> estimated tokens</span>
           </span>
         </div>
+      ) : (
+        <p className="mb-4 text-xs text-[var(--text-secondary)]">
+          Token estimate unavailable — available for GitHub imports and pasted content.
+        </p>
       )}
 
       {/* Install command */}
