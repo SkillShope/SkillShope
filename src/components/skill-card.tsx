@@ -15,6 +15,7 @@ import {
   Clock,
 } from "lucide-react";
 import { ShareButton } from "./share-button";
+import { formatTokenCount } from "@/lib/format-tokens";
 
 type SkillCardProps = {
   slug: string;
@@ -37,6 +38,7 @@ type SkillCardProps = {
   githubStars?: number | null;
   githubForks?: number | null;
   lastUpdated?: string | null;
+  estimatedTokens?: number | null;
   variant?: "default" | "featured";
   authorName: string | null;
   authorImage: string | null;
@@ -173,6 +175,12 @@ export function SkillCard(props: SkillCardProps) {
               <span className="flex items-center gap-1">
                 <Download className="h-3.5 w-3.5" />
                 {formatDownloads(props.downloads)}
+              </span>
+            )}
+            {props.estimatedTokens != null && (
+              <span className="flex items-center gap-1" title="Estimated token cost">
+                <Terminal className="h-3 w-3" />
+                {formatTokenCount(props.estimatedTokens)} tokens
               </span>
             )}
           </div>

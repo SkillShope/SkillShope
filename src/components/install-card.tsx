@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ExternalLink, Loader2, Key } from "lucide-react";
+import { Check, ExternalLink, Loader2, Key, Terminal } from "lucide-react";
 import { CopyButton } from "./copy-button";
+import { formatTokenCount } from "@/lib/format-tokens";
 
 type InstallCardProps = {
   skillId: string;
@@ -14,6 +15,7 @@ type InstallCardProps = {
   sourceUrl: string;
   owned: boolean;
   isSignedIn: boolean;
+  estimatedTokens?: number | null;
 };
 
 export function InstallCard({
@@ -26,6 +28,7 @@ export function InstallCard({
   sourceUrl,
   owned,
   isSignedIn,
+  estimatedTokens,
 }: InstallCardProps) {
   const [loading, setLoading] = useState(false);
   const [downloadToken, setDownloadToken] = useState<string | null>(null);
@@ -70,6 +73,20 @@ export function InstallCard({
           </span>
         )}
       </div>
+
+      {estimatedTokens != null ? (
+        <div className="mb-4 flex items-center gap-2 rounded-lg bg-[var(--bg-secondary)] px-3 py-2 text-sm">
+          <Terminal className="h-4 w-4 text-[var(--text-secondary)]" />
+          <span>
+            <span className="font-medium">{formatTokenCount(estimatedTokens)}</span>
+            <span className="text-[var(--text-secondary)]"> estimated tokens</span>
+          </span>
+        </div>
+      ) : (
+        <p className="mb-4 text-xs text-[var(--text-secondary)]">
+          Token estimate unavailable — available for GitHub imports and pasted content.
+        </p>
+      )}
 
       {/* Install command */}
       {installCmd && (

@@ -107,6 +107,7 @@ model Skill {
   hidden          Boolean  @default(false) // hidden until publisher connects Stripe
   reviewStatus    String   @default("pending") // pending | approved | flagged | rejected
   securityScore   Int?
+  estimatedTokens Int?     // Token count from Claude's tokenizer (beta)
   securityReports SecurityReport[]
   featured        Boolean  @default(false)
   verified        Boolean  @default(false)

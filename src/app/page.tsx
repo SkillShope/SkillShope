@@ -118,6 +118,7 @@ export default async function HomePage() {
                 originalAuthor={skill.originalAuthor}
                 authorName={skill.author.name}
                 authorImage={skill.author.showAvatar ? skill.author.image : null}
+                estimatedTokens={skill.estimatedTokens}
               />
             ))}
           </div>

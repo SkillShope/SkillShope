@@ -234,6 +234,7 @@ export default async function BrowsePage({ searchParams }: Props) {
               originalAuthor={skill.originalAuthor}
               authorName={skill.author.name}
               authorImage={skill.author.showAvatar ? skill.author.image : null}
+              estimatedTokens={skill.estimatedTokens}
             />
           ))}
         </div>

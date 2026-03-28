@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
+import { formatTokenCount } from "@/lib/format-tokens";
 import { ReviewForm } from "@/components/review-form";
 import { InstallCard } from "@/components/install-card";
 import { ShareButton } from "@/components/share-button";
@@ -183,6 +184,12 @@ export default async function SkillPage({ params }: Props) {
               <Download className="h-4 w-4" />
               {skill.downloads.toLocaleString()} installs
             </span>
+            {skill.estimatedTokens != null && (
+              <span className="flex items-center gap-1.5">
+                <Terminal className="h-4 w-4" />
+                {formatTokenCount(skill.estimatedTokens)} tokens
+              </span>
+            )}
             {skill.lastUpdated ? (
               <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
@@ -357,6 +364,7 @@ export default async function SkillPage({ params }: Props) {
               sourceUrl={skill.sourceUrl}
               owned={owned}
               isSignedIn={!!session?.user}
+              estimatedTokens={skill.estimatedTokens}
             />
 
             {/* Author card */}
