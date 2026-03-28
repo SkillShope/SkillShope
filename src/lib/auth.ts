@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import type { Adapter, AdapterAccount } from "@auth/core/adapters";
 import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
 import { encrypt, decrypt, isEncrypted } from "./crypto";
@@ -55,7 +56,7 @@ const encryptedAdapter: Adapter = {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: encryptedAdapter,
   session: { strategy: "jwt" },
-  providers: [GitHub],
+  providers: [GitHub, Google],
   pages: {
     signIn: "/auth/signin",
   },
