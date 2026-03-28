@@ -15,6 +15,7 @@ export default async function ProfilePage() {
       email: true,
       image: true,
       bio: true,
+      showAvatar: true,
       createdAt: true,
     },
   });
@@ -27,6 +28,7 @@ export default async function ProfilePage() {
       email={user.email || ""}
       image={user.image || null}
       bio={user.bio || ""}
+      showAvatar={user.showAvatar}
       joinedAt={user.createdAt.toISOString()}
     />
   );

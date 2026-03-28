@@ -9,13 +9,14 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { name, bio } = await req.json();
+  const { name, bio, showAvatar } = await req.json();
 
   await prisma.user.update({
     where: { id: session.user.id },
     data: {
       ...(typeof name === "string" ? { name: sanitize(name).slice(0, 100) } : {}),
       ...(typeof bio === "string" ? { bio: sanitize(bio).slice(0, 500) } : {}),
+      ...(typeof showAvatar === "boolean" ? { showAvatar } : {}),
     },
   });
 

@@ -133,7 +133,7 @@ export default async function BrowsePage({ searchParams }: Props) {
               lastUpdated={skill.lastUpdated?.toISOString() ?? null}
               originalAuthor={skill.originalAuthor}
               authorName={skill.author.name}
-              authorImage={skill.author.image}
+              authorImage={skill.author.showAvatar ? skill.author.image : null}
             />
           ))}
         </div>

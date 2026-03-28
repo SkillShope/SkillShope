@@ -8,12 +8,14 @@ type Props = {
   email: string;
   image: string | null;
   bio: string;
+  showAvatar: boolean;
   joinedAt: string;
 };
 
-export function ProfileForm({ name: initialName, email, image, bio: initialBio, joinedAt }: Props) {
+export function ProfileForm({ name: initialName, email, image, bio: initialBio, showAvatar: initialShowAvatar, joinedAt }: Props) {
   const [name, setName] = useState(initialName);
   const [bio, setBio] = useState(initialBio);
+  const [showAvatar, setShowAvatar] = useState(initialShowAvatar);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -72,7 +74,7 @@ export function ProfileForm({ name: initialName, email, image, bio: initialBio, 
     await fetch("/api/profile", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, bio }),
+      body: JSON.stringify({ name, bio, showAvatar }),
     });
     setSaving(false);
     setSaved(true);
@@ -110,6 +112,21 @@ export function ProfileForm({ name: initialName, email, image, bio: initialBio, 
             </p>
           </div>
         </div>
+        <label className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3">
+          <div>
+            <p className="text-sm font-medium">Show profile photo publicly</p>
+            <p className="text-xs text-[var(--text-secondary)]">
+              {showAvatar ? "Your photo appears on skill cards and your publisher profile" : "A placeholder icon is shown instead of your photo"}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowAvatar(!showAvatar)}
+            className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${showAvatar ? "bg-[var(--accent)]" : "bg-[var(--border)]"}`}
+          >
+            <span className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform ${showAvatar ? "translate-x-5" : ""}`} />
+          </button>
+        </label>
 
         {/* Form */}
         <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-6">
@@ -201,7 +218,8 @@ export function ProfileForm({ name: initialName, email, image, bio: initialBio, 
             <h2 className="text-sm font-semibold">API Keys</h2>
           </div>
           <p className="mb-4 text-xs text-[var(--text-secondary)]">
-            Use API keys to authenticate the CLI and API. Keys are shown once when created — save them securely.
+            Use API keys to authenticate the CLI and API. Keys are shown once when created — save them securely.{" "}
+            <a href="/docs/api-reference#api-keys" className="text-[var(--accent)] hover:underline">What&apos;s this for?</a>
           </p>
 
           {/* New key created — show once */}
