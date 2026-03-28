@@ -535,8 +535,18 @@ export function PublishForm() {
 
         {/* Source */}
         <div>
-          <label className="mb-1 block text-sm font-medium">Source</label>
-          <p className="mb-2 text-xs text-[var(--text-secondary)]">Where is the source code hosted? This link appears on your skill page so users can review the code.</p>
+          <label className="mb-1 block text-sm font-medium">
+            Source {!form.isFree && <span className="font-normal text-[var(--text-secondary)]">(optional for paid skills)</span>}
+          </label>
+          {!form.isFree ? (
+            <p className="mb-2 text-xs text-[var(--text-secondary)]">
+              Paid skills don&apos;t need a public source. Your skill content is delivered
+              securely through Skill Shope — your repo is the kitchen, Skill Shope is the restaurant.
+              Add a link for credibility, or leave it empty to keep your code private.
+            </p>
+          ) : (
+            <p className="mb-2 text-xs text-[var(--text-secondary)]">Where is the source code hosted? This link appears on your skill page so users can review the code.</p>
+          )}
           <div className="mb-3 grid grid-cols-3 gap-3">
             {sourceTypes.map((s) => (
               <button
@@ -558,7 +568,7 @@ export function PublishForm() {
             type="url"
             value={form.sourceUrl}
             onChange={(e) => updateForm("sourceUrl", e.target.value)}
-            placeholder={sourceTypes.find((s) => s.value === form.sourceType)?.placeholder}
+            placeholder={!form.isFree ? "Optional — leave empty to keep code private" : sourceTypes.find((s) => s.value === form.sourceType)?.placeholder}
             className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-2.5 text-sm outline-none focus:border-[var(--accent)]"
           />
         </div>

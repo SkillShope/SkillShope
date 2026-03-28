@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
       isFree,
       hidden,
       installCmd: body.installCmd ? sanitize(body.installCmd).slice(0, 500) : null,
-      sourceUrl: body.sourceUrl.slice(0, 500),
+      sourceUrl: (body.sourceUrl || "").slice(0, 500),
       sourceType: body.sourceType || "github",
       compatibility: (body.compatibility || "claude-code").slice(0, 200),
       tags: body.tags ? sanitize(body.tags).slice(0, 500) : null,

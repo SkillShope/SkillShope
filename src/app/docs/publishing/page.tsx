@@ -71,6 +71,44 @@ export default function PublishingPage() {
           </tbody>
         </table>
       </div>
+
+      <h2 className="mb-3 mt-8 text-xl font-bold">Paid skills &amp; source visibility</h2>
+      <p className="mb-4 text-sm leading-relaxed text-[var(--text-secondary)]">
+        If you&apos;re selling a skill, you don&apos;t need to link a public repo.
+        The source URL is optional for paid listings. Your skill content is delivered
+        securely through Skill Shope using download tokens — buyers never see
+        your source unless you choose to share it.
+      </p>
+      <p className="mb-4 text-sm leading-relaxed text-[var(--text-secondary)]">
+        Think of it this way: your repo is the kitchen, Skill Shope is the restaurant.
+        You can link a public repo for credibility, point to a private repo, or leave
+        the field empty entirely. The value you&apos;re selling is the curated,
+        production-ready, one-command-install package — not raw source code.
+      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-[var(--border)]">
+              <th className="py-2 pr-4 text-left font-medium text-[var(--text-secondary)]">Strategy</th>
+              <th className="py-2 text-left font-medium text-[var(--text-secondary)]">Best for</th>
+            </tr>
+          </thead>
+          <tbody className="text-[var(--text-secondary)]">
+            <tr className="border-b border-[var(--border)]">
+              <td className="py-2 pr-4 font-medium text-[var(--text)]">No source link</td>
+              <td className="py-2">Maximum IP protection — content lives only on Skill Shope</td>
+            </tr>
+            <tr className="border-b border-[var(--border)]">
+              <td className="py-2 pr-4 font-medium text-[var(--text)]">Private repo link</td>
+              <td className="py-2">Shows credibility without exposing code</td>
+            </tr>
+            <tr>
+              <td className="py-2 pr-4 font-medium text-[var(--text)]">Public repo link</td>
+              <td className="py-2">Open-source with premium support/packaging — the convenience tax</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }
