@@ -6,6 +6,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { verifySkillSource } from "@/lib/source-verify";
 import { runSecurityPipeline } from "@/lib/security";
 import type { SkillInput } from "@/lib/security/types";
+import { countSkillTokens } from "@/lib/tokenize";
 
 const VALID_TYPES = ["skill", "mcp-server", "agent"];
 const VALID_SOURCE_TYPES = ["github", "npm", "other"];
@@ -137,6 +138,22 @@ export async function POST(req: NextRequest) {
         content,
       },
     });
+  }
+
+  // Count tokens in skill content (non-blocking)
+  if (body.skillContent) {
+    countSkillTokens(body.skillContent)
+      .then(async (tokenCount) => {
+        if (tokenCount !== null) {
+          await prisma.skill.update({
+            where: { id: skill.id },
+            data: { estimatedTokens: tokenCount },
+          });
+        }
+      })
+      .catch((err) => {
+        console.error(`Token counting failed for skill ${skill.id}:`, err);
+      });
   }
 
   // Run security pipeline in the background (non-blocking)
