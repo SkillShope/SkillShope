@@ -365,7 +365,7 @@ export default async function SkillPage({ params }: Props) {
                 Publisher
               </h3>
               <div className="flex items-center gap-3">
-                {skill.author.image ? (
+                {skill.author.image && skill.author.showAvatar ? (
                   <img
                     src={skill.author.image}
                     alt={skill.author.name || ""}

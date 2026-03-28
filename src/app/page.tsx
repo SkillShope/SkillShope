@@ -117,7 +117,7 @@ export default async function HomePage() {
                 variant="featured"
                 originalAuthor={skill.originalAuthor}
                 authorName={skill.author.name}
-                authorImage={skill.author.image}
+                authorImage={skill.author.showAvatar ? skill.author.image : null}
               />
             ))}
           </div>
