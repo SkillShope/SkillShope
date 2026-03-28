@@ -64,7 +64,7 @@ export default function SignInPage() {
           {[
             "Install and manage AI skills from your dashboard",
             "Publish skills, MCP servers, and agents",
-            "Get personalized SKILL.md files from Happie",
+            "Chat with Happie for skill recommendations",
             "Leave reviews and help the community",
           ].map((item) => (
             <div key={item} className="flex items-center gap-2">
