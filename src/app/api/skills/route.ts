@@ -101,8 +101,8 @@ export async function POST(req: NextRequest) {
   // Force free if no Stripe connected (admins exempt — platform skills)
   const isFree = isCommunity ? true : (!hasStripe && !isAdmin) ? true : (body.isFree ?? true);
   const price = isFree ? 0 : Math.max(0.99, Number(body.price) || 0);
-  // Hide skills from publishers without Stripe (admins exempt)
-  const hidden = !hasStripe && !isAdmin;
+  // Free skills are visible by default. Paid skills require Stripe (admins exempt).
+  const hidden = isAdmin ? false : !isFree && !hasStripe;
 
   const skill = await prisma.skill.create({
     data: {

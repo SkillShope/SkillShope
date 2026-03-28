@@ -62,32 +62,48 @@ export async function PATCH(
   if (typeof body.longDescription === "string") data.longDescription = sanitize(body.longDescription).slice(0, 5000);
   if (typeof body.tags === "string") data.tags = sanitize(body.tags).slice(0, 500);
   if (typeof body.installCmd === "string") data.installCmd = sanitize(body.installCmd).slice(0, 500);
+  // Fetch Stripe status for pricing and visibility checks
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { stripePayoutsEnabled: true, isAdmin: true },
+  });
+  const hasStripe = user?.stripePayoutsEnabled ?? false;
+  const isAdmin = user?.isAdmin ?? false;
+
+  // Determine the effective isFree after this update
+  const currentSkill = await prisma.skill.findUnique({
+    where: { id },
+    select: { isFree: true },
+  });
+  const effectiveIsFree = body.isFree !== undefined ? body.isFree : currentSkill?.isFree ?? true;
+
+  // Block paid skills without Stripe (admins exempt)
+  if (body.isFree === false && !hasStripe && !isAdmin) {
+    return NextResponse.json(
+      { error: "Connect your Stripe account to offer paid skills" },
+      { status: 400 }
+    );
+  }
+
+  // Block making paid skills visible without Stripe
+  if (body.hidden === false && !effectiveIsFree && !hasStripe && !isAdmin) {
+    return NextResponse.json(
+      { error: "Connect your Stripe account to make paid skills visible" },
+      { status: 400 }
+    );
+  }
+
   if (typeof body.hidden === "boolean") data.hidden = body.hidden;
 
-  // Only allow price changes if publisher has Stripe
-  if (body.isFree !== undefined || body.price !== undefined) {
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { stripePayoutsEnabled: true, isAdmin: true },
-    });
-    const hasStripe = user?.stripePayoutsEnabled ?? false;
-    const isAdmin = user?.isAdmin ?? false;
-
-    if (body.isFree === false && !hasStripe && !isAdmin) {
-      return NextResponse.json(
-        { error: "Connect your Stripe account to offer paid skills" },
-        { status: 400 }
-      );
+  if (typeof body.isFree === "boolean") {
+    data.isFree = body.isFree;
+    if (body.isFree) {
+      data.price = 0;
+    } else {
+      data.price = Math.max(0.99, Number(body.price) || 0);
     }
-
-    if (typeof body.isFree === "boolean") {
-      data.isFree = body.isFree;
-      if (body.isFree) {
-        data.price = 0;
-      } else {
-        data.price = Math.max(0.99, Number(body.price) || 0);
-      }
-    }
+  } else if (body.price !== undefined && !effectiveIsFree) {
+    data.price = Math.max(0.99, Number(body.price) || 0);
   }
 
   if (Object.keys(data).length === 0) {

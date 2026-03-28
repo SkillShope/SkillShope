@@ -177,8 +177,7 @@ export function DashboardClient({
                 {hiddenCount} skill{hiddenCount !== 1 ? "s" : ""} hidden from the public
               </p>
               <p className="mt-1 text-xs text-[var(--text-secondary)]">
-                Connect your Stripe account above to make your skills visible and offer paid products.
-                Until then, all your skills are hidden from the browse page and set to free.
+                To unlock visibility on paid products, connect your Stripe account. Free products are always visible.
               </p>
             </div>
           </div>
