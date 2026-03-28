@@ -42,14 +42,10 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-3">
           <Link href="/browse" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Browse</Link>
-          <Link href="/bundles" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Bundles</Link>
-          <Link href="/docs" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Docs</Link>
-          <Link href="/about" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">About</Link>
           <ThemeToggle />
 
           {user ? (
             <>
-              <Link href="/dashboard" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Dashboard</Link>
               <Link href="/publish" className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors">
                 <Plus className="h-4 w-4" />Publish
               </Link>
@@ -119,12 +115,9 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
             <nav className="space-y-1">
               {[
                 { href: "/browse", label: "Browse" },
-                { href: "/bundles", label: "Bundles" },
-                { href: "/docs", label: "Docs" },
-                { href: "/about", label: "About" },
                 ...(user ? [
-                  { href: "/dashboard", label: "Dashboard" },
                   { href: "/publish", label: "Publish" },
+                  { href: "/dashboard", label: "Dashboard" },
                   { href: "/profile", label: "Profile" },
                   ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
                 ] : []),

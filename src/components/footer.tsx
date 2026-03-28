@@ -17,7 +17,7 @@ export function Footer() {
             <nav className="space-y-2">
               <Link href="/browse" className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text)]">Browse Skills</Link>
               <Link href="/publish" className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text)]">Publish</Link>
-              <Link href="/bundles" className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text)]">Bundles</Link>
+              <Link href="/browse?view=bundles" className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text)]">Bundles</Link>
               <Link href="/docs" className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text)]">Docs</Link>
             </nav>
           </div>
