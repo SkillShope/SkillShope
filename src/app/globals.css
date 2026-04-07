@@ -1,19 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0a0a0a;
-  --bg-secondary: #111111;
-  --bg-card: #161616;
-  --bg-card-hover: #1a1a1a;
-  --border: #222222;
-  --text: #D1D2BD;
-  --text-secondary: #888888;
-  --accent: #4a5d4f;
-  --accent-hover: #303A34;
-  --accent-soft: rgba(74, 93, 79, 0.2);
+  --bg: #0A1628;
+  --bg-secondary: #0F1D32;
+  --bg-card: #13243D;
+  --bg-card-hover: #182B48;
+  --border: #1E3554;
+  --text: #E8ECF1;
+  --text-secondary: #8899AD;
+  --accent: #FF6200;
+  --accent-hover: #E55800;
+  --accent-soft: rgba(255, 98, 0, 0.15);
   --green: #22c55e;
   --yellow: #eab308;
   --blue: #3b82f6;
+  --font-hero: var(--font-space-grotesk);
+  --font-body: var(--font-space-grotesk);
 }
 
 body {
@@ -31,19 +33,16 @@ body {
 }
 
 [data-theme="light"] {
-  --bg: #EFEDE5;
-  --bg-secondary: #E5E3DB;
-  --bg-card: #F5F4EE;
-  --bg-card-hover: #EEECE4;
-  --border: #D5D3CA;
-  --text: #1a1e1b;
-  --text-secondary: #4a4e4b;
-  --accent: #3a4d3e;
-  --accent-hover: #2d3d30;
-  --accent-soft: rgba(58, 77, 62, 0.15);
-  --green: #16803c;
-  --yellow: #a17408;
-  --blue: #2563eb;
+  --bg: #F4F6F8;
+  --bg-secondary: #E8ECF0;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8F9FA;
+  --border: #D1D9E0;
+  --text: #0A1628;
+  --text-secondary: #4A5568;
+  --accent: #FF6200;
+  --accent-hover: #E55800;
+  --accent-soft: rgba(255, 98, 0, 0.1);
 }
 
 ::selection {
