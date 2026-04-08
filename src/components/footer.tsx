@@ -28,9 +28,15 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-[var(--border)] pt-6 text-center text-xs text-[var(--text-secondary)]">
-          <p>&copy; {new Date().getFullYear()} RoughInHub. Built by tradespeople, for tradespeople.</p>
-          <p className="mt-2">
-            RoughInHub is a marketplace — we do not guarantee the accuracy of third-party blueprints.{" "}
+          <p className="mx-auto max-w-xl leading-relaxed">
+            RoughInHub hosts user-uploaded content only. We do not own or verify it.
+            All blueprints are the seller&apos;s responsibility. We comply with DMCA -
+            report infringements to{" "}
+            <a href="mailto:dmca@roughinhub.com" className="text-[var(--accent)] hover:underline">dmca@roughinhub.com</a>.{" "}
+            <Link href="/terms#copyright" className="text-[var(--accent)] hover:underline">Full policy</Link>.
+          </p>
+          <p className="mt-4">
+            &copy; {new Date().getFullYear()} RoughInHub. Built by tradespeople, for tradespeople.{" "}
             <Link href="/terms" className="hover:text-[var(--text)]">Terms</Link> &middot;{" "}
             <Link href="/privacy" className="hover:text-[var(--text)]">Privacy</Link>
           </p>
