@@ -129,7 +129,7 @@ export function PublishForm() {
     if (!blueprintId) {
       await handleCreateBlueprint();
     } else {
-      router.push(`/blueprints/${form.slug}`);
+      router.push("/dashboard");
     }
   };
 
@@ -347,7 +347,7 @@ export function PublishForm() {
           )}
 
           <button
-            onClick={() => router.push(`/blueprints/${form.slug}`)}
+            onClick={() => router.push("/dashboard")}
             disabled={uploadedFiles.length === 0}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-50"
           >
