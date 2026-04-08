@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-4">
       <div className="w-full max-w-sm text-center">
-        <Logo width={48} height={48} className="mx-auto mb-6" />
+        <Logo className="mx-auto mb-6 block" />
         <h1 className="text-6xl font-bold text-[var(--accent)]">404</h1>
         <p className="mt-3 text-lg font-medium">Page not found</p>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">
@@ -22,7 +22,7 @@ export default function NotFound() {
             href="/browse"
             className="rounded-lg border border-[var(--border)] px-6 py-2.5 text-sm font-semibold hover:border-[var(--accent)]/40 transition-colors"
           >
-            Browse Skills
+            Browse Blueprints
           </Link>
         </div>
       </div>

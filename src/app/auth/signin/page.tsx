@@ -10,17 +10,17 @@ export default function SignInPage() {
     return (
       <div className="flex min-h-[80vh] items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
-          <Logo width={48} height={48} className="mx-auto mb-4" />
+          <Logo className="mx-auto mb-4 block" />
           <h1 className="text-2xl font-bold">We&apos;ll be right back</h1>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Skill Shope is undergoing a quick security update.
+            RoughInHub is undergoing a quick maintenance update.
             Sign-in will be available again shortly.
           </p>
           <Link
             href="/browse"
             className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
           >
-            Browse Skills
+            Browse Blueprints
           </Link>
         </div>
       </div>
@@ -31,17 +31,17 @@ export default function SignInPage() {
     return (
       <div className="flex min-h-[80vh] items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
-          <Logo width={48} height={48} className="mx-auto mb-4" />
+          <Logo className="mx-auto mb-4 block" />
           <h1 className="text-2xl font-bold">Coming Soon</h1>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Skill Shope is getting ready for launch. Sign-up will be available
-            shortly — browse the registry in the meantime.
+            RoughInHub is getting ready for launch. Sign-up will be available
+            shortly — browse blueprints in the meantime.
           </p>
           <Link
             href="/browse"
             className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
           >
-            Browse Skills
+            Browse Blueprints
           </Link>
         </div>
       </div>
@@ -52,19 +52,17 @@ export default function SignInPage() {
     <div className="flex min-h-[80vh] items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <Logo width={48} height={48} className="mx-auto mb-4" />
-          <h1 className="text-2xl font-bold">Sign in to Skill Shope</h1>
+          <Logo className="mx-auto mb-4 block" />
+          <h1 className="text-2xl font-bold">Sign in to RoughInHub</h1>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Install skills from the registry, publish your own tools,
-            and get personalized recommendations from Happie.
+            Sign in to access your plumbing blueprints
           </p>
         </div>
 
         <div className="mb-6 space-y-2 text-xs text-[var(--text-secondary)]">
           {[
-            "Install and manage AI skills from your dashboard",
-            "Publish skills, MCP servers, and agents",
-            "Chat with Happie for skill recommendations",
+            "Access and manage your purchased blueprints",
+            "Sell your own blueprints and specs",
             "Leave reviews and help the community",
           ].map((item) => (
             <div key={item} className="flex items-center gap-2">
@@ -114,10 +112,6 @@ export default function SignInPage() {
         </div>
 
         <p className="mt-4 text-center text-xs text-[var(--text-secondary)]">
-          GitHub is required for publishing with ownership verification.
-        </p>
-
-        <p className="mt-2 text-center text-xs text-[var(--text-secondary)]">
           By signing in, you agree to our{" "}
           <Link href="/terms" className="text-[var(--accent)] hover:underline">terms of service</Link>.
         </p>
