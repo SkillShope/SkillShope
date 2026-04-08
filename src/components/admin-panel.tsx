@@ -86,7 +86,7 @@ export function AdminPanel() {
   const loadData = async () => {
     setLoading(true);
     const [skillsRes, usersRes] = await Promise.all([
-      fetch("/api/admin/skills"),
+      fetch("/api/admin/blueprints"),
       fetch("/api/admin/users"),
     ]);
     setBlueprints(await skillsRes.json());
@@ -103,7 +103,7 @@ export function AdminPanel() {
 
   const confirmAction = async () => {
     if (!pending) return;
-    const url = pending.type === "blueprint" ? "/api/admin/skills" : "/api/admin/users";
+    const url = pending.type === "blueprint" ? "/api/admin/blueprints" : "/api/admin/users";
     await fetch(url, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -117,7 +117,7 @@ export function AdminPanel() {
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <h1 className="mb-2 text-2xl font-bold">Admin</h1>
       <p className="mb-6 text-sm text-[var(--text-secondary)]">
-        Manage blueprints, publishers, and platform content.
+        Manage blueprints, creators, and platform content.
       </p>
 
       {/* Tabs + Actions */}
@@ -156,7 +156,7 @@ export function AdminPanel() {
             <Package className="mx-auto mb-3 h-8 w-8 text-[var(--text-secondary)]" />
             <p className="font-medium">No blueprints yet</p>
             <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              Blueprints will appear here once publishers start listing.
+              Blueprints will appear here once creators start listing.
             </p>
           </div>
         ) : (
@@ -165,7 +165,7 @@ export function AdminPanel() {
               <thead>
                 <tr className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Blueprint</th>
-                  <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Publisher</th>
+                  <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Creator</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Type</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Downloads</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Status</th>

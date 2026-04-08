@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     cancel_url: `${origin}/blueprints/${blueprint.slug}`,
   };
 
-  // Route funds to publisher if they have a connected Stripe account
+  // Route funds to creator if they have a connected Stripe account
   if (blueprint.author.stripeAccountId) {
     params.payment_intent_data = {
       application_fee_amount: feeCents,

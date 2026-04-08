@@ -1,9 +1,8 @@
 // Admin Blueprints API
 // Auth: requires admin session (cookie-based via requireAdmin)
-// Future: add API key auth for external access (CI/CD, dashboards, etc.)
 //
-// GET  /api/admin/skills          — List all blueprints with author info
-// PATCH /api/admin/skills         — Manage a blueprint
+// GET  /api/admin/blueprints          — List all blueprints with author info
+// PATCH /api/admin/blueprints         — Manage a blueprint
 //   body: { id: string, action: "feature" | "unfeature" | "remove" }
 
 import { NextRequest, NextResponse } from "next/server";

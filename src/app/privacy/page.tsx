@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy policy for Skill Shope — how we collect, use, and protect your data.",
+  description: "Privacy policy for RoughInHub — how we collect, use, and protect your data.",
 };
 
 export default function PrivacyPage() {
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
             1. Overview
           </h2>
           <p>
-            Skill Shope (&quot;we&quot;, &quot;us&quot;) operates skillshope.com.
+            RoughInHub (&quot;we&quot;, &quot;us&quot;) operates roughinhub.com.
             This policy explains what data we collect, how we use it, and your
             rights regarding that data.
           </p>
@@ -34,23 +34,23 @@ export default function PrivacyPage() {
             Account Data
           </h3>
           <p className="mb-3">
-            When you sign in via GitHub, we receive your name, email address,
-            and profile image from GitHub. We store this to identify your account.
+            When you sign in via Google, we receive your name, email address,
+            and profile image from Google. We store this to identify your account.
           </p>
           <h3 className="mb-2 text-sm font-medium text-[var(--text)]">
             Purchase Data
           </h3>
           <p className="mb-3">
-            When you purchase a skill, we record the transaction (skill ID, amount,
-            Stripe session ID). Payment card details are handled entirely by Stripe
-            — we never see or store your card information.
+            When you purchase a blueprint, we record the transaction (blueprint ID,
+            amount, Stripe session ID). Payment card details are handled entirely
+            by Stripe — we never see or store your card information.
           </p>
           <h3 className="mb-2 text-sm font-medium text-[var(--text)]">
             Content You Submit
           </h3>
           <p className="mb-3">
-            Skill listings, reviews, and profile information you submit are stored
-            in our database and displayed publicly on the platform.
+            Blueprint listings, reviews, and profile information you submit are
+            stored in our database and displayed publicly on the platform.
           </p>
           <h3 className="mb-2 text-sm font-medium text-[var(--text)]">
             Analytics Data
@@ -70,8 +70,8 @@ export default function PrivacyPage() {
           </h2>
           <ul className="ml-4 list-disc space-y-2">
             <li>To provide and maintain your account</li>
-            <li>To process purchases and deliver skill content</li>
-            <li>To display your published skills and reviews</li>
+            <li>To process purchases and deliver blueprint content</li>
+            <li>To display your published blueprints and reviews</li>
             <li>To send transactional emails (purchase receipts via Stripe)</li>
             <li>To improve the platform based on aggregated usage patterns</li>
             <li>To prevent fraud and abuse</li>
@@ -84,9 +84,9 @@ export default function PrivacyPage() {
           </h2>
           <ul className="ml-4 list-disc space-y-2">
             <li>
-              <strong>GitHub</strong> — Authentication provider. Subject to{" "}
-              <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">
-                GitHub&apos;s Privacy Statement
+              <strong>Google</strong> — Authentication provider. Subject to{" "}
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">
+                Google&apos;s Privacy Policy
               </a>.
             </li>
             <li>
@@ -179,10 +179,10 @@ export default function PrivacyPage() {
         <p className="text-sm text-[var(--text-secondary)]">
           Questions? Contact{" "}
           <a
-            href="mailto:ryan@skillshope.com"
+            href="mailto:ryan@roughinhub.com"
             className="text-[var(--accent)] hover:underline"
           >
-            ryan@skillshope.com
+            ryan@roughinhub.com
           </a>
         </p>
       </div>
