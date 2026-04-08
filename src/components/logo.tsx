@@ -16,7 +16,11 @@ export function Logo({
 
   useEffect(() => {
     const html = document.documentElement;
-    const update = () => setTheme(html.getAttribute("data-theme") || "dark");
+    const update = () => {
+      const attr = html.getAttribute("data-theme");
+      const stored = localStorage.getItem("roughinhub-theme");
+      setTheme(attr || stored || "dark");
+    };
     update();
     const observer = new MutationObserver(update);
     observer.observe(html, { attributes: true, attributeFilter: ["data-theme"] });
