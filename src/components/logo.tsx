@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 
 export function Logo({
   className,
-  width = 160,
-  height = 48,
+  width = 180,
+  height = 58,
 }: {
   className?: string;
   width?: number;

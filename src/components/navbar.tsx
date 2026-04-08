@@ -35,7 +35,7 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
     <nav className="sticky top-0 z-50 border-b border-[var(--border)]/50 bg-[var(--bg)]/10 backdrop-blur-2xl backdrop-saturate-150">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="shrink-0">
-          <Logo width={140} height={40} />
+          <Logo width={180} height={58} />
         </Link>
 
 
