@@ -75,6 +75,7 @@ model Blueprint {
   featured        Boolean         @default(false)
   hidden          Boolean         @default(false)
   tags            String?
+  contentAcknowledgedAt DateTime?  // timestamp when creator attested ownership at publish
   authorId        String
   author          User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
   purchases       Purchase[]

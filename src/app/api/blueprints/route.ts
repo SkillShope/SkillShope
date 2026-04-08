@@ -66,6 +66,9 @@ export async function POST(req: NextRequest) {
   if (body.category && !VALID_CATEGORIES.includes(body.category)) {
     errors.push({ field: "category", message: "Invalid category" });
   }
+  if (!body.contentAcknowledged) {
+    errors.push({ field: "contentAcknowledged", message: "You must confirm this is your original work" });
+  }
   if (errors.length > 0) {
     return NextResponse.json({ errors }, { status: 400 });
   }
@@ -93,6 +96,7 @@ export async function POST(req: NextRequest) {
       isFree,
       region: body.region ? sanitize(body.region).slice(0, 100) : null,
       tags: body.tags ? sanitize(body.tags).slice(0, 500) : null,
+      contentAcknowledgedAt: new Date(),
       authorId: session.user.id,
     },
   });

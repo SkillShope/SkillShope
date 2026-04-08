@@ -43,6 +43,7 @@ export function PublishForm() {
     isFree: true,
     region: "",
     tags: "",
+    contentAcknowledged: false,
   });
 
   const updateForm = (key: string, value: string | number | boolean) => {
@@ -288,9 +289,32 @@ export function PublishForm() {
             />
           </div>
 
+          {/* Content ownership acknowledgement */}
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.contentAcknowledged as boolean}
+                onChange={(e) => updateForm("contentAcknowledged", e.target.checked)}
+                className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--accent)]"
+              />
+              <span className="text-sm text-[var(--text-secondary)]">
+                I confirm this is my original work and I have the legal right to sell it.
+                I agree to the{" "}
+                <a
+                  href="/terms#copyright"
+                  target="_blank"
+                  className="text-[var(--accent)] hover:underline"
+                >
+                  Content &amp; Copyright Policy
+                </a>.
+              </span>
+            </label>
+          </div>
+
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !form.contentAcknowledged}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Plus className="h-5 w-5" />}
