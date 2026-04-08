@@ -8,6 +8,7 @@
 // GET /api/deliver/[blueprintId]?token=<download-token>
 
 import { NextRequest, NextResponse } from "next/server";
+import { getDownloadUrl } from "@vercel/blob";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { timingSafeEqual } from "crypto";
@@ -99,18 +100,18 @@ export async function GET(
 
   auditInfo("deliver.success", { blueprintId, metadata: { fileCount: files.length } });
 
-  // If single file, redirect directly to the Blob URL for immediate download
+  // If single file, redirect directly to the download URL
   if (files.length === 1) {
-    return NextResponse.redirect(files[0].blobUrl);
+    return NextResponse.redirect(getDownloadUrl(files[0].blobUrl));
   }
 
-  // Multiple files — return the list with download URLs
+  // Multiple files - return the list with download URLs
   return NextResponse.json({
     blueprintId,
     files: files.map((f) => ({
       id: f.id,
       filename: f.filename,
-      url: f.blobUrl,
+      url: getDownloadUrl(f.blobUrl),
       size: f.size,
       mimeType: f.mimeType,
     })),

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
+import { getBlobToken } from "@/lib/blob";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
@@ -108,6 +109,7 @@ export async function POST(req: NextRequest) {
     const blob = await put(`blueprints/${blueprintId}/${file.name}`, file, {
       access: "private",
       addRandomSuffix: true,
+      token: getBlobToken(),
     });
 
     // Save metadata to database
