@@ -81,8 +81,38 @@ export async function GET(
     }
   }
 
-  // File delivery rewrite coming in Plan 3
-  auditInfo("deliver.success", { blueprintId, metadata: { stub: true } });
+  // Fetch files for this blueprint
+  const files = await prisma.blueprintFile.findMany({
+    where: { blueprintId },
+    select: { id: true, filename: true, blobUrl: true, size: true, mimeType: true },
+  });
 
-  return NextResponse.json({ message: "Access granted. File delivery coming soon." });
+  if (files.length === 0) {
+    return NextResponse.json({ error: "No files available for this blueprint" }, { status: 404 });
+  }
+
+  // Increment download counter (non-blocking)
+  prisma.blueprint.update({
+    where: { id: blueprintId },
+    data: { downloads: { increment: 1 } },
+  }).catch(() => {});
+
+  auditInfo("deliver.success", { blueprintId, metadata: { fileCount: files.length } });
+
+  // If single file, redirect directly to the Blob URL for immediate download
+  if (files.length === 1) {
+    return NextResponse.redirect(files[0].blobUrl);
+  }
+
+  // Multiple files — return the list with download URLs
+  return NextResponse.json({
+    blueprintId,
+    files: files.map((f) => ({
+      id: f.id,
+      filename: f.filename,
+      url: f.blobUrl,
+      size: f.size,
+      mimeType: f.mimeType,
+    })),
+  });
 }
