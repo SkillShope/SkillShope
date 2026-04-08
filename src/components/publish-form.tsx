@@ -241,7 +241,7 @@ export function PublishForm() {
                 type="button"
                 onClick={() => handleCleanup("description")}
                 disabled={cleaning === "description"}
-                className="mt-1.5 flex items-center gap-1 self-end text-xs text-[var(--accent)] hover:underline disabled:opacity-50 ml-auto"
+                className="ai-cleanup-btn mt-1.5 ml-auto flex items-center gap-1.5 rounded-lg border border-[var(--accent)]/30 px-3 py-1.5 text-xs font-medium text-[var(--accent)] hover:bg-[var(--accent)]/10 disabled:opacity-50 transition-colors"
               >
                 {cleaning === "description" ? (
                   <><Loader2 className="h-3 w-3 animate-spin" /> Cleaning...</>
@@ -267,7 +267,7 @@ export function PublishForm() {
                 type="button"
                 onClick={() => handleCleanup("longDescription")}
                 disabled={cleaning === "longDescription"}
-                className="mt-1.5 flex items-center gap-1 self-end text-xs text-[var(--accent)] hover:underline disabled:opacity-50 ml-auto"
+                className="ai-cleanup-btn mt-1.5 ml-auto flex items-center gap-1.5 rounded-lg border border-[var(--accent)]/30 px-3 py-1.5 text-xs font-medium text-[var(--accent)] hover:bg-[var(--accent)]/10 disabled:opacity-50 transition-colors"
               >
                 {cleaning === "longDescription" ? (
                   <><Loader2 className="h-3 w-3 animate-spin" /> Cleaning...</>
