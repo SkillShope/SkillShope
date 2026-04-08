@@ -223,10 +223,10 @@ export default function TermsPage() {
         <p className="text-sm text-[var(--text-secondary)]">
           Questions? Reach out at{" "}
           <a
-            href="mailto:ryan@roughinhub.com"
+            href="mailto:info@roughinhub.com"
             className="text-[var(--accent)] hover:underline"
           >
-            ryan@roughinhub.com
+            info@roughinhub.com
           </a>
         </p>
       </div>
