@@ -1,4 +1,4 @@
-import { SkillCardSkeleton } from "@/components/skeleton";
+import { BlueprintCardSkeleton } from "@/components/skeleton";
 
 export default function BrowseLoading() {
   return (
@@ -10,7 +10,7 @@ export default function BrowseLoading() {
       <div className="mb-6 h-10 w-full animate-pulse rounded-lg bg-[var(--bg-secondary)]" />
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 9 }).map((_, i) => (
-          <SkillCardSkeleton key={i} />
+          <BlueprintCardSkeleton key={i} />
         ))}
       </div>
     </div>

@@ -10,7 +10,6 @@ const PROTECTED_ROUTES = [
   "/api/checkout",
   "/api/connect",
   "/api/reviews",
-  "/api/happie",
   "/api/keys",
 ];
 
