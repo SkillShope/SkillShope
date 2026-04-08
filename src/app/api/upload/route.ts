@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
   // Upload to Vercel Blob
   try {
     const blob = await put(`blueprints/${blueprintId}/${file.name}`, file, {
-      access: "public",
+      access: "private",
       addRandomSuffix: true,
     });
 
