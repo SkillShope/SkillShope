@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Plus, LayoutDashboard, User, ShieldCheck, Menu, X } from "lucide-react";
 import { useState, ReactNode } from "react";
+import { Logo } from "@/components/logo";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
@@ -34,10 +35,7 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
     <nav className="sticky top-0 z-50 border-b border-[var(--border)]/50 bg-[var(--bg)]/10 backdrop-blur-2xl backdrop-saturate-150">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="shrink-0">
-          <span className="text-xl font-bold">
-            <span className="text-[var(--accent)]">Rough</span>
-            <span className="text-[var(--text)]">InHub</span>
-          </span>
+          <Logo width={140} height={40} />
         </Link>
 
 

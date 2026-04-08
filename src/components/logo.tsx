@@ -1,8 +1,36 @@
-export function Logo({ className }: { className?: string }) {
+"use client";
+
+import Image from "next/image";
+import { useState, useEffect } from "react";
+
+export function Logo({
+  className,
+  width = 160,
+  height = 48,
+}: {
+  className?: string;
+  width?: number;
+  height?: number;
+}) {
+  const [theme, setTheme] = useState("dark");
+
+  useEffect(() => {
+    const html = document.documentElement;
+    const update = () => setTheme(html.getAttribute("data-theme") || "dark");
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(html, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <span className={`text-xl font-bold ${className || ""}`}>
-      <span className="text-[var(--accent)]">Rough</span>
-      <span className="text-[var(--text)]">InHub</span>
-    </span>
+    <Image
+      src={theme === "light" ? "/logo-light.png" : "/logo-dark.png"}
+      alt="RoughInHub"
+      width={width}
+      height={height}
+      className={className}
+      priority
+    />
   );
 }
