@@ -9,7 +9,7 @@ export function ThemeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("skillshope-theme") as "dark" | "light" | null;
+    const saved = localStorage.getItem("roughinhub-theme") as "dark" | "light" | null;
     if (saved) {
       setTheme(saved);
       document.documentElement.setAttribute("data-theme", saved);
@@ -19,7 +19,7 @@ export function ThemeToggle() {
   const toggle = () => {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    localStorage.setItem("skillshope-theme", next);
+    localStorage.setItem("roughinhub-theme", next);
     if (next === "light") {
       document.documentElement.setAttribute("data-theme", "light");
     } else {

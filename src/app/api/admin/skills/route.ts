@@ -1,10 +1,10 @@
-// Admin Skills API
+// Admin Blueprints API
 // Auth: requires admin session (cookie-based via requireAdmin)
 // Future: add API key auth for external access (CI/CD, dashboards, etc.)
 //
-// GET  /api/admin/skills          — List all skills with author info
-// PATCH /api/admin/skills         — Manage a skill
-//   body: { id: string, action: "feature" | "unfeature" | "verify" | "unverify" | "remove" }
+// GET  /api/admin/skills          — List all blueprints with author info
+// PATCH /api/admin/skills         — Manage a blueprint
+//   body: { id: string, action: "feature" | "unfeature" | "remove" }
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
@@ -16,12 +16,12 @@ export async function GET() {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const skills = await prisma.skill.findMany({
-    include: { author: { select: { id: true, name: true, email: true, publisherVerified: true } } },
+  const blueprints = await prisma.blueprint.findMany({
+    include: { author: { select: { id: true, name: true, email: true } } },
     orderBy: { createdAt: "desc" },
   });
 
-  return NextResponse.json(skills);
+  return NextResponse.json(blueprints);
 }
 
 export async function PATCH(req: NextRequest) {
@@ -36,26 +36,20 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "id and action required" }, { status: 400 });
   }
 
-  const skill = await prisma.skill.findUnique({ where: { id } });
-  if (!skill) {
-    return NextResponse.json({ error: "Skill not found" }, { status: 404 });
+  const blueprint = await prisma.blueprint.findUnique({ where: { id } });
+  if (!blueprint) {
+    return NextResponse.json({ error: "Blueprint not found" }, { status: 404 });
   }
 
   switch (action) {
     case "feature":
-      await prisma.skill.update({ where: { id }, data: { featured: true } });
+      await prisma.blueprint.update({ where: { id }, data: { featured: true } });
       break;
     case "unfeature":
-      await prisma.skill.update({ where: { id }, data: { featured: false } });
-      break;
-    case "verify":
-      await prisma.skill.update({ where: { id }, data: { verified: true } });
-      break;
-    case "unverify":
-      await prisma.skill.update({ where: { id }, data: { verified: false } });
+      await prisma.blueprint.update({ where: { id }, data: { featured: false } });
       break;
     case "remove":
-      await prisma.skill.delete({ where: { id } });
+      await prisma.blueprint.delete({ where: { id } });
       break;
     default:
       return NextResponse.json({ error: "Invalid action" }, { status: 400 });

@@ -5,13 +5,13 @@ import { join } from "path";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Find the Skill Shope publisher account
+  // Find the RoughInHub publisher account
   const publisher = await prisma.user.findUnique({
-    where: { email: "publisher@skillshope.com" },
+    where: { email: "publisher@roughinhub.com" },
   });
 
   if (!publisher) {
-    console.error("Skill Shope publisher account not found");
+    console.error("RoughInHub publisher account not found");
     process.exit(1);
   }
 
@@ -36,30 +36,22 @@ async function main() {
         .replace(/(^-|-$)/g, "");
 
       // Skip if already exists
-      const existing = await prisma.skill.findUnique({ where: { slug } });
+      const existing = await prisma.blueprint.findUnique({ where: { slug } });
       if (existing) {
         console.log(`  SKIP: ${listing.name} (${slug}) — already exists`);
         skipped++;
         continue;
       }
 
-      await prisma.skill.create({
+      await prisma.blueprint.create({
         data: {
           slug,
           name: listing.name,
           description: listing.description,
-          category: listing.category || "productivity",
-          type: listing.type || "skill",
+          category: listing.category || "general",
           price: 0,
           isFree: true,
-          installCmd: listing.installCmd || null,
-          sourceUrl: listing.sourceUrl || "",
-          sourceType: listing.sourceType || "github",
-          compatibility: listing.compatibility || "claude-code",
           tags: listing.tags || null,
-          listingType: "community",
-          originalAuthor: listing.originalAuthor || null,
-          originalUrl: listing.originalUrl || null,
           authorId: publisher.id,
         },
       });

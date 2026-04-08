@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
               color: "#4a5d4f",
             }}
           >
-            skillshope.com
+            roughinhub.com
           </div>
         </div>
       </div>
