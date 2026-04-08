@@ -24,7 +24,7 @@ function buildCspHeader(nonce: string): string {
     "default-src 'self'",
     scriptSrc,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' https://avatars.githubusercontent.com data:",
+    "img-src 'self' https://avatars.githubusercontent.com https://lh3.googleusercontent.com data:",
     "connect-src 'self' https://checkout.stripe.com https://api.stripe.com https://va.vercel-scripts.com",
     "frame-src https://checkout.stripe.com",
     "font-src 'self'",
