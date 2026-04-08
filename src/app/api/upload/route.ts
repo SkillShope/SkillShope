@@ -104,21 +104,27 @@ export async function POST(req: NextRequest) {
   }
 
   // Upload to Vercel Blob
-  const blob = await put(`blueprints/${blueprintId}/${file.name}`, file, {
-    access: "public",
-    addRandomSuffix: true,
-  });
+  try {
+    const blob = await put(`blueprints/${blueprintId}/${file.name}`, file, {
+      access: "public",
+      addRandomSuffix: true,
+    });
 
-  // Save metadata to database
-  const blueprintFile = await prisma.blueprintFile.create({
-    data: {
-      blueprintId,
-      filename: file.name,
-      blobUrl: blob.url,
-      size: file.size,
-      mimeType: file.type,
-    },
-  });
+    // Save metadata to database
+    const blueprintFile = await prisma.blueprintFile.create({
+      data: {
+        blueprintId,
+        filename: file.name,
+        blobUrl: blob.url,
+        size: file.size,
+        mimeType: file.type,
+      },
+    });
 
-  return NextResponse.json(blueprintFile, { status: 201 });
+    return NextResponse.json(blueprintFile, { status: 201 });
+  } catch (err) {
+    console.error("Upload failed:", err);
+    const message = err instanceof Error ? err.message : "Upload failed";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
