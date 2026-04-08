@@ -12,7 +12,7 @@ export default function TermsPage() {
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="mb-2 text-3xl font-bold">Terms of Service</h1>
       <p className="mb-10 text-sm text-[var(--text-secondary)]">
-        Last updated: March 23, 2026
+        Last updated: April 8, 2026
       </p>
 
       <div className="space-y-8 text-sm leading-relaxed text-[var(--text-secondary)]">
@@ -134,9 +134,83 @@ export default function TermsPage() {
           </p>
         </section>
 
+        <section id="copyright">
+          <h2 className="mb-3 text-base font-semibold text-[var(--text)]">
+            8. User Content Disclaimer &amp; Copyright Policy
+          </h2>
+          <p className="mb-3">
+            By uploading, posting, or selling any blueprint, diagram, template,
+            or other content (&quot;User Content&quot;) on RoughInHub.com, you
+            represent and warrant the following:
+          </p>
+          <ol className="ml-4 list-decimal space-y-2">
+            <li>
+              You are the sole owner of all rights, title, and interest in the
+              User Content, including copyrights, trademarks, and any other
+              intellectual property.
+            </li>
+            <li>
+              The User Content does not infringe on any third-party rights -
+              such as copyrights held by clients, architects, engineers, or
+              employers - and is not derived from work-for-hire materials
+              without express permission.
+            </li>
+            <li>
+              You have the full legal authority to license or sell the User
+              Content to others.
+            </li>
+          </ol>
+          <p className="mt-3">
+            RoughInHub is a neutral platform and does not review, endorse, or
+            verify User Content for copyright compliance. We make no warranties
+            about the originality, accuracy, or legality of anything uploaded.
+          </p>
+          <p className="mt-3">
+            You agree to indemnify and hold harmless RoughInHub, its owners,
+            employees, and affiliates from any claims, damages, losses, or
+            expenses (including attorney fees) arising from your User Content,
+            including but not limited to copyright infringement, privacy
+            violations, or misuse.
+          </p>
+          <p className="mt-3 font-medium text-[var(--text)]">
+            By uploading, you accept full responsibility. If it&apos;s not
+            yours, don&apos;t post it.
+          </p>
+        </section>
+
+        <section id="dmca">
+          <h2 className="mb-3 text-base font-semibold text-[var(--text)]">
+            9. DMCA &amp; Copyright Takedowns
+          </h2>
+          <p className="mb-3">
+            We comply with the Digital Millennium Copyright Act (DMCA). If we
+            receive a valid takedown notice, we will remove the content promptly
+            and notify the uploader. Repeat offenders may be permanently banned.
+          </p>
+          <p className="mb-3">
+            To report infringement, email{" "}
+            <a
+              href="mailto:dmca@roughinhub.com"
+              className="text-[var(--accent)] hover:underline"
+            >
+              dmca@roughinhub.com
+            </a>{" "}
+            (our designated agent). Include:
+          </p>
+          <ul className="ml-4 list-disc space-y-2">
+            <li>Your contact information</li>
+            <li>The URL of the infringing content</li>
+            <li>Proof of ownership of the original work</li>
+            <li>
+              A sworn statement under penalty of perjury that you believe the
+              use is unauthorized
+            </li>
+          </ul>
+        </section>
+
         <section>
           <h2 className="mb-3 text-base font-semibold text-[var(--text)]">
-            8. Changes
+            10. Changes
           </h2>
           <p>
             We may update these terms at any time. Continued use of the
