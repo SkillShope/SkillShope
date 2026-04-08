@@ -9,6 +9,7 @@ import {
   Upload,
   Loader2,
   Plus,
+  Sparkles,
 } from "lucide-react";
 import { BLUEPRINT_CATEGORIES, BLUEPRINT_TYPES, ALLOWED_EXTENSIONS } from "@/lib/constants";
 
@@ -45,6 +46,33 @@ export function PublishForm() {
     tags: "",
     contentAcknowledged: false,
   });
+
+  const [cleaning, setCleaning] = useState<string | null>(null);
+
+  const handleCleanup = async (field: "description" | "longDescription") => {
+    const text = form[field];
+    if (!text || text.trim().length < 5) return;
+
+    setCleaning(field);
+    try {
+      const res = await fetch("/api/ai-cleanup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, field }),
+      });
+      if (res.ok) {
+        const { result } = await res.json();
+        setForm((prev) => ({ ...prev, [field]: result }));
+      } else {
+        const data = await res.json();
+        setError(data.error || "Cleanup failed");
+      }
+    } catch {
+      setError("Cleanup failed. Try again.");
+    } finally {
+      setCleaning(null);
+    }
+  };
 
   const updateForm = (key: string, value: string | number | boolean) => {
     if (key === "name") {
@@ -208,6 +236,20 @@ export function PublishForm() {
               maxLength={500}
               className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-3 text-sm outline-none focus:border-[var(--accent)]"
             />
+            {form.description.trim().length >= 5 && (
+              <button
+                type="button"
+                onClick={() => handleCleanup("description")}
+                disabled={cleaning === "description"}
+                className="mt-1.5 flex items-center gap-1 self-end text-xs text-[var(--accent)] hover:underline disabled:opacity-50 ml-auto"
+              >
+                {cleaning === "description" ? (
+                  <><Loader2 className="h-3 w-3 animate-spin" /> Cleaning...</>
+                ) : (
+                  <><Sparkles className="h-3 w-3" /> Clean it up with AI</>
+                )}
+              </button>
+            )}
           </div>
 
           {/* Full Description */}
@@ -220,6 +262,20 @@ export function PublishForm() {
               placeholder="Explain what's included, how to use it, and why someone should buy it..."
               className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-4 py-3 text-sm outline-none focus:border-[var(--accent)]"
             />
+            {form.longDescription.trim().length >= 5 && (
+              <button
+                type="button"
+                onClick={() => handleCleanup("longDescription")}
+                disabled={cleaning === "longDescription"}
+                className="mt-1.5 flex items-center gap-1 self-end text-xs text-[var(--accent)] hover:underline disabled:opacity-50 ml-auto"
+              >
+                {cleaning === "longDescription" ? (
+                  <><Loader2 className="h-3 w-3 animate-spin" /> Cleaning...</>
+                ) : (
+                  <><Sparkles className="h-3 w-3" /> Clean it up with AI</>
+                )}
+              </button>
+            )}
           </div>
 
           {/* Category + Region */}
