@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { validate, sanitize, isValidSlug } from "@/lib/validation";
 import { rateLimit } from "@/lib/rate-limit";
 
-const VALID_TYPES = ["pdf", "excel", "zip-pack", "video", "doc"];
+const VALID_TYPES = ["pdf", "excel", "zip-pack", "doc"];
 const VALID_CATEGORIES = [
   "estimating-bidding", "service-repair", "proposals-contracts",
   "training", "marketing", "safety-compliance", "residential", "commercial",

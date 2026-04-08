@@ -19,12 +19,10 @@ export const ALLOWED_FILE_TYPES = [
   "application/msword", // .doc
   "application/zip",
   "application/x-zip-compressed",
-  "video/mp4",
-  "video/quicktime", // .mov
 ] as const;
 
 export const ALLOWED_EXTENSIONS = [
-  ".pdf", ".xlsx", ".xls", ".docx", ".doc", ".zip", ".mp4", ".mov",
+  ".pdf", ".xlsx", ".xls", ".docx", ".doc", ".zip",
 ] as const;
 
 // Blueprint categories
@@ -44,6 +42,5 @@ export const BLUEPRINT_TYPES = [
   { value: "pdf", label: "PDF", icon: "FileText" },
   { value: "excel", label: "Excel Spreadsheet", icon: "Sheet" },
   { value: "zip-pack", label: "ZIP Bundle", icon: "Archive" },
-  { value: "video", label: "Video", icon: "Video" },
   { value: "doc", label: "Word Document", icon: "FileText" },
 ] as const;

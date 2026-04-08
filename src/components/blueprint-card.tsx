@@ -4,7 +4,6 @@ import {
   FileText,
   Sheet,
   Archive,
-  Video,
   MapPin,
 } from "lucide-react";
 
@@ -26,7 +25,6 @@ const typeIcons: Record<string, typeof FileText> = {
   pdf: FileText,
   excel: Sheet,
   "zip-pack": Archive,
-  video: Video,
   doc: FileText,
 };
 
@@ -34,7 +32,6 @@ const typeLabels: Record<string, string> = {
   pdf: "PDF",
   excel: "Excel",
   "zip-pack": "ZIP Bundle",
-  video: "Video",
   doc: "Word Doc",
 };
 

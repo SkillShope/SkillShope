@@ -6,7 +6,6 @@ import {
   FileText,
   Sheet,
   Archive,
-  Video,
   Upload,
   Loader2,
   Plus,
@@ -17,7 +16,6 @@ const typeIcons: Record<string, typeof FileText> = {
   pdf: FileText,
   excel: Sheet,
   "zip-pack": Archive,
-  video: Video,
   doc: FileText,
 };
 
