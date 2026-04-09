@@ -21,7 +21,11 @@ export const metadata: Metadata = {
   description:
     "Buy battle-tested plumbing bid calculators, checklists, proposals, contracts, and training materials from experienced plumbers. Instant access, automatic updates.",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/favicon.png", sizes: "335x335", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "RoughInHub — Real Plumbing Blueprints from Real Plumbers",
