@@ -252,9 +252,9 @@ export function PublishForm() {
             )}
           </div>
 
-          {/* Full Description */}
+          {/* About This Blueprint */}
           <div>
-            <label className="mb-1 block text-sm font-medium">Full Description</label>
+            <label className="mb-1 block text-sm font-medium">About This Blueprint</label>
             <textarea
               rows={5}
               value={form.longDescription}
