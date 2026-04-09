@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { sanitize } from "@/lib/validation";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -40,11 +41,11 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
   const updated = await prisma.blueprint.update({
     where: { id },
     data: {
-      ...(body.name && { name: body.name }),
-      ...(body.description && { description: body.description }),
-      ...(body.longDescription !== undefined && { longDescription: body.longDescription }),
-      ...(body.tags !== undefined && { tags: body.tags }),
-      ...(body.region !== undefined && { region: body.region }),
+      ...(body.name && { name: sanitize(body.name).slice(0, 100) }),
+      ...(body.description && { description: sanitize(body.description).slice(0, 500) }),
+      ...(body.longDescription !== undefined && { longDescription: body.longDescription ? sanitize(body.longDescription).slice(0, 5000) : null }),
+      ...(body.tags !== undefined && { tags: body.tags ? sanitize(body.tags).slice(0, 500) : null }),
+      ...(body.region !== undefined && { region: body.region ? sanitize(body.region).slice(0, 100) : null }),
       ...(body.isFree !== undefined && { isFree: body.isFree }),
       ...(body.price !== undefined && { price: body.price }),
       ...(body.hidden !== undefined && { hidden: body.hidden }),

@@ -9,8 +9,8 @@ const PROTECTED_ROUTES = [
   "/api/admin",
   "/api/checkout",
   "/api/connect",
-  "/api/reviews",
-  "/api/keys",
+  "/api/upload",
+  "/api/ai-cleanup",
 ];
 
 const isDev = process.env.NODE_ENV === "development";

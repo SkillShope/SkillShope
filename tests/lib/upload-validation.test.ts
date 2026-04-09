@@ -22,9 +22,9 @@ describe("validateFileType", () => {
     expect(validateFileType("application/zip")).toBe(true);
     expect(validateFileType("application/x-zip-compressed")).toBe(true);
   });
-  it("accepts video files", () => {
-    expect(validateFileType("video/mp4")).toBe(true);
-    expect(validateFileType("video/quicktime")).toBe(true);
+  it("rejects video files (removed from MVP)", () => {
+    expect(validateFileType("video/mp4")).toBe(false);
+    expect(validateFileType("video/quicktime")).toBe(false);
   });
   it("rejects executable files", () => {
     expect(validateFileType("application/x-executable")).toBe(false);
@@ -66,7 +66,6 @@ describe("validateFileExtension", () => {
     expect(validateFileExtension(".xlsx")).toBe(true);
     expect(validateFileExtension(".docx")).toBe(true);
     expect(validateFileExtension(".zip")).toBe(true);
-    expect(validateFileExtension(".mp4")).toBe(true);
   });
   it("rejects dangerous extensions", () => {
     expect(validateFileExtension(".exe")).toBe(false);
