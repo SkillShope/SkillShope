@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(blueprintFile, { status: 201 });
   } catch (err) {
-    console.error("Upload failed:", err);
+    console.error("Upload failed:", err instanceof Error ? err.message : "Unknown error");
     const message = err instanceof Error ? err.message : "Upload failed";
     return NextResponse.json({ error: message }, { status: 500 });
   }

@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ result: content.text.trim() });
   } catch (err) {
-    console.error("AI cleanup failed:", err);
+    console.error("AI cleanup failed:", err instanceof Error ? err.message : "Unknown error");
     return NextResponse.json({ error: "AI cleanup failed. Try again." }, { status: 500 });
   }
 }

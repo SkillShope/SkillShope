@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { randomBytes } from "crypto";
 import Stripe from "stripe";
 import { DOWNLOAD_TOKEN_EXPIRY_DAYS } from "@/lib/constants";
-import { auditInfo, auditCritical } from "@/lib/audit";
+import { auditInfo, auditWarn, auditCritical } from "@/lib/audit";
 
 function generateToken(): string {
   return randomBytes(32).toString("hex");
@@ -38,6 +38,18 @@ export async function POST(req: NextRequest) {
     const metadata = session.metadata || {};
 
     if (session.payment_status === "paid" && metadata.blueprintId && metadata.userId) {
+      // Validate that both the user and blueprint actually exist
+      const [user, blueprint] = await Promise.all([
+        prisma.user.findUnique({ where: { id: metadata.userId }, select: { id: true } }),
+        prisma.blueprint.findUnique({ where: { id: metadata.blueprintId }, select: { id: true } }),
+      ]);
+      if (!user || !blueprint) {
+        auditWarn("webhook.invalid_metadata", {
+          metadata: { userId: metadata.userId, blueprintId: metadata.blueprintId, sessionId: session.id },
+        });
+        return NextResponse.json({ received: true });
+      }
+
       const amount = (session.amount_total || 0) / 100;
 
       // Single blueprint purchase
