@@ -1,10 +1,9 @@
 // Admin Users API
 // Auth: requires admin session (cookie-based via requireAdmin)
-// Future: add API key auth for external access (CI/CD, dashboards, etc.)
 //
-// GET  /api/admin/users           — List all users with skill/review counts
-// PATCH /api/admin/users          — Manage a user
-//   body: { id: string, action: "verify" | "unverify" }
+// GET  /api/admin/users — List all users with blueprint counts
+// PATCH /api/admin/users — Manage a user
+//   body: { id: string, action: "make-admin" | "remove-admin" }
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
@@ -23,10 +22,9 @@ export async function GET() {
       email: true,
       image: true,
       isAdmin: true,
-      publisherVerified: true,
       stripeAccountId: true,
       createdAt: true,
-      _count: { select: { skills: true, reviews: true } },
+      _count: { select: { blueprints: true } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -53,11 +51,11 @@ export async function PATCH(req: NextRequest) {
   }
 
   switch (action) {
-    case "verify":
-      await prisma.user.update({ where: { id }, data: { publisherVerified: true } });
+    case "make-admin":
+      await prisma.user.update({ where: { id }, data: { isAdmin: true } });
       break;
-    case "unverify":
-      await prisma.user.update({ where: { id }, data: { publisherVerified: false } });
+    case "remove-admin":
+      await prisma.user.update({ where: { id }, data: { isAdmin: false } });
       break;
     default:
       return NextResponse.json({ error: "Invalid action" }, { status: 400 });

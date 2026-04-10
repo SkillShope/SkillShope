@@ -1,38 +1,40 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
-type Props = {
-  width: number;
-  height: number;
+export function Logo({
+  className,
+  width = 180,
+  height = 58,
+}: {
   className?: string;
-  alt?: string;
-};
-
-export function Logo({ width, height, className, alt = "Skill Shope" }: Props) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  width?: number;
+  height?: number;
+}) {
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
-    const check = () => {
-      const t = document.documentElement.getAttribute("data-theme");
-      setTheme(t === "light" ? "light" : "dark");
+    const html = document.documentElement;
+    const update = () => {
+      const attr = html.getAttribute("data-theme");
+      const stored = localStorage.getItem("roughinhub-theme");
+      setTheme(attr || stored || "dark");
     };
-    check();
-
-    // Watch for theme changes
-    const observer = new MutationObserver(check);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(html, { attributes: true, attributeFilter: ["data-theme"] });
     return () => observer.disconnect();
   }, []);
 
   return (
     <Image
-      src={theme === "light" ? "/logo-light.svg" : "/logo-dark.svg"}
-      alt={alt}
+      src={theme === "light" ? "/logo-light.png" : "/logo-dark.png"}
+      alt="RoughInHub"
       width={width}
       height={height}
       className={className}
+      priority
     />
   );
 }

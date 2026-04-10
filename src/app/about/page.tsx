@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Shield, Lock, Terminal, Globe, ArrowRight } from "lucide-react";
+import { Shield, Lock, FileText, Globe, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Skill Shope is the independent registry where AI skill creators set their price, keep their IP, and get 85% of every sale.",
+    "RoughInHub is the independent marketplace where plumbing blueprint creators set their price, keep their IP, and get 85% of every sale.",
 };
 
 const values = [
@@ -19,19 +19,19 @@ const values = [
     icon: Lock,
     title: "Your IP, protected",
     description:
-      "Paid skills are delivered via time-limited download tokens. Your code is never exposed publicly.",
+      "Paid blueprints are delivered via time-limited download tokens. Your documents are never exposed publicly.",
   },
   {
-    icon: Terminal,
-    title: "One command",
+    icon: FileText,
+    title: "Professional quality",
     description:
-      "npx skillshope install <slug>. That's it. No cloning repos, no reading READMEs, no dependency hell.",
+      "Browse detailed plumbing blueprints, templates, and guides vetted by the community through reviews and ratings.",
   },
   {
     icon: Globe,
-    title: "Vendor neutral",
+    title: "Industry neutral",
     description:
-      "Works with Claude Code, Codex, Cursor, Windsurf, and any MCP-compatible client. No walled gardens.",
+      "Works for residential, commercial, and industrial plumbing projects. No platform lock-in.",
   },
 ];
 
@@ -45,12 +45,12 @@ export default function AboutPage() {
         </h1>
         <div className="space-y-4 text-lg leading-relaxed text-[var(--text-secondary)]">
           <p>
-            You spend weeks building an AI skill that saves developers hours.
-            You publish it on GitHub. A giant forks it, ships it in their
-            marketplace, and you get a star.
+            You spend weeks perfecting a plumbing blueprint that saves contractors
+            hours of design time. You share it for free. A large company packages
+            it and you get nothing.
           </p>
           <p>
-            We think you deserve more than a star.
+            We think you deserve more than that.
           </p>
         </div>
       </div>
@@ -59,10 +59,9 @@ export default function AboutPage() {
       <div className="mb-12 rounded-xl border border-[var(--accent)]/20 bg-[var(--accent-soft)] p-6">
         <h2 className="mb-3 text-xl font-bold">The deal</h2>
         <p className="leading-relaxed text-[var(--text-secondary)]">
-          Skill Shope is the independent registry where creators set their price,
-          keep their IP, and get 85% of every sale. One-command installs. Security
-          scanning. Download token protection. Security scanned on publish. No vendor lock-in.
-          Your work earns what it deserves.
+          RoughInHub is the independent marketplace where creators set their price,
+          keep their IP, and get 85% of every sale. Secure download tokens protect
+          your documents. No vendor lock-in. Your work earns what it deserves.
         </p>
       </div>
 
@@ -73,13 +72,13 @@ export default function AboutPage() {
           {[
             {
               step: "1",
-              title: "Publish your skill",
-              desc: "Import from GitHub or paste a URL. Set your price or keep it free. We run a security scan and you're live in minutes.",
+              title: "Publish your blueprint",
+              desc: "Upload your plumbing blueprint, template, or guide. Set your price or keep it free. You're live in minutes.",
             },
             {
               step: "2",
-              title: "Developers find and install",
-              desc: "Browse, search, read reviews. One command to install. Free skills are instant. Paid skills use download tokens — your code stays protected.",
+              title: "Contractors find and download",
+              desc: "Browse, search, read reviews. Free blueprints are instant. Paid blueprints use secure download tokens — your documents stay protected.",
             },
             {
               step: "3",
@@ -126,9 +125,9 @@ export default function AboutPage() {
 
       {/* CTA */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-8 text-center">
-        <h2 className="mb-2 text-xl font-bold">Your code. Your rules. Your revenue.</h2>
+        <h2 className="mb-2 text-xl font-bold">Your work. Your rules. Your revenue.</h2>
         <p className="mb-6 text-sm text-[var(--text-secondary)]">
-          Whether you&apos;re looking for tools or building them — there&apos;s
+          Whether you&apos;re looking for blueprints or creating them — there&apos;s
           a place for you here. And if you built it, you should get paid for it.
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -143,7 +142,7 @@ export default function AboutPage() {
             href="/browse"
             className="flex items-center gap-2 rounded-lg border border-[var(--border)] px-6 py-2.5 text-sm font-semibold hover:border-[var(--accent)]/40 transition-colors"
           >
-            Browse Skills
+            Browse Blueprints
           </Link>
         </div>
       </div>

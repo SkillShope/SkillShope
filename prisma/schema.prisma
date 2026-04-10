@@ -8,28 +8,22 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  bio               String?
-  showAvatar        Boolean   @default(true)
-  isAdmin           Boolean   @default(false)
-  publisherVerified Boolean   @default(false)
-  githubUsername    String?
+  id                    String    @id @default(cuid())
+  name                  String?
+  email                 String?   @unique
+  emailVerified         DateTime?
+  image                 String?
+  bio                   String?
+  showAvatar            Boolean   @default(true)
+  isAdmin               Boolean   @default(false)
   stripeAccountId       String?
   stripePayoutsEnabled  Boolean   @default(false)
-  accounts          Account[]
-  sessions      Session[]
-  skills        Skill[]
-  reviews       Review[]
-  purchases     Purchase[]
-  apiKeys       ApiKey[]
-  projects      Project[]
-  bundles       Bundle[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  accounts              Account[]
+  sessions              Session[]
+  blueprints            Blueprint[]
+  purchases             Purchase[]
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 }
 
 model Account {
@@ -66,225 +60,74 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Skill {
-  id            String   @id @default(cuid())
-  slug          String   @unique
-  name          String
-  description   String
-  longDescription String?
-  category      String
-  type          String   @default("skill") // skill | mcp-server | agent
-  price         Float    @default(0)
-  isFree        Boolean  @default(true)
-  installCmd    String?
-  sourceUrl         String   @default("")
-  sourceType        String   @default("github") // github | npm | other
-  sourceStatus      String   @default("pending") // pending | valid | invalid | error
-  sourceCheckedAt   DateTime?
-  githubStars       Int?
-  githubForks       Int?
-  lastUpdated       DateTime?
-  downloads     Int      @default(0)
-  rating        Float    @default(0)
-  reviewCount   Int      @default(0)
-  compatibility String   @default("claude-code") // comma-separated: claude-code,codex,cursor
-  tags          String?  // comma-separated tags
-  authorId      String
-  author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  reviews       Review[]
-  purchases     Purchase[]
-  currentVersion  String   @default("1.0.0")
-  files           SkillFile[]
-  versions        SkillVersion[]
-  installEvents   InstallEvent[]
-  listingType     String   @default("original") // original | community
-  originalAuthor  String?  // attribution for community skills
-  originalUrl     String?  // canonical URL for community skills
-  dependencies    SkillDependency[] @relation("skillDeps")
-  dependedOnBy    SkillDependency[] @relation("depOf")
-  projectSkills   ProjectSkill[]
-  bundleSkills    BundleSkill[]
-  hidden          Boolean  @default(false) // hidden until publisher connects Stripe
-  reviewStatus    String   @default("pending") // pending | approved | flagged | rejected
-  securityScore   Int?
-  estimatedTokens Int?     // Token count from Claude's tokenizer (beta)
-  securityReports SecurityReport[]
-  featured        Boolean  @default(false)
-  verified        Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model Purchase {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  skillId         String
-  skill           Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  stripeSessionId String   @unique
-  amount          Float
-  createdAt       DateTime @default(now())
-
-  downloadToken   DownloadToken?
-
-  @@unique([userId, skillId])
-}
-
-model SkillFile {
-  id        String        @id @default(cuid())
-  skillId   String
-  skill     Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  versionId String?
-  version   SkillVersion? @relation(fields: [versionId], references: [id], onDelete: SetNull)
-  filename  String
-  content   String
-
-  @@unique([skillId, filename, versionId])
-}
-
-model SkillVersion {
-  id        String     @id @default(cuid())
-  skillId   String
-  skill     Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  version   String
-  changelog String?
-  files     SkillFile[]
-  createdAt DateTime   @default(now())
-
-  @@unique([skillId, version])
-}
-
-model DownloadToken {
-  id         String   @id @default(cuid())
-  token      String   @unique
-  purchaseId String   @unique
-  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
-  expiresAt  DateTime?
-  createdAt  DateTime @default(now())
-}
-
-model ApiKey {
-  id        String    @id @default(cuid())
-  keyHash   String    @unique
-  name      String
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lastUsed  DateTime?
-  createdAt DateTime  @default(now())
-}
-
-model Review {
-  id        String   @id @default(cuid())
-  rating    Int
-  comment   String?
-  skillId   String
-  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-}
-
-model InstallEvent {
-  id        String   @id @default(cuid())
-  skillId   String
-  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  source    String   @default("cli") // cli | web | api
-  version   String?
-  createdAt DateTime @default(now())
-
-  @@index([skillId, createdAt])
-}
-
-model SkillDependency {
-  id          String @id @default(cuid())
-  skillId     String
-  skill       Skill  @relation("skillDeps", fields: [skillId], references: [id], onDelete: Cascade)
-  dependsOnId String
-  dependsOn   Skill  @relation("depOf", fields: [dependsOnId], references: [id], onDelete: Cascade)
-  versionReq  String?
-
-  @@unique([skillId, dependsOnId])
-}
-
-model Project {
-  id          String         @id @default(cuid())
-  name        String
-  description String?
-  userId      String
-  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  skills      ProjectSkill[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-}
-
-model ProjectSkill {
-  id        String  @id @default(cuid())
-  projectId String
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  skillId   String
-  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
-
-  @@unique([projectId, skillId])
-}
-
-model HappieEvent {
-  id        String   @id @default(cuid())
-  type      String   // message | generate-skill | open
-  userId    String?
-  message   String?
-  createdAt DateTime @default(now())
-
-  @@index([type, createdAt])
-}
-
-model SecurityReport {
-  id        String   @id @default(cuid())
-  skillId   String
-  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  status    String   // approved | flagged | rejected
-  score     Int
-  checks    String   // JSON stringified CheckResult[]
-  createdAt DateTime @default(now())
-
-  @@index([skillId, createdAt])
-}
-
-model Bundle {
-  id              String        @id @default(cuid())
-  slug            String        @unique
+model Blueprint {
+  id              String          @id @default(cuid())
+  slug            String          @unique
   name            String
   description     String
   longDescription String?
-  category        String        @default("general")
-  price           Float         @default(0)
-  isFree          Boolean       @default(true)
-  discount        Int?
-  featured        Boolean       @default(false)
+  category        String
+  type            String          @default("pdf")
+  price           Float           @default(0)
+  isFree          Boolean         @default(true)
+  region          String?
+  downloads       Int             @default(0)
+  featured        Boolean         @default(false)
+  hidden          Boolean         @default(false)
+  tags            String?
+  contentAcknowledgedAt DateTime?  // timestamp when creator attested ownership at publish
   authorId        String
-  author          User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  skills          BundleSkill[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  author          User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  purchases       Purchase[]
+  files           BlueprintFile[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 }
 
-model BundleSkill {
-  id       String @id @default(cuid())
-  bundleId String
-  bundle   Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
-  skillId  String
-  skill    Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+model BlueprintFile {
+  id          String    @id @default(cuid())
+  blueprintId String
+  blueprint   Blueprint @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+  filename    String
+  blobUrl     String
+  size        Int
+  mimeType    String
+  createdAt   DateTime  @default(now())
 
-  @@unique([bundleId, skillId])
+  @@index([blueprintId])
+}
+
+model Purchase {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blueprintId     String
+  blueprint       Blueprint     @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+  stripeSessionId String        @unique
+  amount          Float
+  createdAt       DateTime      @default(now())
+  downloadToken   DownloadToken?
+
+  @@unique([userId, blueprintId])
+}
+
+model DownloadToken {
+  id         String    @id @default(cuid())
+  token      String    @unique
+  purchaseId String    @unique
+  purchase   Purchase  @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
 }
 
 model AuditLog {
-  id        String   @id @default(cuid())
-  type      String   // checkout.started | checkout.completed | checkout.failed | webhook.received | webhook.failed | deliver.success | deliver.denied | review.created | publish.created
-  severity  String   @default("info") // info | warn | critical
-  userId    String?
-  skillId   String?
-  metadata  String?  // JSON stringified details
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  type        String
+  severity    String   @default("info")
+  userId      String?
+  blueprintId String?
+  metadata    String?
+  createdAt   DateTime @default(now())
 
   @@index([type, createdAt])
   @@index([severity, createdAt])

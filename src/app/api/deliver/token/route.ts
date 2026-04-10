@@ -1,5 +1,5 @@
-// Get download token for a purchased skill
-// GET /api/deliver/token?skillId=xxx
+// Get download token for a purchased blueprint
+// GET /api/deliver/token?blueprintId=xxx
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
@@ -11,13 +11,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const skillId = req.nextUrl.searchParams.get("skillId");
-  if (!skillId) {
-    return NextResponse.json({ error: "skillId required" }, { status: 400 });
+  const blueprintId = req.nextUrl.searchParams.get("blueprintId");
+  if (!blueprintId) {
+    return NextResponse.json({ error: "blueprintId required" }, { status: 400 });
   }
 
   const purchase = await prisma.purchase.findUnique({
-    where: { userId_skillId: { userId: session.user.id, skillId } },
+    where: { userId_blueprintId: { userId: session.user.id, blueprintId } },
     include: { downloadToken: true },
   });
 

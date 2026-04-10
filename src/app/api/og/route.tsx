@@ -4,9 +4,9 @@ import { NextRequest } from "next/server";
 export const runtime = "edge";
 
 const typeLabels: Record<string, string> = {
-  skill: "Skill",
-  "mcp-server": "MCP Server",
-  agent: "Agent",
+  blueprint: "Blueprint",
+  template: "Template",
+  guide: "Guide",
 };
 
 export async function GET(req: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   // Truncate inputs to prevent abuse
   const name = (searchParams.get("name") || "Untitled").slice(0, 100);
   const description = (searchParams.get("description") || "").slice(0, 300);
-  const type = searchParams.get("type") || "skill";
+  const type = searchParams.get("type") || "blueprint";
   const category = (searchParams.get("category") || "").slice(0, 50);
   const rating = searchParams.get("rating") || "0";
   const downloads = searchParams.get("downloads") || "0";
@@ -107,7 +107,7 @@ export async function GET(req: NextRequest) {
               <span>{`★ ${Number(rating).toFixed(1)}`}</span>
             )}
             {Number(downloads) > 0 && (
-              <span>{`${Number(downloads).toLocaleString()} installs`}</span>
+              <span>{`${Number(downloads).toLocaleString()} downloads`}</span>
             )}
             <span
               style={{
@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
               color: "#4a5d4f",
             }}
           >
-            skillshope.com
+            roughinhub.com
           </div>
         </div>
       </div>

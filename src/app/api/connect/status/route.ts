@@ -30,9 +30,9 @@ export async function GET() {
       });
     }
 
-    // Auto-unhide skills when payouts become enabled
+    // Auto-unhide blueprints when payouts become enabled
     if (payoutsEnabled && !user.stripePayoutsEnabled) {
-      await prisma.skill.updateMany({
+      await prisma.blueprint.updateMany({
         where: { authorId: session.user.id, hidden: true },
         data: { hidden: false },
       });
