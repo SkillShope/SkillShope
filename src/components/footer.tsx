@@ -17,6 +17,7 @@ export function Footer() {
             <nav className="space-y-2">
               <Link href="/browse" className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text)]">Browse Blueprints</Link>
               <Link href="/publish" className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text)]">Sell</Link>
+              <Link href="/blog" className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text)]">Blog</Link>
             </nav>
           </div>
           <div>
