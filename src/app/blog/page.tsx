@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
-import { Clock, ArrowRight, Tag } from "lucide-react";
+import { Clock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Blog - RoughInHub",
@@ -30,10 +30,10 @@ export default function BlogPage() {
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="divide-y divide-[var(--border)]">
         {posts.map((post) => (
           <Link key={post.slug} href={`/blog/${post.slug}`}>
-            <article className="group rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-6 transition-all hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-hover)]">
+            <article className="group py-8 transition-all">
               <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-[var(--text-secondary)]">
                 <span className={`rounded-md px-2 py-0.5 font-medium ${categoryColors[post.category] || "bg-gray-500/10 text-gray-400"}`}>
                   {post.category}
@@ -52,10 +52,6 @@ export default function BlogPage() {
               <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] line-clamp-2">
                 {post.description}
               </p>
-
-              <div className="mt-4 flex items-center gap-1 text-sm font-medium text-[var(--accent)]">
-                Read more <ArrowRight className="h-3.5 w-3.5" />
-              </div>
             </article>
           </Link>
         ))}
