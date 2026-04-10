@@ -64,12 +64,16 @@ export default async function BlueprintPage({ params }: Props) {
   if (!blueprint) notFound();
 
   const session = await auth();
-  let owned = blueprint.isFree;
-  if (!owned && session?.user?.id) {
-    const purchase = await prisma.purchase.findUnique({
-      where: { userId_blueprintId: { userId: session.user.id, blueprintId: blueprint.id } },
-    });
-    owned = !!purchase;
+  let owned = false;
+  if (session?.user?.id) {
+    if (blueprint.isFree) {
+      owned = true; // signed-in users can download free blueprints
+    } else {
+      const purchase = await prisma.purchase.findUnique({
+        where: { userId_blueprintId: { userId: session.user.id, blueprintId: blueprint.id } },
+      });
+      owned = !!purchase;
+    }
   }
 
   const TypeIcon = typeIcons[blueprint.type] || FileText;
