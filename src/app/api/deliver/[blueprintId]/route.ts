@@ -8,12 +8,12 @@
 // GET /api/deliver/[blueprintId]?token=<download-token>
 
 import { NextRequest, NextResponse } from "next/server";
-import { getDownloadUrl } from "@vercel/blob";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { timingSafeEqual } from "crypto";
 import { rateLimit } from "@/lib/rate-limit";
 import { auditInfo, auditWarn } from "@/lib/audit";
+import { getBlobToken } from "@/lib/blob";
 
 export async function GET(
   req: NextRequest,
@@ -30,7 +30,16 @@ export async function GET(
     return NextResponse.json({ error: "Blueprint not found" }, { status: 404 });
   }
 
-  // Paid blueprints — verify access
+  // All downloads require sign-in (free or paid)
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { error: "Sign in to download", signInUrl: "/auth/signin" },
+      { status: 401 }
+    );
+  }
+
+  // Paid blueprints — verify purchase
   if (!blueprint.isFree) {
     const token = req.nextUrl.searchParams.get("token");
     let authorized = false;
@@ -64,13 +73,10 @@ export async function GET(
         }
       }
     } else {
-      const session = await auth();
-      if (session?.user?.id) {
-        const purchase = await prisma.purchase.findUnique({
-          where: { userId_blueprintId: { userId: session.user.id, blueprintId } },
-        });
-        authorized = !!purchase;
-      }
+      const purchase = await prisma.purchase.findUnique({
+        where: { userId_blueprintId: { userId: session.user.id, blueprintId } },
+      });
+      authorized = !!purchase;
     }
 
     if (!authorized) {
@@ -100,18 +106,33 @@ export async function GET(
 
   auditInfo("deliver.success", { blueprintId, metadata: { fileCount: files.length } });
 
-  // If single file, redirect directly to the download URL
+  // For single file, proxy the download from Vercel Blob (private store requires auth)
   if (files.length === 1) {
-    return NextResponse.redirect(getDownloadUrl(files[0].blobUrl));
+    const file = files[0];
+    const blobRes = await fetch(file.blobUrl, {
+      headers: { Authorization: `Bearer ${getBlobToken()}` },
+    });
+
+    if (!blobRes.ok) {
+      return NextResponse.json({ error: "File download failed" }, { status: 502 });
+    }
+
+    return new NextResponse(blobRes.body, {
+      headers: {
+        "Content-Type": file.mimeType,
+        "Content-Disposition": `attachment; filename="${file.filename}"`,
+        "Content-Length": String(file.size),
+      },
+    });
   }
 
-  // Multiple files - return the list with download URLs
+  // Multiple files - return download links (each proxied through this same endpoint)
   return NextResponse.json({
     blueprintId,
     files: files.map((f) => ({
       id: f.id,
       filename: f.filename,
-      url: getDownloadUrl(f.blobUrl),
+      url: `/api/deliver/${blueprintId}/file/${f.id}`,
       size: f.size,
       mimeType: f.mimeType,
     })),
