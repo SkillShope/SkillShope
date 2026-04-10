@@ -42,6 +42,7 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-3">
           <Link href="/browse" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Browse</Link>
+          <Link href="/blog" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Blog</Link>
           <ThemeToggle />
 
           {user ? (
@@ -115,6 +116,7 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
             <nav className="space-y-1">
               {[
                 { href: "/browse", label: "Browse" },
+                { href: "/blog", label: "Blog" },
                 ...(user ? [
                   { href: "/publish", label: "Sell a Blueprint" },
                   { href: "/dashboard", label: "My Library" },
