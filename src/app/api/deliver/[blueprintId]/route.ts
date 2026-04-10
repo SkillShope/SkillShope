@@ -30,7 +30,16 @@ export async function GET(
     return NextResponse.json({ error: "Blueprint not found" }, { status: 404 });
   }
 
-  // Paid blueprints — verify access
+  // All downloads require sign-in (free or paid)
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { error: "Sign in to download", signInUrl: "/auth/signin" },
+      { status: 401 }
+    );
+  }
+
+  // Paid blueprints — verify purchase
   if (!blueprint.isFree) {
     const token = req.nextUrl.searchParams.get("token");
     let authorized = false;
@@ -64,13 +73,10 @@ export async function GET(
         }
       }
     } else {
-      const session = await auth();
-      if (session?.user?.id) {
-        const purchase = await prisma.purchase.findUnique({
-          where: { userId_blueprintId: { userId: session.user.id, blueprintId } },
-        });
-        authorized = !!purchase;
-      }
+      const purchase = await prisma.purchase.findUnique({
+        where: { userId_blueprintId: { userId: session.user.id, blueprintId } },
+      });
+      authorized = !!purchase;
     }
 
     if (!authorized) {

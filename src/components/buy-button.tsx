@@ -26,6 +26,18 @@ export function BuyButton({ blueprintId, isFree, price, owned, isSignedIn }: Buy
     );
   }
 
+  if (!isSignedIn) {
+    return (
+      <a
+        href="/auth/signin"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
+      >
+        {isFree ? "Sign in to Download" : "Sign in to Purchase"}
+      </a>
+    );
+  }
+
+  // Free blueprint + signed in = direct download
   if (isFree) {
     return (
       <a
@@ -34,17 +46,6 @@ export function BuyButton({ blueprintId, isFree, price, owned, isSignedIn }: Buy
       >
         <Download className="h-5 w-5" />
         Download Free Blueprint
-      </a>
-    );
-  }
-
-  if (!isSignedIn) {
-    return (
-      <a
-        href="/auth/signin"
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
-      >
-        Sign in to Purchase
       </a>
     );
   }
