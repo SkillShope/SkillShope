@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 import { Clock } from "lucide-react";
+import { BlogShareButton } from "@/components/blog-share-button";
 
 export const metadata: Metadata = {
   title: "Blog - RoughInHub",
@@ -43,6 +44,7 @@ export default function BlogPage() {
                   {post.readTime}
                 </span>
                 <span>{new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+                <BlogShareButton title={post.title} slug={post.slug} />
               </div>
 
               <h2 className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
