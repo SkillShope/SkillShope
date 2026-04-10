@@ -4,10 +4,15 @@ import type { MetadataRoute } from "next";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://roughinhub.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const blueprints = await prisma.blueprint.findMany({
-    where: { hidden: false },
-    select: { slug: true, updatedAt: true, featured: true },
-  });
+  let blueprints: { slug: string; updatedAt: Date; featured: boolean }[] = [];
+  try {
+    blueprints = await prisma.blueprint.findMany({
+      where: { hidden: false },
+      select: { slug: true, updatedAt: true, featured: true },
+    });
+  } catch {
+    // Table may not exist during build - return static pages only
+  }
 
   return [
     // Core pages
