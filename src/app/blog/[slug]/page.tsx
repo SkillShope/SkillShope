@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPost, getAllPosts } from "@/lib/blog";
+import { auth } from "@/lib/auth";
 import { ArrowLeft, Clock, ArrowRight } from "lucide-react";
+import { UsefulButton } from "@/components/useful-button";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,6 +33,8 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();
+
+  const session = await auth();
 
   // Simple markdown-like rendering for content
   const sections = post.content.split("\n\n").map((block, i) => {
@@ -137,8 +141,13 @@ export default async function BlogPostPage({ params }: Props) {
 
         <div className="prose-custom text-base">{sections}</div>
 
+        {/* Useful button */}
+        <div className="mt-10 border-t border-[var(--border)] pt-6">
+          <UsefulButton slug={post.slug} isSignedIn={!!session?.user} />
+        </div>
+
         {/* CTA */}
-        <div className="mt-12 rounded-xl border border-[var(--accent)]/30 bg-[var(--accent-soft)] p-6 text-center">
+        <div className="mt-8 rounded-xl border border-[var(--accent)]/30 bg-[var(--accent-soft)] p-6 text-center">
           <p className="mb-4 text-lg font-semibold text-[var(--text)]">
             Ready to put this into practice?
           </p>
