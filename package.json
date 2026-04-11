@@ -34,6 +34,7 @@
     "@types/react-dom": "^19.2.3",
     "docx": "^9.6.1",
     "exceljs": "^4.4.0",
+    "pdfkit": "^0.18.0",
     "postcss": "^8.5.8",
     "prisma": "^6.19.2",
     "tailwindcss": "^4.2.2",
