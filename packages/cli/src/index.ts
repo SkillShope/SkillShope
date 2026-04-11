@@ -23,7 +23,7 @@ function help(): void {
     skillshope install codebase-memory-mcp
     skillshope login
 
-  Docs: https://skillshope.com/docs/cli-reference
+  Docs: https://roughinhub.com/docs/cli-reference
 `);
 }
 

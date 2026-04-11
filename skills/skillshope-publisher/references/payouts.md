@@ -2,11 +2,11 @@
 
 ## Stripe Connect Express
 
-Skill Shope uses Stripe Connect Express for automatic publisher payouts. You must complete this setup before listing paid skills.
+RoughInHub uses Stripe Connect Express for automatic publisher payouts. You must complete this setup before listing paid skills.
 
 ## Setup Steps
 
-1. **Go to your dashboard** at skillshope.com/dashboard
+1. **Go to your dashboard** at roughinhub.com/dashboard
 2. **Click "Connect"** on the payout setup banner
 3. **Complete Stripe onboarding** — Stripe will ask for:
    - Business type (individual or company)
@@ -20,7 +20,7 @@ Skill Shope uses Stripe Connect Express for automatic publisher payouts. You mus
 | Event | What happens |
 |-------|-------------|
 | Buyer purchases your skill | Stripe processes payment |
-| Platform fee deducted | Skill Shope takes 15% |
+| Platform fee deducted | RoughInHub takes 15% |
 | Funds transferred | 85% goes to your connected Stripe account |
 | Payout to bank | Stripe deposits to your bank on rolling basis (typically 2 business days) |
 

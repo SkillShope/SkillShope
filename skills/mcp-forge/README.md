@@ -24,10 +24,10 @@ npx skillshope install mcp-forge
 
 ## Pricing
 
-$9.99 — one-time purchase via [Skill Shope](https://skillshope.com/skills/mcp-forge).
+$9.99 -- one-time purchase via [RoughInHub](https://roughinhub.com/blueprints/mcp-forge).
 
-Publishers receive a complete MCP server generator skill with reference guides for input formats, configuration, output structure, and publishing.
+Publishers receive a complete MCP server generator blueprint with reference guides for input formats, configuration, output structure, and publishing.
 
 ## License
 
-Proprietary. See [Skill Shope Terms](https://skillshope.com/terms).
+Proprietary. See [RoughInHub Terms](https://roughinhub.com/terms).

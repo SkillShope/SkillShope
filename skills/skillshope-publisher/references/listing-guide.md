@@ -2,7 +2,7 @@
 
 ## The Publish Form
 
-Navigate to skillshope.com/publish (must be signed in) and fill out:
+Navigate to roughinhub.com/publish (must be signed in) and fill out:
 
 ### Required Fields
 
@@ -27,7 +27,7 @@ Navigate to skillshope.com/publish (must be signed in) and fill out:
 
 ### Slug
 
-Auto-generated from name. This becomes your URL: `skillshope.com/skills/your-slug`. Keep it clean and URL-friendly.
+Auto-generated from name. This becomes your URL: `roughinhub.com/blueprints/your-slug`. Keep it clean and URL-friendly.
 
 ## Common Mistakes
 

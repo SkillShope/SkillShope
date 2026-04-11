@@ -7,7 +7,7 @@ import { getPost } from "@/lib/blog";
 // GET - get vote count and whether current user has voted
 export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get("slug");
-  if (!slug || !getPost(slug)) {
+  if (!slug || !(await getPost(slug))) {
     return NextResponse.json({ error: "Invalid post" }, { status: 400 });
   }
 
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { slug } = await req.json();
-  if (!slug || !getPost(slug)) {
+  if (!slug || !(await getPost(slug))) {
     return NextResponse.json({ error: "Invalid post" }, { status: 400 });
   }
 

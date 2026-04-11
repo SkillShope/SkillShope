@@ -30,7 +30,7 @@ export async function install(slug: string): Promise<void> {
     const token = getToken();
     if (!token) {
       console.log("  This is a paid skill. To install:");
-      console.log(`  1. Purchase at https://skillshope.com/skills/${slug}`);
+      console.log(`  1. Purchase at https://roughinhub.com/blueprints/${slug}`);
       console.log("  2. Run: skillshope login");
       console.log(`  3. Run: skillshope install ${slug}`);
       console.log();

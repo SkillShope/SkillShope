@@ -9,8 +9,10 @@ import {
   Package,
   CheckCircle,
   XCircle,
+  FileText,
 } from "lucide-react";
 import { AdminConfirm } from "./admin-confirm";
+import { AdminBlog } from "./admin-blog";
 
 type Blueprint = {
   id: string;
@@ -73,7 +75,7 @@ const ACTION_DETAILS: Record<string, Omit<PendingAction, "type" | "id" | "action
 };
 
 export function AdminPanel() {
-  const [tab, setTab] = useState<"blueprints" | "users">("blueprints");
+  const [tab, setTab] = useState<"blueprints" | "users" | "blog">("blueprints");
   const [blueprints, setBlueprints] = useState<Blueprint[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -145,10 +147,23 @@ export function AdminPanel() {
           <Users className="h-4 w-4" />
           Users ({users.length})
         </button>
+        <button
+          onClick={() => setTab("blog")}
+          className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+            tab === "blog"
+              ? "bg-[var(--bg-card)] text-[var(--text)]"
+              : "text-[var(--text-secondary)] hover:text-[var(--text)]"
+          }`}
+        >
+          <FileText className="h-4 w-4" />
+          Blog
+        </button>
       </div>
       </div>
 
-      {loading ? (
+      {tab === "blog" ? (
+        <AdminBlog />
+      ) : loading ? (
         <p className="text-sm text-[var(--text-secondary)]">Loading...</p>
       ) : tab === "blueprints" ? (
         blueprints.length === 0 ? (

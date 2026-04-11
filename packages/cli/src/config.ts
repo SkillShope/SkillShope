@@ -9,7 +9,7 @@ export type Config = {
 
 const CONFIG_DIR = join(homedir(), ".skillshope");
 const CONFIG_PATH = join(CONFIG_DIR, "config.json");
-const DEFAULT_REGISTRY = "https://skillshope.com";
+const DEFAULT_REGISTRY = "https://roughinhub.com";
 
 export function loadConfig(): Config {
   if (!existsSync(CONFIG_PATH)) {

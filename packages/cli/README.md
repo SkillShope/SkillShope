@@ -1,45 +1,45 @@
-# skillshope
+# roughinhub
 
-Install AI skills, MCP servers, and agents from [Skill Shope](https://skillshope.com).
+Install AI blueprints, MCP servers, and agents from [RoughInHub](https://roughinhub.com).
 
 ## Quick Start
 
 ```bash
-npx skillshope install <slug>
+npx roughinhub install <slug>
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `skillshope install <slug>` | Install a skill, MCP server, or agent |
-| `skillshope login` | Authenticate with your API key |
-| `skillshope whoami` | Show current logged-in user |
-| `skillshope list` | List installed skills in this directory |
-| `skillshope help` | Show help |
+| `roughinhub install <slug>` | Install a blueprint, MCP server, or agent |
+| `roughinhub login` | Authenticate with your API key |
+| `roughinhub whoami` | Show current logged-in user |
+| `roughinhub list` | List installed blueprints in this directory |
+| `roughinhub help` | Show help |
 
-## Install a Skill
+## Install a Blueprint
 
 ```bash
-# Free skills — install instantly
-npx skillshope install code-reviewer-pro
+# Free blueprints -- install instantly
+npx roughinhub install code-reviewer-pro
 
-# Paid skills — requires login + purchase
-npx skillshope login
-npx skillshope install premium-skill
+# Paid blueprints -- requires login + purchase
+npx roughinhub login
+npx roughinhub install premium-blueprint
 ```
 
-Skills are installed to the appropriate directory based on type:
-- **Skills:** `.claude/skills/<slug>/`
+Blueprints are installed to the appropriate directory based on type:
+- **Blueprints:** `.claude/blueprints/<slug>/`
 - **MCP Servers:** `.claude/mcp-servers/<slug>/`
 - **Agents:** `.claude/agents/<slug>/`
 
 ## Authentication
 
-Generate an API key from your [profile page](https://skillshope.com/profile), then:
+Generate an API key from your [profile page](https://roughinhub.com/profile), then:
 
 ```bash
-npx skillshope login
+npx roughinhub login
 # Paste your API key when prompted
 ```
 
@@ -49,7 +49,7 @@ Works with Claude Code, Codex, Cursor, Windsurf, and any MCP-compatible AI assis
 
 ## Links
 
-- [Browse Skills](https://skillshope.com/browse)
-- [Publish a Skill](https://skillshope.com/publish)
-- [CLI Reference](https://skillshope.com/docs/cli-reference)
-- [API Reference](https://skillshope.com/docs/api-reference)
+- [Browse Blueprints](https://roughinhub.com/browse)
+- [Publish a Blueprint](https://roughinhub.com/publish)
+- [CLI Reference](https://roughinhub.com/docs/cli-reference)
+- [API Reference](https://roughinhub.com/docs/api-reference)
