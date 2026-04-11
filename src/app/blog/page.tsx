@@ -8,8 +8,8 @@ export const metadata: Metadata = {
     "Plumbing career guides, business tips, bidding strategies, and industry insights for plumbers and aspiring plumbers.",
 };
 
-export default function BlogPage() {
-  const posts = getAllPosts();
+export default async function BlogPage() {
+  const posts = await getAllPosts();
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">

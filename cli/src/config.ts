@@ -11,7 +11,7 @@ type Config = {
 };
 
 const DEFAULT_CONFIG: Config = {
-  registryUrl: "https://skillshope.com",
+  registryUrl: "https://roughinhub.com",
 };
 
 export function getConfig(): Config {
