@@ -34,6 +34,10 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "RoughInHub",
   },
+  twitter: {
+    card: "summary_large_image",
+    site: "@RoughInHub",
+  },
 };
 
 export default async function RootLayout({

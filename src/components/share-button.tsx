@@ -45,7 +45,7 @@ export function ShareButton({ slug, name, description }: ShareButtonProps) {
     e.preventDefault();
     e.stopPropagation();
     window.open(
-      `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&via=RoughInHub`,
       "_blank",
       "width=550,height=420"
     );
