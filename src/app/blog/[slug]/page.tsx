@@ -142,6 +142,16 @@ export default async function BlogPostPage({ params }: Props) {
           </p>
         </header>
 
+        {post.imageUrl && (
+          <div className="mb-8 overflow-hidden rounded-xl">
+            <img
+              src={post.imageUrl}
+              alt={post.title}
+              className="w-full object-cover"
+            />
+          </div>
+        )}
+
         <div className="prose-custom text-base">{sections}</div>
 
         {/* Useful button */}

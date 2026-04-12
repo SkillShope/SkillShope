@@ -130,6 +130,7 @@ model BlogPost {
   category    String
   author      String    @default("RoughInHub Team")
   readTime    String    @default("5 min read")
+  imageUrl    String?
   ctaText     String?
   ctaLink     String?
   published   Boolean   @default(false)

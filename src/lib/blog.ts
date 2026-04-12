@@ -10,6 +10,7 @@ export type BlogPost = {
   readTime: string;
   ctaText: string;
   ctaLink: string;
+  imageUrl: string | null;
   content: string;
 };
 
@@ -21,6 +22,7 @@ function toPublic(row: {
   author: string;
   category: string;
   readTime: string;
+  imageUrl: string | null;
   ctaText: string | null;
   ctaLink: string | null;
   content: string;
@@ -36,6 +38,7 @@ function toPublic(row: {
     readTime: row.readTime,
     ctaText: row.ctaText ?? "",
     ctaLink: row.ctaLink ?? "/browse",
+    imageUrl: row.imageUrl,
     content: row.content,
   };
 }

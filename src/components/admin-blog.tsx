@@ -9,6 +9,8 @@ import {
   EyeOff,
   ArrowLeft,
   FileText,
+  ImagePlus,
+  X,
 } from "lucide-react";
 import { AdminConfirm } from "./admin-confirm";
 
@@ -21,6 +23,7 @@ type BlogPost = {
   category: string;
   author: string;
   readTime: string;
+  imageUrl: string | null;
   ctaText: string | null;
   ctaLink: string | null;
   published: boolean;
@@ -58,6 +61,8 @@ export function AdminBlog() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     loadPosts();
@@ -73,6 +78,7 @@ export function AdminBlog() {
   const openNew = () => {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setImageUrl(null);
     setError("");
     setView("form");
   };
@@ -90,8 +96,40 @@ export function AdminBlog() {
       ctaLink: post.ctaLink || "",
       published: post.published,
     });
+    setImageUrl(post.imageUrl);
     setError("");
     setView("form");
+  };
+
+  const uploadImage = async (file: File) => {
+    setUploading(true);
+    setError("");
+    const fd = new FormData();
+    fd.append("file", file);
+    if (editingId) fd.append("postId", editingId);
+
+    const res = await fetch("/api/admin/blog/image", { method: "POST", body: fd });
+    if (!res.ok) {
+      const data = await res.json();
+      setError(data.error || "Image upload failed");
+      setUploading(false);
+      return;
+    }
+
+    const { url } = await res.json();
+    setImageUrl(url);
+    setUploading(false);
+  };
+
+  const removeImage = async () => {
+    if (editingId && imageUrl) {
+      await fetch("/api/admin/blog/image", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId: editingId }),
+      });
+    }
+    setImageUrl(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -101,7 +139,8 @@ export function AdminBlog() {
 
     const url = "/api/admin/blog";
     const method = editingId ? "PATCH" : "POST";
-    const body = editingId ? { id: editingId, ...form } : form;
+    const payload = { ...form, imageUrl };
+    const body = editingId ? { id: editingId, ...payload } : payload;
 
     const res = await fetch(url, {
       method,
@@ -246,6 +285,54 @@ export function AdminBlog() {
               Supports: ## headings, ### subheadings, **bold**, - bullet lists,
               1. numbered lists
             </p>
+          </div>
+
+          {/* Featured Image */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium">
+              Featured Image <span className="text-[var(--text-secondary)]">(optional)</span>
+            </label>
+            {imageUrl ? (
+              <div className="relative inline-block">
+                <img
+                  src={imageUrl}
+                  alt="Featured"
+                  className="h-40 rounded-lg border border-[var(--border)] object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600 transition-colors"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              <label className="flex h-32 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-[var(--border)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-colors">
+                <div className="text-center">
+                  {uploading ? (
+                    <p className="text-sm text-[var(--text-secondary)]">Uploading...</p>
+                  ) : (
+                    <>
+                      <ImagePlus className="mx-auto h-6 w-6 text-[var(--text-secondary)]" />
+                      <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                        Click to upload (JPEG, PNG, WebP, max 5MB)
+                      </p>
+                    </>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/avif"
+                  className="hidden"
+                  disabled={uploading}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) uploadImage(file);
+                  }}
+                />
+              </label>
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">

@@ -61,25 +61,37 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
         ) : (
           filtered.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`}>
-              <article className="group py-8 transition-all">
-                <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-[var(--text-secondary)]">
-                  <span className={`rounded-md px-2 py-0.5 font-medium ${categoryColors[post.category] || "bg-gray-500/10 text-gray-400"}`}>
-                    {post.category}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    {post.readTime}
-                  </span>
-                  <span>{new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+              <article className="group flex gap-5 py-8 transition-all">
+                <div className="flex-1 min-w-0">
+                  <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-[var(--text-secondary)]">
+                    <span className={`rounded-md px-2 py-0.5 font-medium ${categoryColors[post.category] || "bg-gray-500/10 text-gray-400"}`}>
+                      {post.category}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {post.readTime}
+                    </span>
+                    <span>{new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+                  </div>
+
+                  <h2 className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                    {post.title}
+                  </h2>
+
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] line-clamp-2">
+                    {post.description}
+                  </p>
                 </div>
 
-                <h2 className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                  {post.title}
-                </h2>
-
-                <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] line-clamp-2">
-                  {post.description}
-                </p>
+                {post.imageUrl && (
+                  <div className="hidden shrink-0 sm:block">
+                    <img
+                      src={post.imageUrl}
+                      alt=""
+                      className="h-24 w-36 rounded-lg object-cover"
+                    />
+                  </div>
+                )}
               </article>
             </Link>
           ))
