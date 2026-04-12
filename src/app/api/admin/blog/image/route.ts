@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const blob = await put(`blog/${postId || "draft"}/${file.name}`, file, {
-      access: "public",
+      access: "private",
       addRandomSuffix: true,
       token: getBlobToken(),
     });
@@ -78,8 +78,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ url: blob.url }, { status: 201 });
   } catch (err) {
-    console.error("Blog image upload failed:", err instanceof Error ? err.message : "Unknown error");
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("Blog image upload failed:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

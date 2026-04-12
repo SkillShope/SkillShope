@@ -295,7 +295,7 @@ export function AdminBlog() {
             {imageUrl ? (
               <div className="relative inline-block">
                 <img
-                  src={imageUrl}
+                  src={imageUrl.includes(".blob.vercel-storage.com/") ? `/api/blog-image?url=${encodeURIComponent(imageUrl)}` : imageUrl}
                   alt="Featured"
                   className="h-40 rounded-lg border border-[var(--border)] object-cover"
                 />

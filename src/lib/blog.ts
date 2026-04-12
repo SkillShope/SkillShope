@@ -38,7 +38,9 @@ function toPublic(row: {
     readTime: row.readTime,
     ctaText: row.ctaText ?? "",
     ctaLink: row.ctaLink ?? "/browse",
-    imageUrl: row.imageUrl,
+    imageUrl: row.imageUrl
+      ? `/api/blog-image?url=${encodeURIComponent(row.imageUrl)}`
+      : null,
     content: row.content,
   };
 }
