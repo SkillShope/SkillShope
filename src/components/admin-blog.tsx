@@ -462,7 +462,22 @@ export function AdminBlog() {
                   key={post.id}
                   className="border-b border-[var(--border)] last:border-0 hover:bg-[var(--bg-card)]"
                 >
-                  <td className="px-4 py-3 font-medium">{post.title}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      {post.imageUrl ? (
+                        <img
+                          src={`/api/blog-image?url=${encodeURIComponent(post.imageUrl)}`}
+                          alt=""
+                          className="h-8 w-12 shrink-0 rounded object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-8 w-12 shrink-0 items-center justify-center rounded bg-[var(--bg-secondary)]">
+                          <FileText className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
+                        </div>
+                      )}
+                      <span className="font-medium">{post.title}</span>
+                    </div>
+                  </td>
                   <td className="px-4 py-3">
                     <span className="rounded-full bg-[var(--bg-secondary)] px-2.5 py-0.5 text-xs">
                       {post.category}
