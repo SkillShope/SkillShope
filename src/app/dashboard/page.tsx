@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Download, FileText, Plus, Calendar, Package } from "lucide-react";
+import { Download, FileText, Plus, Calendar, Package, Sparkles, ScrollText, ChevronRight } from "lucide-react";
 
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat("en-US", {
@@ -40,13 +40,27 @@ export default async function LibraryPage() {
     orderBy: { createdAt: "desc" },
   });
 
+  const estimates = await prisma.estimate.findMany({
+    where: { userId: session.user.id },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, estimateNumber: true, jobDescription: true, jobType: true, data: true, contractData: true, createdAt: true },
+  });
+
+  const estimatesWithTotals = estimates.map((e) => ({
+    ...e,
+    total: (JSON.parse(e.data) as { total: number }).total,
+    hasContract: !!e.contractData,
+  }));
+
+  const contracts = estimatesWithTotals.filter((e) => e.hasContract);
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 space-y-12">
       <h1 className="text-3xl font-bold">My Library</h1>
 
       {/* Section 1: Purchased Blueprints */}
       <section>
-        <h2 className="text-xl font-semibold mb-4">My Purchased Blueprints</h2>
+        <h2 className="text-xl font-semibold mb-4">My Purchased Templates</h2>
 
         {purchases.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2">
@@ -101,23 +115,112 @@ export default async function LibraryPage() {
               href="/browse"
               className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] text-white font-semibold px-5 py-2.5 hover:opacity-90 transition-opacity"
             >
-              Browse Blueprints
+              Browse Templates
             </Link>
           </div>
         )}
       </section>
 
-      {/* Section 2: Published Blueprints (only if any) */}
+      {/* Section 2: Estimates (only if any) */}
+      {estimatesWithTotals.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold">My Estimates</h2>
+            <Link
+              href="/estimate"
+              className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-[var(--surface-hover)] transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              New Estimate
+            </Link>
+          </div>
+
+          <div className="divide-y divide-[var(--border)] rounded-xl border">
+            {estimatesWithTotals.map((est) => (
+              <Link
+                key={est.id}
+                href={`/estimate/${est.id}`}
+                className="flex items-center justify-between px-5 py-4 hover:bg-[var(--bg-card)] transition-colors"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium">
+                    {est.estimateNumber && <span className="mr-2 text-[var(--text-secondary)]">{est.estimateNumber}</span>}
+                    {est.jobDescription}
+                  </p>
+                  <div className="mt-1 flex items-center gap-3 text-sm text-[var(--text-secondary)]">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {formatDate(est.createdAt)}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      {est.jobType}
+                    </span>
+                    {est.hasContract && (
+                      <span className="flex items-center gap-1 text-[var(--accent)]">
+                        <ScrollText className="w-3.5 h-3.5" />
+                        Contract
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="ml-4 flex items-center gap-3">
+                  <span className="text-sm font-semibold">
+                    ${est.total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
+                  <ChevronRight className="h-4 w-4 text-[var(--text-secondary)]" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Section 3: Contracts (only if any) */}
+      {contracts.length > 0 && (
+        <section>
+          <h2 className="text-xl font-semibold mb-4">My Contracts</h2>
+
+          <div className="divide-y divide-[var(--border)] rounded-xl border">
+            {contracts.map((est) => (
+              <Link
+                key={est.id}
+                href={`/estimate/${est.id}`}
+                className="flex items-center justify-between px-5 py-4 hover:bg-[var(--bg-card)] transition-colors"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium">{est.jobDescription}</p>
+                  <div className="mt-1 flex items-center gap-3 text-sm text-[var(--text-secondary)]">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {formatDate(est.createdAt)}
+                    </span>
+                    <span className="font-semibold">
+                      ${est.total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                </div>
+                <div className="ml-4 flex items-center gap-2">
+                  <Download className="h-4 w-4 text-[var(--text-secondary)]" />
+                  <ChevronRight className="h-4 w-4 text-[var(--text-secondary)]" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Section 4: Published Blueprints (only if any) */}
       {myBlueprints.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold">My Published Blueprints</h2>
+            <h2 className="text-xl font-semibold">My Published Templates</h2>
             <Link
               href="/publish"
               className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-[var(--surface-hover)] transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Sell a Blueprint
+              Sell a Template
             </Link>
           </div>
 

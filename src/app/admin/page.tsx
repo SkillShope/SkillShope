@@ -14,5 +14,22 @@ export default async function AdminPage() {
 
   if (!user?.isAdmin) redirect("/");
 
-  return <AdminPanel />;
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const [totalEstimates, monthlyEstimates, totalUsers] = await Promise.all([
+    prisma.estimate.count(),
+    prisma.estimate.count({ where: { createdAt: { gte: startOfMonth } } }),
+    prisma.user.count(),
+  ]);
+
+  return (
+    <AdminPanel
+      stats={{
+        totalEstimates,
+        monthlyEstimates,
+        totalUsers,
+      }}
+    />
+  );
 }

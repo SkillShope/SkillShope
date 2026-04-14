@@ -26,6 +26,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
+  serverExternalPackages: ["pdfkit"],
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },

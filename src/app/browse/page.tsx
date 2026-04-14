@@ -4,9 +4,9 @@ import { BlueprintCard } from "@/components/blueprint-card";
 import { BLUEPRINT_CATEGORIES, BLUEPRINT_TYPES } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Browse Blueprints",
+  title: "Browse Templates",
   description:
-    "Browse plumbing blueprints — estimating sheets, service checklists, contracts, training materials, and more.",
+    "Browse plumbing templates -- estimating sheets, service checklists, contracts, training materials, and more.",
 };
 
 type Props = {
@@ -62,9 +62,9 @@ export default async function BrowsePage({ searchParams }: Props) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Browse Blueprints</h1>
+        <h1 className="text-3xl font-bold">Browse Templates</h1>
         <p className="mt-2 text-[var(--text-secondary)]">
-          {resultCount} blueprint{resultCount !== 1 ? "s" : ""} found
+          {resultCount} template{resultCount !== 1 ? "s" : ""} found
           {q ? ` for "${q}"` : ""}
           {category
             ? ` in ${BLUEPRINT_CATEGORIES.find((c) => c.value === category)?.label ?? category}`
@@ -79,7 +79,7 @@ export default async function BrowsePage({ searchParams }: Props) {
           type="text"
           name="q"
           defaultValue={q}
-          placeholder="Search blueprints…"
+          placeholder="Search templates…"
           className="h-9 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-3 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] w-56"
         />
 
@@ -164,7 +164,7 @@ export default async function BrowsePage({ searchParams }: Props) {
       {blueprints.length === 0 ? (
         <div className="py-20 text-center">
           <p className="text-lg text-[var(--text-secondary)]">
-            No blueprints found. Try a different search or category.
+            No templates found. Try a different search or category.
           </p>
         </div>
       ) : (

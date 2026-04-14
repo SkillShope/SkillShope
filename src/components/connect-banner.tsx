@@ -66,7 +66,7 @@ export function ConnectBanner() {
               {status.connected ? "Complete payout setup" : "Set up payouts"}
             </p>
             <p className="text-xs text-[var(--text-secondary)]">
-              Connect your Stripe account to receive earnings from paid blueprints.
+              Connect your Stripe account to receive earnings from paid templates.
             </p>
           </div>
         </div>

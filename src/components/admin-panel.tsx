@@ -46,18 +46,18 @@ type PendingAction = {
 
 const ACTION_DETAILS: Record<string, Omit<PendingAction, "type" | "id" | "action">> = {
   feature: {
-    title: "Feature this blueprint?",
-    description: "This blueprint will appear on the homepage in the Featured section. It signals to visitors that this is a high-quality, recommended resource.",
-    confirmLabel: "Feature Blueprint",
+    title: "Feature this template?",
+    description: "This template will appear on the homepage in the Featured section. It signals to visitors that this is a high-quality, recommended resource.",
+    confirmLabel: "Feature Template",
   },
   unfeature: {
     title: "Remove from featured?",
-    description: "This blueprint will no longer appear in the Featured section on the homepage. It will still be discoverable via browse and search.",
+    description: "This template will no longer appear in the Featured section on the homepage. It will still be discoverable via browse and search.",
     confirmLabel: "Remove from Featured",
   },
   remove: {
-    title: "Delete this blueprint?",
-    description: "This will permanently remove the blueprint listing and all associated purchase records. This cannot be undone.",
+    title: "Delete this template?",
+    description: "This will permanently remove the template listing and all associated purchase records. This cannot be undone.",
     confirmLabel: "Delete Permanently",
     confirmStyle: "danger" as const,
   },
@@ -74,7 +74,15 @@ const ACTION_DETAILS: Record<string, Omit<PendingAction, "type" | "id" | "action
   },
 };
 
-export function AdminPanel() {
+type AdminPanelProps = {
+  stats: {
+    totalEstimates: number;
+    monthlyEstimates: number;
+    totalUsers: number;
+  };
+};
+
+export function AdminPanel({ stats }: AdminPanelProps) {
   const [tab, setTab] = useState<"blueprints" | "users" | "blog">("blueprints");
   const [blueprints, setBlueprints] = useState<Blueprint[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -118,9 +126,25 @@ export function AdminPanel() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <h1 className="mb-2 text-2xl font-bold">Admin</h1>
-      <p className="mb-6 text-sm text-[var(--text-secondary)]">
-        Manage blueprints, creators, and platform content.
+      <p className="mb-4 text-sm text-[var(--text-secondary)]">
+        Manage templates, creators, and platform content.
       </p>
+
+      {/* Stats */}
+      <div className="mb-6 grid grid-cols-3 gap-4">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3">
+          <p className="text-2xl font-bold">{stats.totalEstimates}</p>
+          <p className="text-xs text-[var(--text-secondary)]">Total estimates</p>
+        </div>
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3">
+          <p className="text-2xl font-bold">{stats.monthlyEstimates}</p>
+          <p className="text-xs text-[var(--text-secondary)]">Estimates this month</p>
+        </div>
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3">
+          <p className="text-2xl font-bold">{stats.totalUsers}</p>
+          <p className="text-xs text-[var(--text-secondary)]">Total users</p>
+        </div>
+      </div>
 
       {/* Tabs + Actions */}
       <div className="mb-6 flex items-center justify-between">
@@ -134,7 +158,7 @@ export function AdminPanel() {
           }`}
         >
           <Package className="h-4 w-4" />
-          Blueprints ({blueprints.length})
+          Templates ({blueprints.length})
         </button>
         <button
           onClick={() => setTab("users")}
@@ -169,9 +193,9 @@ export function AdminPanel() {
         blueprints.length === 0 ? (
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] py-16 text-center">
             <Package className="mx-auto mb-3 h-8 w-8 text-[var(--text-secondary)]" />
-            <p className="font-medium">No blueprints yet</p>
+            <p className="font-medium">No templates yet</p>
             <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              Blueprints will appear here once creators start listing.
+              Templates will appear here once creators start listing.
             </p>
           </div>
         ) : (
@@ -179,7 +203,7 @@ export function AdminPanel() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
-                  <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Blueprint</th>
+                  <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Template</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Creator</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Type</th>
                   <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Downloads</th>
@@ -253,7 +277,7 @@ export function AdminPanel() {
               <tr className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
                 <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">User</th>
                 <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Email</th>
-                <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Blueprints</th>
+                <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Templates</th>
                 <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Status</th>
                 <th className="px-4 py-3 text-right font-medium text-[var(--text-secondary)]">Actions</th>
               </tr>

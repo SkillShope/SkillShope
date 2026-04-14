@@ -40,7 +40,7 @@ export default async function HomePage() {
           <h1 className="font-hero mb-6 text-4xl font-bold tracking-tight sm:text-6xl text-balance">
             RoughInHub —{" "}
             <span className="bg-gradient-to-r from-[var(--accent)] to-[#c97c3a] bg-clip-text text-transparent">
-              Real Plumbing Blueprints from Real Plumbers
+              Real Plumbing Templates from Real Plumbers
             </span>
           </h1>
           <p className="mb-4 text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl max-w-3xl mx-auto">
@@ -58,23 +58,23 @@ export default async function HomePage() {
               href="/browse"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-8 py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors min-w-[200px]"
             >
-              Browse Blueprints
+              Browse Templates
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/publish"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-8 py-4 text-base font-semibold text-[var(--text)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-hover)] transition-colors min-w-[200px]"
             >
-              Sell Your Blueprints
+              Sell Your Templates
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Featured Blueprints */}
+      {/* Featured Templates */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="font-display text-2xl font-bold">Featured Blueprints</h2>
+          <h2 className="font-display text-2xl font-bold">Featured Templates</h2>
           <Link
             href="/browse"
             className="flex items-center gap-1 text-sm text-[var(--accent)] hover:underline"
@@ -104,7 +104,7 @@ export default async function HomePage() {
         ) : (
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-12 text-center">
             <p className="text-[var(--text-secondary)]">
-              First blueprints coming soon — be the first to sell yours.
+              First templates coming soon — be the first to sell yours.
             </p>
             <Link
               href="/publish"
@@ -143,7 +143,7 @@ export default async function HomePage() {
             {[
               {
                 step: 1,
-                title: "Browse proven blueprints from real plumbers",
+                title: "Browse proven templates from real plumbers",
                 description:
                   "Find templates built by working plumbers — bid sheets, checklists, contracts, and more — sorted by trade and region.",
               },
@@ -182,7 +182,7 @@ export default async function HomePage() {
             href="/browse"
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-10 py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
           >
-            Browse Blueprints
+            Browse Templates
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

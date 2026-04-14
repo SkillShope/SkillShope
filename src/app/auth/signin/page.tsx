@@ -61,8 +61,8 @@ export default function SignInPage() {
 
         <div className="mb-6 space-y-2 text-xs text-[var(--text-secondary)]">
           {[
-            "Access and manage your purchased blueprints",
-            "Sell your own blueprints and specs",
+            "Access and manage your purchased templates",
+            "Sell your own templates and specs",
             "Leave reviews and help the community",
           ].map((item) => (
             <div key={item} className="flex items-center gap-2">
