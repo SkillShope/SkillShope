@@ -17,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "RoughInHub — Real Plumbing Blueprints from Real Plumbers",
+  title: "RoughInHub — Real Plumbing Templates from Real Plumbers",
   description:
     "Buy battle-tested plumbing bid calculators, checklists, proposals, contracts, and training materials from experienced plumbers. Instant access, automatic updates.",
   icons: {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "RoughInHub — Real Plumbing Blueprints from Real Plumbers",
+    title: "RoughInHub — Real Plumbing Templates from Real Plumbers",
     description:
       "Buy battle-tested plumbing bid calculators, checklists, proposals, contracts, and training materials from experienced plumbers.",
     type: "website",

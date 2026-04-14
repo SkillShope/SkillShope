@@ -168,7 +168,7 @@ export function PublishForm() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="mb-2 text-3xl font-bold">Sell a Blueprint</h1>
+      <h1 className="mb-2 text-3xl font-bold">Sell a Template</h1>
       <p className="mb-8 text-[var(--text-secondary)]">
         Share your proven plumbing documents — bid calculators, checklists, proposals, and more.
       </p>
@@ -252,9 +252,9 @@ export function PublishForm() {
             )}
           </div>
 
-          {/* About This Blueprint */}
+          {/* About This Template */}
           <div>
-            <label className="mb-1 block text-sm font-medium">About This Blueprint</label>
+            <label className="mb-1 block text-sm font-medium">About This Template</label>
             <textarea
               rows={5}
               value={form.longDescription}
@@ -374,14 +374,14 @@ export function PublishForm() {
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Plus className="h-5 w-5" />}
-            {loading ? "Creating..." : "Create Blueprint & Add Files"}
+            {loading ? "Creating..." : "Create Template & Add Files"}
           </button>
         </form>
       ) : (
         <div className="space-y-6">
           <div className="rounded-xl border border-[var(--green)]/30 bg-[var(--green)]/5 p-4">
             <p className="text-sm font-medium text-[var(--green)]">
-              Blueprint created! Now upload your files.
+              Template created! Now upload your files.
             </p>
           </div>
 
@@ -431,7 +431,7 @@ export function PublishForm() {
           >
             {uploadedFiles.length === 0
               ? "Upload at least one file to continue"
-              : `Publish Blueprint (${uploadedFiles.length} file${uploadedFiles.length > 1 ? "s" : ""})`}
+              : `Publish Template (${uploadedFiles.length} file${uploadedFiles.length > 1 ? "s" : ""})`}
           </button>
         </div>
       )}

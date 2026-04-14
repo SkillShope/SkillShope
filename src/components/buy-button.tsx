@@ -21,7 +21,7 @@ export function BuyButton({ blueprintId, isFree, price, owned, isSignedIn }: Buy
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--green)]/15 py-4 text-base font-semibold text-[var(--green)]"
       >
         <Check className="h-5 w-5" />
-        {isFree ? "Download Free Blueprint" : "Download — Purchased"}
+        {isFree ? "Download Free Template" : "Download — Purchased"}
       </a>
     );
   }
@@ -45,7 +45,7 @@ export function BuyButton({ blueprintId, isFree, price, owned, isSignedIn }: Buy
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
       >
         <Download className="h-5 w-5" />
-        Download Free Blueprint
+        Download Free Template
       </a>
     );
   }

@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "Terms of service and content policy for RoughInHub — the plumbing blueprint marketplace.",
+    "Terms of service and content policy for RoughInHub -- the plumbing template marketplace.",
 };
 
 export default function TermsPage() {

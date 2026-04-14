@@ -37,6 +37,26 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
     const metadata = session.metadata || {};
 
+    // Handle Pro subscription checkout
+    if (metadata.type === "pro_subscription" && metadata.userId) {
+      const subscription = session.subscription as string;
+      if (subscription) {
+        const sub = await stripe.subscriptions.retrieve(subscription) as unknown as { status: string; current_period_end: number };
+        await prisma.user.update({
+          where: { id: metadata.userId },
+          data: {
+            subscriptionStatus: sub.status,
+            subscriptionEndDate: new Date(sub.current_period_end * 1000),
+          },
+        });
+        auditInfo("subscription.created", {
+          userId: metadata.userId,
+          metadata: { subscriptionId: subscription, sessionId: session.id },
+        });
+      }
+    }
+
+    // Handle blueprint purchase
     if (session.payment_status === "paid" && metadata.blueprintId && metadata.userId) {
       // Validate that both the user and blueprint actually exist
       const [user, blueprint] = await Promise.all([
@@ -78,6 +98,31 @@ export async function POST(req: NextRequest) {
         userId: metadata.userId,
         blueprintId: metadata.blueprintId,
         metadata: { amount, sessionId: session.id },
+      });
+    }
+  }
+
+  // Handle subscription updates (renewals, cancellations, failures)
+  if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
+    const subscription = event.data.object as unknown as { customer: string; status: string; current_period_end: number };
+    const customerId = subscription.customer;
+
+    const user = await prisma.user.findFirst({
+      where: { stripeCustomerId: customerId },
+      select: { id: true },
+    });
+
+    if (user) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          subscriptionStatus: event.type === "customer.subscription.deleted" ? "canceled" : subscription.status,
+          subscriptionEndDate: new Date(subscription.current_period_end * 1000),
+        },
+      });
+      auditInfo("subscription.updated", {
+        userId: user.id,
+        metadata: { status: subscription.status, eventType: event.type },
       });
     }
   }

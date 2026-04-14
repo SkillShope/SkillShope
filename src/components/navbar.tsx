@@ -42,13 +42,15 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-3">
           <Link href="/browse" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Browse</Link>
+          <Link href="/estimate" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Estimate</Link>
           <Link href="/blog" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Blog</Link>
+          <Link href="/about" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">About</Link>
           <ThemeToggle />
 
           {user ? (
             <>
               <Link href="/publish" className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors">
-                <Plus className="h-4 w-4" />Sell a Blueprint
+                <Plus className="h-4 w-4" />Sell a Template
               </Link>
               <div className="relative">
                 <button
@@ -116,9 +118,11 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
             <nav className="space-y-1">
               {[
                 { href: "/browse", label: "Browse" },
+                { href: "/estimate", label: "Estimate" },
                 { href: "/blog", label: "Blog" },
+                { href: "/about", label: "About" },
                 ...(user ? [
-                  { href: "/publish", label: "Sell a Blueprint" },
+                  { href: "/publish", label: "Sell a Template" },
                   { href: "/dashboard", label: "My Library" },
                   { href: "/profile", label: "Profile" },
                   ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : []),

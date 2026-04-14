@@ -22,7 +22,7 @@ export default function NotFound() {
             href="/browse"
             className="rounded-lg border border-[var(--border)] px-6 py-2.5 text-sm font-semibold hover:border-[var(--accent)]/40 transition-colors"
           >
-            Browse Blueprints
+            Browse Templates
           </Link>
         </div>
       </div>

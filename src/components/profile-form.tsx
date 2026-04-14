@@ -67,7 +67,7 @@ export function ProfileForm({ name: initialName, email, image, bio: initialBio, 
           <div>
             <p className="text-sm font-medium">Show profile photo publicly</p>
             <p className="text-xs text-[var(--text-secondary)]">
-              {showAvatar ? "Your photo appears on blueprint cards and your creator profile" : "A placeholder icon is shown instead of your photo"}
+              {showAvatar ? "Your photo appears on template cards and your creator profile" : "A placeholder icon is shown instead of your photo"}
             </p>
           </div>
           <button
