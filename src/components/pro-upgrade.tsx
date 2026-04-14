@@ -5,14 +5,22 @@ import { Sparkles, FileText, Zap, Check, Loader2 } from "lucide-react";
 
 export function ProUpgrade() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleUpgrade = async () => {
     setLoading(true);
-    const res = await fetch("/api/subscribe", { method: "POST" });
-    const data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
+    setError("");
+    try {
+      const res = await fetch("/api/subscribe", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(data.error || "Something went wrong. Try again.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Network error. Try again.");
       setLoading(false);
     }
   };
@@ -73,6 +81,12 @@ export function ProUpgrade() {
             </div>
           </li>
         </ul>
+
+        {error && (
+          <div className="mt-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            {error}
+          </div>
+        )}
 
         <button
           onClick={handleUpgrade}

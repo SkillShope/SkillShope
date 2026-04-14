@@ -32,32 +32,36 @@ export async function POST() {
     });
   }
 
-  // Create subscription checkout session
-  // Price is created dynamically -- in production you'd use a pre-created Price ID
-  const checkoutSession = await stripe.checkout.sessions.create({
-    customer: customerId,
-    mode: "subscription",
-    line_items: [
-      {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: "RoughInHub Pro",
-            description: "30 AI estimates/month + contract generation",
+  try {
+    const checkoutSession = await stripe.checkout.sessions.create({
+      customer: customerId,
+      mode: "subscription",
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "RoughInHub Pro",
+              description: "30 AI estimates/month + contract generation",
+            },
+            unit_amount: 1900, // $19.00
+            recurring: { interval: "month" },
           },
-          unit_amount: 1900, // $19.00
-          recurring: { interval: "month" },
+          quantity: 1,
         },
-        quantity: 1,
+      ],
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/estimate?upgraded=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/estimate/pro`,
+      metadata: {
+        userId: session.user.id,
+        type: "pro_subscription",
       },
-    ],
-    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/estimate?upgraded=true`,
-    cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/estimate/pro`,
-    metadata: {
-      userId: session.user.id,
-      type: "pro_subscription",
-    },
-  });
+    });
 
-  return NextResponse.json({ url: checkoutSession.url });
+    return NextResponse.json({ url: checkoutSession.url });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Subscription checkout failed";
+    console.error("Subscribe error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }

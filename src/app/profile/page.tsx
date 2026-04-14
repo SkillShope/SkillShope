@@ -16,6 +16,8 @@ export default async function ProfilePage() {
       image: true,
       bio: true,
       showAvatar: true,
+      subscriptionStatus: true,
+      subscriptionEndDate: true,
       createdAt: true,
     },
   });
@@ -30,6 +32,10 @@ export default async function ProfilePage() {
       bio={user.bio || ""}
       showAvatar={user.showAvatar}
       joinedAt={user.createdAt.toISOString()}
+      subscription={{
+        status: user.subscriptionStatus,
+        endDate: user.subscriptionEndDate?.toISOString() || null,
+      }}
     />
   );
 }

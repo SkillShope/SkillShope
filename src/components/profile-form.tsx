@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { User, Mail, FileText } from "lucide-react";
+import { User, Mail, FileText, CreditCard, Sparkles, Check } from "lucide-react";
+import Link from "next/link";
 
 type Props = {
   name: string;
@@ -10,9 +11,13 @@ type Props = {
   bio: string;
   showAvatar: boolean;
   joinedAt: string;
+  subscription: {
+    status: string | null;
+    endDate: string | null;
+  };
 };
 
-export function ProfileForm({ name: initialName, email, image, bio: initialBio, showAvatar: initialShowAvatar, joinedAt }: Props) {
+export function ProfileForm({ name: initialName, email, image, bio: initialBio, showAvatar: initialShowAvatar, joinedAt, subscription }: Props) {
   const [name, setName] = useState(initialName);
   const [bio, setBio] = useState(initialBio);
   const [showAvatar, setShowAvatar] = useState(initialShowAvatar);
@@ -139,6 +144,55 @@ export function ProfileForm({ name: initialName, email, image, bio: initialBio, 
               {saving ? "Saving..." : "Save Changes"}
             </button>
           </div>
+        </div>
+
+        {/* Billing */}
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-6">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+            <CreditCard className="h-5 w-5 text-[var(--text-secondary)]" />
+            Billing
+          </h2>
+
+          {subscription.status === "active" ? (
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="flex items-center gap-1.5 rounded-full bg-green-500/15 px-3 py-1 text-sm font-medium text-green-400">
+                  <Check className="h-3.5 w-3.5" />
+                  Pro
+                </span>
+                <span className="text-sm text-[var(--text-secondary)]">$19/month</span>
+              </div>
+              {subscription.endDate && (
+                <p className="mt-2 text-xs text-[var(--text-secondary)]">
+                  Current period ends {new Date(subscription.endDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                </p>
+              )}
+              <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                30 AI estimates/month + contract generation.
+                To manage or cancel your subscription, contact us at{" "}
+                <a href="mailto:info@roughinhub.com" className="text-[var(--accent)] hover:underline">info@roughinhub.com</a>.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-[var(--bg-secondary)] px-3 py-1 text-sm font-medium text-[var(--text-secondary)]">
+                  Free
+                </span>
+                <span className="text-sm text-[var(--text-secondary)]">3 estimates/month</span>
+              </div>
+              <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                Upgrade to Pro for 30 estimates/month and one-click contract generation.
+              </p>
+              <Link
+                href="/estimate/pro"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-5 py-2 text-sm font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
+              >
+                <Sparkles className="h-4 w-4" />
+                Upgrade to Pro - $19/mo
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
