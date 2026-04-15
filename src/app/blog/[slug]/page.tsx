@@ -22,6 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.description,
       type: "article",
       siteName: "RoughInHub",
+      images: post.imageUrl
+        ? [{ url: post.imageUrl, alt: post.title }]
+        : [{ url: "/og-image.png", width: 1200, height: 630, alt: post.title }],
     },
   };
 }
