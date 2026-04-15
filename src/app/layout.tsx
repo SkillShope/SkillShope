@@ -33,6 +33,14 @@ export const metadata: Metadata = {
       "Buy battle-tested plumbing bid calculators, checklists, proposals, contracts, and training materials from experienced plumbers.",
     type: "website",
     siteName: "RoughInHub",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "RoughInHub",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
