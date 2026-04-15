@@ -5,7 +5,7 @@ import { getPost, getPostSlugs } from "@/lib/blog";
 import { auth } from "@/lib/auth";
 import { ArrowLeft, Clock, ArrowRight } from "lucide-react";
 import { UsefulButton } from "@/components/useful-button";
-import { BlogShareButton } from "@/components/blog-share-button";
+import { BlogShareButtons } from "@/components/blog-share-button";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -130,7 +130,6 @@ export default async function BlogPostPage({ params }: Props) {
                 year: "numeric",
               })}
             </span>
-            <BlogShareButton title={post.title} slug={post.slug} />
           </div>
 
           <h1 className="text-3xl font-bold leading-tight sm:text-4xl">
@@ -170,6 +169,11 @@ export default async function BlogPostPage({ params }: Props) {
           >
             {post.ctaText} <ArrowRight className="h-4 w-4" />
           </Link>
+        </div>
+
+        {/* Social share */}
+        <div className="mt-8 border-t border-[var(--border)] pt-6">
+          <BlogShareButtons title={post.title} slug={post.slug} />
         </div>
       </article>
     </div>
