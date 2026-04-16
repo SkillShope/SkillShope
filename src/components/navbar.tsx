@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, LayoutDashboard, User, ShieldCheck, Menu, X } from "lucide-react";
+import { Zap, LayoutDashboard, User, ShieldCheck, Menu, X } from "lucide-react";
 import { useState, ReactNode } from "react";
 import { Logo } from "@/components/logo";
 import { createPortal } from "react-dom";
@@ -49,8 +49,8 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
 
           {user ? (
             <>
-              <Link href="/publish" className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors">
-                <Plus className="h-4 w-4" />Sell a Template
+              <Link href="/estimate" className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors">
+                <Zap className="h-4 w-4" />Create Estimate
               </Link>
               <div className="relative">
                 <button

@@ -1,14 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
-  Calculator,
-  ClipboardCheck,
   FileSignature,
-  GraduationCap,
-  Megaphone,
-  ShieldCheck,
-  Home,
-  Building2,
+  Zap,
+  Camera,
+  FileText,
+  Clock,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { BlueprintCard } from "@/components/blueprint-card";
@@ -21,68 +19,179 @@ export default async function HomePage() {
     take: 6,
   });
 
-  const categories = [
-    { name: "Estimating & Bidding", value: "estimating-bidding", icon: Calculator },
-    { name: "Service & Repair Checklists", value: "service-repair", icon: ClipboardCheck },
-    { name: "Proposals & Contracts", value: "proposals-contracts", icon: FileSignature },
-    { name: "Training & Apprentice Materials", value: "training", icon: GraduationCap },
-    { name: "Marketing & Client Acquisition", value: "marketing", icon: Megaphone },
-    { name: "Safety & Compliance", value: "safety-compliance", icon: ShieldCheck },
-    { name: "Residential Plumbing", value: "residential", icon: Home },
-    { name: "Commercial Plumbing", value: "commercial", icon: Building2 },
-  ];
-
   return (
     <div>
-      {/* Hero */}
+      {/* Hero - AI Estimates */}
       <section className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
-        <div className="mx-auto max-w-5xl px-4 py-24 sm:px-6 sm:py-32 text-center">
-          <h1 className="font-hero mb-6 text-4xl font-bold tracking-tight sm:text-6xl text-balance">
-            RoughInHub —{" "}
-            <span className="bg-gradient-to-r from-[var(--accent)] to-[#c97c3a] bg-clip-text text-transparent">
-              Real Plumbing Templates from Real Plumbers
-            </span>
-          </h1>
-          <p className="mb-4 text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl max-w-3xl mx-auto">
-            You&apos;ve already done the hard work sweating pipes and perfecting your systems.
-          </p>
-          <p className="mb-10 text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl max-w-3xl mx-auto">
-            Now get paid for the smart bid calculators, checklists, proposals, contracts,
-            and training materials you&apos;ve built.
-          </p>
-          <p className="mb-10 text-base font-semibold text-[var(--text)] tracking-wide">
-            Buy once → Instant access in your library → Automatic updates.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/browse"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-8 py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors min-w-[200px]"
-            >
-              Browse Templates
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/publish"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-8 py-4 text-base font-semibold text-[var(--text)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-hover)] transition-colors min-w-[200px]"
-            >
-              Sell Your Templates
-            </Link>
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+          <div className="grid gap-12 items-center lg:grid-cols-2">
+            <div>
+              <h1 className="font-hero mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl text-balance">
+                Professional Estimates in{" "}
+                <span className="bg-gradient-to-r from-[var(--accent)] to-[#c97c3a] bg-clip-text text-transparent">
+                  60 Seconds
+                </span>
+              </h1>
+              <p className="mb-4 text-lg leading-relaxed text-[var(--text-secondary)] max-w-xl">
+                Describe the job. Get itemized materials, labor, and markup
+                instantly. Edit everything inline. Send a clean PDF to the homeowner.
+              </p>
+              <p className="mb-8 text-base text-[var(--text-secondary)] max-w-xl">
+                No more napkin math. No more 3-hour quotes. No more guessing on materials.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/estimate"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-8 py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors min-w-[200px]"
+                >
+                  Try the AI Estimator
+                  <Zap className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/browse"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-8 py-4 text-base font-semibold text-[var(--text)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-hover)] transition-colors min-w-[200px]"
+                >
+                  Browse Templates
+                </Link>
+              </div>
+              <p className="mt-4 text-sm text-[var(--text-secondary)]">
+                3 free estimates per month. No credit card required.
+              </p>
+            </div>
+            <div className="hidden lg:flex justify-end">
+              <div className="relative w-[320px] rounded-3xl overflow-hidden shadow-2xl border border-[var(--border)]">
+                <Image
+                  src="/estimate-tool-screenshot.png"
+                  alt="RoughInHub AI Estimate Generator showing job type selection, job description, and photo upload"
+                  width={320}
+                  height={640}
+                  className="w-full h-auto"
+                  priority
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Templates */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div className="mb-8 flex items-center justify-between">
-          <h2 className="font-display text-2xl font-bold">Featured Templates</h2>
-          <Link
-            href="/browse"
-            className="flex items-center gap-1 text-sm text-[var(--accent)] hover:underline"
-          >
-            View all <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+      {/* Estimate Features */}
+      <section className="border-b border-[var(--border)]">
+        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+          <h2 className="font-display mb-4 text-center text-2xl font-bold">
+            Everything You Need to Quote with Confidence
+          </h2>
+          <p className="mb-12 text-center text-[var(--text-secondary)] max-w-2xl mx-auto">
+            Built for plumbers who are tired of losing money on bad estimates
+            and losing jobs because quotes take too long.
+          </p>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                icon: Clock,
+                title: "60-Second Estimates",
+                description:
+                  "Describe any job and get itemized materials, labor, and markup instantly.",
+              },
+              {
+                icon: FileText,
+                title: "One-Click Contracts",
+                description:
+                  "Turn any estimate into a professional service agreement with scope and payment terms.",
+              },
+              {
+                icon: Camera,
+                title: "Photo Analysis",
+                description:
+                  "Upload job photos and the AI identifies pipe materials, fixtures, and potential complications.",
+              },
+              {
+                icon: FileSignature,
+                title: "Professional PDFs",
+                description:
+                  "Clean, branded PDFs with your business name, phone, and license number.",
+              },
+            ].map(({ icon: Icon, title, description }) => (
+              <div key={title} className="flex flex-col items-center text-center p-4">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--accent-soft)]">
+                  <Icon className="h-5 w-5 text-[var(--accent)]" />
+                </div>
+                <h3 className="mb-2 font-semibold text-base">{title}</h3>
+                <p className="text-sm leading-relaxed text-[var(--text-secondary)]">{description}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        {featuredBlueprints.length > 0 ? (
+      </section>
+
+      {/* Pro Plan */}
+      <section className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+          <div className="grid gap-12 items-center lg:grid-cols-2">
+            <div className="hidden lg:flex justify-start order-2 lg:order-1">
+              <div className="relative w-[300px] rounded-3xl overflow-hidden shadow-2xl border border-[var(--border)]">
+                <Image
+                  src="/pro-features-screenshot.png"
+                  alt="RoughInHub Pro plan features including AI estimates, contract generation, and PDF downloads"
+                  width={300}
+                  height={600}
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+            <div className="order-1 lg:order-2">
+              <h2 className="font-display mb-4 text-2xl font-bold">
+                Go Pro for{" "}
+                <span className="text-[var(--accent)]">$19/month</span>
+              </h2>
+              <p className="mb-6 text-[var(--text-secondary)]">
+                The free tier gives you 3 estimates per month. Pro unlocks the full toolkit.
+              </p>
+              <ul className="space-y-4 mb-8">
+                {[
+                  "30 AI estimates per month",
+                  "One-click contract generation",
+                  "Professional branded PDF downloads",
+                  "Photo analysis for job sites",
+                ].map((feature) => (
+                  <li key={feature} className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--accent)]">
+                      <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/profile"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-8 py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
+              >
+                Start Pro
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                Cancel anytime. No long-term commitment.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Templates - Discovery */}
+      {featuredBlueprints.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+          <div className="mb-2 text-center">
+            <p className="text-sm font-medium uppercase tracking-widest text-[var(--accent)]">
+              Also on RoughInHub
+            </p>
+          </div>
+          <h2 className="font-display mb-3 text-center text-2xl font-bold">
+            Plumbing Templates from the Field
+          </h2>
+          <p className="mb-10 text-center text-[var(--text-secondary)] max-w-xl mx-auto">
+            Bid calculators, checklists, contracts, and training materials built by working plumbers.
+          </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featuredBlueprints.map((blueprint) => (
               <BlueprintCard
@@ -101,39 +210,16 @@ export default async function HomePage() {
               />
             ))}
           </div>
-        ) : (
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-12 text-center">
-            <p className="text-[var(--text-secondary)]">
-              First templates coming soon — be the first to sell yours.
-            </p>
+          <div className="mt-8 text-center">
             <Link
-              href="/publish"
-              className="mt-4 inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:underline"
+              href="/browse"
+              className="inline-flex items-center gap-1 text-sm font-medium text-[var(--accent)] hover:underline"
             >
-              Start selling <ArrowRight className="h-3.5 w-3.5" />
+              Browse all templates <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
-        )}
-      </section>
-
-      {/* Categories */}
-      <section className="border-t border-[var(--border)] bg-[var(--bg-secondary)]">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-          <h2 className="font-display mb-8 text-2xl font-bold">Browse by Category</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((cat) => (
-              <Link key={cat.value} href={`/browse?category=${cat.value}`}>
-                <div className="flex items-center gap-4 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5 transition-all hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-hover)] h-full">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[var(--accent-soft)]">
-                    <cat.icon className="h-5 w-5 text-[var(--accent)]" />
-                  </div>
-                  <h3 className="font-semibold text-sm leading-snug">{cat.name}</h3>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* How It Works */}
       <section className="border-t border-[var(--border)]">
@@ -143,21 +229,21 @@ export default async function HomePage() {
             {[
               {
                 step: 1,
-                title: "Browse proven templates from real plumbers",
+                title: "Describe the job",
                 description:
-                  "Find templates built by working plumbers — bid sheets, checklists, contracts, and more — sorted by trade and region.",
+                  "Pick a job type, describe the scope, and optionally upload photos. The AI handles the rest.",
               },
               {
                 step: 2,
-                title: "Buy once — instant access in your library",
+                title: "Get an itemized estimate in seconds",
                 description:
-                  "Pay once and get immediate access. No subscriptions, no drip-feeding. Download and use today.",
+                  "Materials, labor, markup -- all broken down and editable. Adjust anything before sending.",
               },
               {
                 step: 3,
-                title: "Get automatic updates when the creator improves the file",
+                title: "Send a professional PDF to the homeowner",
                 description:
-                  "When the plumber who built it updates the template, you get the latest version automatically — no rebuying required.",
+                  "Generate a clean, branded estimate or contract. No more handwritten quotes on the tailgate.",
               },
             ].map(({ step, title, description }) => (
               <div key={step} className="flex flex-col items-center text-center sm:items-start sm:text-left">
@@ -175,15 +261,18 @@ export default async function HomePage() {
       {/* CTA Footer */}
       <section className="border-t border-[var(--border)] bg-[var(--bg-secondary)]">
         <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 text-center">
-          <h2 className="font-display mb-8 text-3xl font-bold text-balance">
-            Stop reinventing the wheel. Buy battle-tested plumbing templates.
+          <h2 className="font-display mb-4 text-3xl font-bold text-balance">
+            Stop guessing. Start estimating.
           </h2>
+          <p className="mb-8 text-[var(--text-secondary)]">
+            3 free estimates per month. No credit card. No commitment.
+          </p>
           <Link
-            href="/browse"
+            href="/estimate"
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-10 py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
           >
-            Browse Templates
-            <ArrowRight className="h-4 w-4" />
+            Try the AI Estimator
+            <Zap className="h-4 w-4" />
           </Link>
         </div>
       </section>
