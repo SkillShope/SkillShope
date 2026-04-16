@@ -22,31 +22,39 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero - AI Estimates */}
-      <section className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <div className="grid gap-12 items-center lg:grid-cols-2">
+      <section className="relative border-b border-[var(--border)] bg-[var(--bg-secondary)] overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
+        <div className="relative mx-auto max-w-6xl px-4 min-h-[calc(100dvh-4rem)] flex items-center sm:min-h-0 sm:py-28">
+          <div className="grid gap-12 items-center lg:grid-cols-2 w-full">
             <div>
-              <h1 className="font-hero mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl text-balance">
+              <h1 className="font-hero mb-6 text-[3.25rem] leading-[1.1] font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-balance sm:px-0">
                 Professional Estimates in{" "}
                 <span className="bg-gradient-to-r from-[var(--accent)] to-[#c97c3a] bg-clip-text text-transparent">
                   60 Seconds
                 </span>
               </h1>
-              <p className="mb-4 text-lg leading-relaxed text-[var(--text-secondary)] max-w-xl">
+              <p className="mb-8 text-lg leading-relaxed text-[var(--text-secondary)] max-w-xl">
                 Describe the job. Get itemized materials, labor, and markup
-                instantly. Edit everything inline. Send a clean PDF to the homeowner.
+                instantly.
               </p>
-              <p className="mb-8 text-base text-[var(--text-secondary)] max-w-xl">
+              <p className="hidden sm:block mb-8 text-base text-[var(--text-secondary)] max-w-xl">
                 No more napkin math. No more 3-hour quotes. No more guessing on materials.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/estimate"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-8 py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors min-w-[200px]"
-                >
-                  Try the AI Estimator
-                  <Zap className="h-4 w-4" />
-                </Link>
+              <Link
+                href="/estimate"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-8 py-4 text-base font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors w-full sm:w-auto sm:min-w-[200px]"
+              >
+                Try the AI Estimator
+                <Zap className="h-4 w-4" />
+              </Link>
+              <div className="hidden sm:flex flex-row gap-4 mt-4">
                 <Link
                   href="/browse"
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-8 py-4 text-base font-semibold text-[var(--text)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-hover)] transition-colors min-w-[200px]"
@@ -54,7 +62,7 @@ export default async function HomePage() {
                   Browse Templates
                 </Link>
               </div>
-              <p className="mt-4 text-sm text-[var(--text-secondary)]">
+              <p className="mt-4 text-sm text-[var(--text-secondary)] hidden sm:block">
                 3 free estimates per month. No credit card required.
               </p>
             </div>

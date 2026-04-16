@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   Sparkles,
   Download,
@@ -58,8 +58,18 @@ export function EstimateTool({ isPro, usage, businessProfile, recentEstimates }:
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [micPermission, setMicPermission] = useState<"prompt" | "granted" | "denied">("prompt");
   const [speechError, setSpeechError] = useState("");
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+
+  useEffect(() => {
+    if (!isRecording) {
+      setRecordingSeconds(0);
+      return;
+    }
+    const interval = setInterval(() => setRecordingSeconds((s) => s + 1), 1000);
+    return () => clearInterval(interval);
+  }, [isRecording]);
 
   const stopRecording = useCallback(() => {
     mediaRecorderRef.current?.stop();
@@ -412,7 +422,7 @@ export function EstimateTool({ isPro, usage, businessProfile, recentEstimates }:
               {isRecording && (
                 <div className="absolute bottom-3 right-3 flex items-center gap-1.5 text-xs text-red-500">
                   <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                  Recording...
+                  Recording {recordingSeconds > 0 ? `0:${recordingSeconds.toString().padStart(2, "0")}` : "..."}
                 </div>
               )}
             </div>
