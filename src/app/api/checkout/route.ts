@@ -6,7 +6,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { getSafeOrigin } from "@/lib/origin";
 import Stripe from "stripe";
 import { PLATFORM_FEE_PERCENT } from "@/lib/constants";
-import { auditInfo, auditWarn } from "@/lib/audit";
+import { auditInfo } from "@/lib/audit";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -19,33 +19,33 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
-  const { skillId } = await req.json();
-  if (!skillId) {
-    return NextResponse.json({ error: "skillId required" }, { status: 400 });
+  const { blueprintId } = await req.json();
+  if (!blueprintId) {
+    return NextResponse.json({ error: "blueprintId required" }, { status: 400 });
   }
 
-  const skill = await prisma.skill.findUnique({
-    where: { id: skillId },
+  const blueprint = await prisma.blueprint.findUnique({
+    where: { id: blueprintId },
     include: { author: { select: { stripeAccountId: true } } },
   });
-  if (!skill) {
-    return NextResponse.json({ error: "Skill not found" }, { status: 404 });
+  if (!blueprint) {
+    return NextResponse.json({ error: "Blueprint not found" }, { status: 404 });
   }
 
-  if (skill.isFree) {
-    return NextResponse.json({ error: "This skill is free" }, { status: 400 });
+  if (blueprint.isFree) {
+    return NextResponse.json({ error: "This blueprint is free" }, { status: 400 });
   }
 
   // Check if already purchased
   const existing = await prisma.purchase.findUnique({
-    where: { userId_skillId: { userId: session.user.id, skillId } },
+    where: { userId_blueprintId: { userId: session.user.id, blueprintId } },
   });
   if (existing) {
     return NextResponse.json({ error: "Already purchased" }, { status: 409 });
   }
 
   const origin = getSafeOrigin(req.headers.get("origin"));
-  const amountCents = Math.round(skill.price * 100);
+  const amountCents = Math.round(blueprint.price * 100);
   const feeCents = Math.round(amountCents * (PLATFORM_FEE_PERCENT / 100));
 
   // Build checkout session params
@@ -56,8 +56,8 @@ export async function POST(req: NextRequest) {
         price_data: {
           currency: "usd",
           product_data: {
-            name: skill.name,
-            description: skill.description,
+            name: blueprint.name,
+            description: blueprint.description,
           },
           unit_amount: amountCents,
         },
@@ -65,19 +65,19 @@ export async function POST(req: NextRequest) {
       },
     ],
     metadata: {
-      skillId: skill.id,
+      blueprintId: blueprint.id,
       userId: session.user.id,
     },
-    success_url: `${origin}/dashboard?purchased=${skill.slug}`,
-    cancel_url: `${origin}/skills/${skill.slug}`,
+    success_url: `${origin}/dashboard?purchased=${blueprint.slug}`,
+    cancel_url: `${origin}/blueprints/${blueprint.slug}`,
   };
 
-  // Route funds to publisher if they have a connected Stripe account
-  if (skill.author.stripeAccountId) {
+  // Route funds to creator if they have a connected Stripe account
+  if (blueprint.author.stripeAccountId) {
     params.payment_intent_data = {
       application_fee_amount: feeCents,
       transfer_data: {
-        destination: skill.author.stripeAccountId,
+        destination: blueprint.author.stripeAccountId,
       },
     };
   }
@@ -86,8 +86,8 @@ export async function POST(req: NextRequest) {
 
   auditInfo("checkout.started", {
     userId: session.user.id,
-    skillId,
-    metadata: { amount: skill.price, sessionId: checkoutSession.id },
+    blueprintId,
+    metadata: { amount: blueprint.price, sessionId: checkoutSession.id },
   });
 
   return NextResponse.json({ url: checkoutSession.url });

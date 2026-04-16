@@ -1,5 +1,5 @@
 {
-  "name": "skill-shope",
+  "name": "roughinhub",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,10 +15,11 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.80.0",
+    "@anthropic-ai/sdk": "^0.86.1",
     "@auth/prisma-adapter": "^2.11.1",
     "@prisma/client": "^6.19.2",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.3.3",
     "lucide-react": "^0.577.0",
     "next": "^16.2.1",
     "next-auth": "^5.0.0-beta.30",
@@ -29,8 +30,12 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^25.5.0",
+    "@types/pdfkit": "^0.17.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "docx": "^9.6.1",
+    "exceljs": "^4.4.0",
+    "pdfkit": "^0.18.0",
     "postcss": "^8.5.8",
     "prisma": "^6.19.2",
     "tailwindcss": "^4.2.2",

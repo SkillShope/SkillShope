@@ -6,7 +6,7 @@ type AuditEvent = {
   type: string;
   severity?: Severity;
   userId?: string | null;
-  skillId?: string | null;
+  blueprintId?: string | null;
   metadata?: Record<string, unknown>;
 };
 
@@ -18,7 +18,7 @@ export function audit(event: AuditEvent) {
         type: event.type,
         severity: event.severity || "info",
         userId: event.userId || null,
-        skillId: event.skillId || null,
+        blueprintId: event.blueprintId || null,
         metadata: event.metadata ? JSON.stringify(event.metadata) : null,
       },
     })

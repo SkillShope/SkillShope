@@ -4,10 +4,7 @@ import { PublishForm } from "@/components/publish-form";
 
 export default async function PublishPage() {
   const session = await auth();
-
-  if (!session?.user) {
-    redirect("/auth/signin");
-  }
+  if (!session?.user) redirect("/auth/signin");
 
   return <PublishForm />;
 }

@@ -59,10 +59,6 @@ export function decrypt(encoded: string): string {
  * Checks if a value looks like it's already encrypted (base64, correct min length).
  */
 export function isEncrypted(value: string): boolean {
-  // Plaintext GitHub tokens start with known prefixes
-  if (value.startsWith("gho_") || value.startsWith("ghu_") || value.startsWith("ghp_")) {
-    return false;
-  }
   // Encrypted values are base64 and at least iv + tag = 28 bytes → ~40 base64 chars
   try {
     const buf = Buffer.from(value, "base64");

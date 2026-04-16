@@ -6,7 +6,7 @@ export function Skeleton({ className = "" }: { className?: string }) {
   );
 }
 
-export function SkillCardSkeleton() {
+export function BlueprintCardSkeleton() {
   return (
     <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
       <div className="flex items-start gap-3">
@@ -47,7 +47,7 @@ export function DashboardSkeleton() {
   );
 }
 
-export function SkillDetailSkeleton() {
+export function BlueprintDetailSkeleton() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <Skeleton className="mb-6 h-4 w-32" />

@@ -49,7 +49,7 @@ export async function downloadSkill(
 
   if (res.status === 403) {
     throw new Error(
-      "Purchase required. Buy this skill at skillshope.com, then run:\n" +
+      "Purchase required. Buy this skill at roughinhub.com, then run:\n" +
         "  skillshope login\n" +
         "  skillshope install <slug>"
     );

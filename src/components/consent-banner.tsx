@@ -7,12 +7,12 @@ export function ConsentBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem("skillshope-consent");
+    const consent = localStorage.getItem("roughinhub-consent");
     if (!consent) setVisible(true);
   }, []);
 
   const accept = () => {
-    localStorage.setItem("skillshope-consent", "accepted");
+    localStorage.setItem("roughinhub-consent", "accepted");
     setVisible(false);
   };
 
@@ -22,7 +22,7 @@ export function ConsentBanner() {
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-[var(--bg-card)] p-4 shadow-xl">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 sm:flex-row">
         <p className="text-sm text-[var(--text-secondary)]">
-          We use cookie-free analytics to improve Skill Shope. By continuing,
+          We use cookie-free analytics to improve RoughInHub. By continuing,
           you agree to our{" "}
           <Link href="/privacy" className="text-[var(--accent)] hover:underline">
             Privacy Policy

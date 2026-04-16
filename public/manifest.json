@@ -1,11 +1,11 @@
 {
-  "name": "Skill Shope",
-  "short_name": "Skill Shope",
-  "description": "The registry where AI skill creators keep 85%. You built it. Now get paid for it.",
+  "name": "RoughInHub",
+  "short_name": "RoughInHub",
+  "description": "Real Plumbing Blueprints from Real Plumbers",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#353D37",
-  "theme_color": "#4a5d4f",
+  "background_color": "#0A1628",
+  "theme_color": "#FF6200",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",

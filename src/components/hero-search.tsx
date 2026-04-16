@@ -25,7 +25,7 @@ export function HeroSearch() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search skills, MCP servers, agents..."
+          placeholder="Search plumbing templates, checklists, contracts..."
           className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-card)] py-3.5 pl-12 pr-24 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)] transition-colors"
         />
         <button

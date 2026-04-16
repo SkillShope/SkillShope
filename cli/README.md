@@ -1,72 +1,72 @@
-# skillshope
+# roughinhub
 
-The CLI for [Skill Shope](https://skillshope.com) — install AI skills, MCP servers, and agent configs from the terminal.
+The CLI for [RoughInHub](https://roughinhub.com) -- install AI blueprints, MCP servers, and agent configs from the terminal.
 
 ## Install
 
 ```bash
-npx skillshope install <slug>
+npx roughinhub install <slug>
 ```
 
 Or install globally:
 
 ```bash
-npm install -g skillshope
+npm install -g roughinhub
 ```
 
 ## Commands
 
 ```
-skillshope install <slug>   Install a skill by name
-skillshope login            Save your download token for paid skills
-skillshope whoami           Show auth status
-skillshope list             List installed skills in current project
-skillshope help             Show help
+roughinhub install <slug>   Install a blueprint by name
+roughinhub login            Save your download token for paid blueprints
+roughinhub whoami           Show auth status
+roughinhub list             List installed blueprints in current project
+roughinhub help             Show help
 ```
 
 ## Examples
 
 ```bash
-# Install a free community skill
-npx skillshope install pdf-processing
+# Install a free community blueprint
+npx roughinhub install pdf-processing
 
-# Install a paid skill (requires purchase + login)
-npx skillshope install mcp-forge
+# Install a paid blueprint (requires purchase + login)
+npx roughinhub install mcp-forge
 
 # List what's installed
-npx skillshope list
+npx roughinhub list
 ```
 
 ## How it works
 
-1. Looks up the skill on the [Skill Shope registry](https://skillshope.com)
-2. Free skills download immediately
-3. Paid skills require a purchase at skillshope.com, then `skillshope login` with your download token
-4. Files are installed to `.agents/skills/<name>/` in your project
+1. Looks up the blueprint on the [RoughInHub registry](https://roughinhub.com)
+2. Free blueprints download immediately
+3. Paid blueprints require a purchase at roughinhub.com, then `roughinhub login` with your download token
+4. Files are installed to `.agents/blueprints/<name>/` in your project
 
 ## For publishers
 
-List your AI skills and earn 85% of every sale:
+List your AI blueprints and earn 85% of every sale:
 
 ```bash
 # Publish via the web
-https://skillshope.com/publish
+https://roughinhub.com/publish
 
 # Or via API (CI/CD)
-curl -X POST https://skillshope.com/api/publish \
+curl -X POST https://roughinhub.com/api/publish \
   -H "Authorization: Bearer sk_..." \
   -H "Content-Type: application/json" \
   -d @listing.json
 ```
 
-See the [Publisher Guide](https://skillshope.com/about) and [JSON schema](https://skillshope.com/skill-schema.json).
+See the [Publisher Guide](https://roughinhub.com/about) and [JSON schema](https://roughinhub.com/blueprint-schema.json).
 
 ## Links
 
-- [Browse skills](https://skillshope.com/browse)
-- [Publish a skill](https://skillshope.com/publish)
-- [Terms](https://skillshope.com/terms) · [Privacy](https://skillshope.com/privacy)
+- [Browse blueprints](https://roughinhub.com/browse)
+- [Publish a blueprint](https://roughinhub.com/publish)
+- [Terms](https://roughinhub.com/terms) . [Privacy](https://roughinhub.com/privacy)
 
 ## License
 
-Copyright 2026 Skill Shope. All rights reserved.
+Copyright 2026 RoughInHub. All rights reserved.

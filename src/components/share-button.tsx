@@ -14,7 +14,7 @@ export function ShareButton({ slug, name, description }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const url = `https://skillshope.com/skills/${slug}`;
+  const url = `https://roughinhub.com/blueprints/${slug}`;
   const text = `${name} — ${description}`;
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function ShareButton({ slug, name, description }: ShareButtonProps) {
     e.preventDefault();
     e.stopPropagation();
     window.open(
-      `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&via=RoughInHub`,
       "_blank",
       "width=550,height=420"
     );

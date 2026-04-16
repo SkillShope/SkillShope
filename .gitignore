@@ -7,6 +7,9 @@
 # testing
 /coverage
 
+# generated artifacts
+scripts/artifacts/
+
 # next.js
 /.next/
 /out/

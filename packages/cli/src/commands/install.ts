@@ -33,7 +33,7 @@ export async function install(slug: string | undefined): Promise<void> {
 
   if (!files || files.length === 0) {
     console.log("\n  No files available for this skill.");
-    console.log(`  Visit: https://skillshope.com/skills/${slug}`);
+    console.log(`  Visit: https://roughinhub.com/blueprints/${slug}`);
     return;
   }
   console.log(` ${files.length} file${files.length !== 1 ? "s" : ""}`);

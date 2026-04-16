@@ -7,17 +7,8 @@ import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/sign-out-button";
 import { Analytics } from "@vercel/analytics/next";
 import { ConsentBanner } from "@/components/consent-banner";
-import { Happie } from "@/components/happie";
-import { ServiceWorkerRegister } from "@/components/sw-register";
 import { Footer } from "@/components/footer";
-import { Space_Grotesk, Jacques_Francois } from "next/font/google";
-
-const jacquesFrancois = Jacques_Francois({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-hero",
-  display: "swap",
-});
+import { Space_Grotesk } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -25,36 +16,35 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://skillshope.com";
-
 export const metadata: Metadata = {
-  title: {
-    default: "Skill Shope — You Built It. Now Get Paid For It.",
-    template: "%s | Skill Shope",
-  },
+  title: "RoughInHub — Real Plumbing Templates from Real Plumbers",
   description:
-    "The registry where AI skill creators keep 85%. Publish your skills, MCP servers, and agents — distributed in one command, protected by default.",
-  metadataBase: new URL(siteUrl),
-  manifest: "/manifest.json",
-  icons: { icon: "/logo-dark.svg", apple: "/icons/icon-192x192.png" },
-  other: { "mobile-web-app-capable": "yes", "apple-mobile-web-app-capable": "yes", "apple-mobile-web-app-status-bar-style": "black-translucent" },
+    "Buy battle-tested plumbing bid calculators, checklists, proposals, contracts, and training materials from experienced plumbers. Instant access, automatic updates.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/favicon.png", sizes: "335x335", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
-    type: "website",
-    siteName: "Skill Shope",
-    title: "Skill Shope — You Built It. Now Get Paid For It.",
+    title: "RoughInHub — Real Plumbing Templates from Real Plumbers",
     description:
-      "The registry where AI skill creators keep 85%. Publish your skills, MCP servers, and agents — distributed in one command, protected by default.",
-    url: siteUrl,
+      "Buy battle-tested plumbing bid calculators, checklists, proposals, contracts, and training materials from experienced plumbers.",
+    type: "website",
+    siteName: "RoughInHub",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "RoughInHub",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Skill Shope — You Built It. Now Get Paid For It.",
-    description:
-      "The registry where AI skill creators keep 85%. Publish your skills, MCP servers, and agents — distributed in one command, protected by default.",
-  },
-  robots: {
-    index: true,
-    follow: true,
+    site: "@RoughInHub",
   },
 };
 
@@ -78,13 +68,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`min-h-screen antialiased ${spaceGrotesk.variable} ${jacquesFrancois.variable}`}>
+      <body className={`min-h-screen antialiased ${spaceGrotesk.variable}`}>
         <Navbar user={session?.user} isAdmin={isAdmin} signOutButton={<SignOutButton />} />
         <main>{children}</main>
         <Footer />
-        <Happie isSignedIn={!!session?.user} />
         <Analytics />
-        <ServiceWorkerRegister />
         <ConsentBanner />
       </body>
     </html>

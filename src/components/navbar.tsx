@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Logo } from "./logo";
-import { Plus, LayoutDashboard, User, ShieldCheck, Menu, X } from "lucide-react";
-import { useState, ReactNode, useEffect } from "react";
+import { Zap, LayoutDashboard, User, ShieldCheck, Menu, X } from "lucide-react";
+import { useState, ReactNode } from "react";
+import { Logo } from "@/components/logo";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
@@ -35,19 +35,22 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
     <nav className="sticky top-0 z-50 border-b border-[var(--border)]/50 bg-[var(--bg)]/10 backdrop-blur-2xl backdrop-saturate-150">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="shrink-0">
-          <Logo width={32} height={32} />
+          <Logo width={180} height={58} />
         </Link>
 
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-3">
           <Link href="/browse" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Browse</Link>
+          <Link href="/estimate" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Estimate</Link>
+          <Link href="/blog" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">Blog</Link>
+          <Link href="/about" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors">About</Link>
           <ThemeToggle />
 
           {user ? (
             <>
-              <Link href="/publish" className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors">
-                <Plus className="h-4 w-4" />Publish
+              <Link href="/estimate" className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors">
+                <Zap className="h-4 w-4" />Create Estimate
               </Link>
               <div className="relative">
                 <button
@@ -67,7 +70,7 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
                       <div className="px-3 py-2 text-sm"><p className="font-medium">{user.name || "User"}</p></div>
                       <div className="my-1 border-t border-[var(--border)]" />
                       <Link href="/profile" onClick={() => setShowMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text)] transition-colors"><User className="h-4 w-4" />Profile</Link>
-                      <Link href="/dashboard" onClick={() => setShowMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text)] transition-colors"><LayoutDashboard className="h-4 w-4" />Dashboard</Link>
+                      <Link href="/dashboard" onClick={() => setShowMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text)] transition-colors"><LayoutDashboard className="h-4 w-4" />My Library</Link>
                       {isAdmin && (<Link href="/admin" onClick={() => setShowMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text)] transition-colors"><ShieldCheck className="h-4 w-4" />Admin</Link>)}
                       <div className="my-1 border-t border-[var(--border)]" />
                       {signOutButton}
@@ -115,9 +118,12 @@ export function Navbar({ user, isAdmin, signOutButton }: NavbarProps) {
             <nav className="space-y-1">
               {[
                 { href: "/browse", label: "Browse" },
+                { href: "/estimate", label: "Estimate" },
+                { href: "/blog", label: "Blog" },
+                { href: "/about", label: "About" },
                 ...(user ? [
-                  { href: "/publish", label: "Publish" },
-                  { href: "/dashboard", label: "Dashboard" },
+                  { href: "/publish", label: "Sell a Template" },
+                  { href: "/dashboard", label: "My Library" },
                   { href: "/profile", label: "Profile" },
                   ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
                 ] : []),
