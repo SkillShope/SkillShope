@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   Sparkles,
   Download,
@@ -53,107 +53,96 @@ export function EstimateTool({ isPro, usage, businessProfile, recentEstimates }:
   const [contractFull, setContractFull] = useState<string | null>(null);
   const [generatingContract, setGeneratingContract] = useState(false);
 
-  // Speech-to-text
-  const [isListening, setIsListening] = useState(false);
-  const [speechSupported, setSpeechSupported] = useState(false);
+  // Speech-to-text (MediaRecorder + Whisper API)
+  const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const [micPermission, setMicPermission] = useState<"prompt" | "granted" | "denied">("prompt");
   const [speechError, setSpeechError] = useState("");
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
-  useEffect(() => {
-    const hasSpeech = "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
-    setSpeechSupported(hasSpeech);
-    if (!hasSpeech) return;
-
-    // Check existing mic permission without prompting
-    navigator.permissions?.query({ name: "microphone" as PermissionName }).then((result) => {
-      setMicPermission(result.state as "prompt" | "granted" | "denied");
-      result.onchange = () => {
-        setMicPermission(result.state as "prompt" | "granted" | "denied");
-      };
-    }).catch(() => {
-      // permissions API not supported, we'll handle it on first tap
-    });
+  const stopRecording = useCallback(() => {
+    mediaRecorderRef.current?.stop();
   }, []);
 
-  const requestMicPermission = useCallback(async () => {
+  const startRecording = useCallback(async () => {
     setSpeechError("");
+
+    let stream: MediaStream;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // Permission granted -- stop the stream immediately, we just needed the permission
-      stream.getTracks().forEach((t) => t.stop());
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setMicPermission("granted");
-      return true;
     } catch {
       setMicPermission("denied");
       setSpeechError("Microphone access denied. Check your browser settings to allow mic access for this site.");
-      return false;
-    }
-  }, []);
-
-  const startListening = useCallback(() => {
-    setSpeechError("");
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = "en-US";
-
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
-      const transcript = event.results[0]?.[0]?.transcript;
-      if (transcript) {
-        setJobDescription((prev) => {
-          if (!prev) return transcript;
-          return prev.endsWith(" ") ? prev + transcript : prev + " " + transcript;
-        });
-      }
-    };
-
-    recognition.onend = () => {
-      recognitionRef.current = null;
-      setIsListening(false);
-    };
-
-    recognition.onerror = (event: Event & { error?: string }) => {
-      recognitionRef.current = null;
-      setIsListening(false);
-      const errorType = event.error || "unknown";
-      if (errorType === "no-speech") {
-        setSpeechError("No speech detected. Tap Speak and try again.");
-      } else if (errorType === "not-allowed") {
-        setMicPermission("denied");
-        setSpeechError("Microphone access denied. Check your browser settings to allow mic access for this site.");
-      } else {
-        setSpeechError(`Speech recognition failed (${errorType}). Try again.`);
-      }
-    };
-
-    recognitionRef.current = recognition;
-    try {
-      recognition.start();
-      setIsListening(true);
-    } catch {
-      setSpeechError("Could not start speech recognition.");
-      setIsListening(false);
-    }
-  }, []);
-
-  const handleMicButton = useCallback(async () => {
-    if (isListening) {
-      recognitionRef.current?.stop();
       return;
     }
 
-    if (micPermission !== "granted") {
-      const granted = await requestMicPermission();
-      if (!granted) return;
-    }
+    chunksRef.current = [];
+    const mediaRecorder = new MediaRecorder(stream, {
+      mimeType: MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : "audio/webm",
+    });
 
-    startListening();
-  }, [isListening, micPermission, requestMicPermission, startListening]);
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) chunksRef.current.push(e.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      // Stop all mic tracks
+      stream.getTracks().forEach((t) => t.stop());
+      setIsRecording(false);
+
+      const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
+      if (audioBlob.size === 0) {
+        setSpeechError("No audio recorded. Try again.");
+        return;
+      }
+
+      // Send to our API route for Whisper transcription
+      setIsTranscribing(true);
+      try {
+        const formData = new FormData();
+        formData.append("audio", audioBlob, "recording.webm");
+
+        const res = await fetch("/api/transcribe", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          setSpeechError(data.error || "Transcription failed. Try again.");
+          return;
+        }
+
+        const { text } = await res.json();
+        if (text) {
+          setJobDescription((prev) => {
+            if (!prev) return text;
+            return prev.endsWith(" ") ? prev + text : prev + " " + text;
+          });
+        }
+      } catch {
+        setSpeechError("Transcription failed. Check your connection and try again.");
+      } finally {
+        setIsTranscribing(false);
+      }
+    };
+
+    mediaRecorderRef.current = mediaRecorder;
+    mediaRecorder.start();
+    setIsRecording(true);
+  }, []);
+
+  const handleMicButton = useCallback(() => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  }, [isRecording, stopRecording, startRecording]);
 
   const handlePhotoUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -371,36 +360,42 @@ export function EstimateTool({ isPro, usage, businessProfile, recentEstimates }:
           <div>
             <div className="mb-1.5 flex items-center justify-between">
               <label className="block text-sm font-medium">Describe the Job</label>
-              {speechSupported && (
-                <button
-                  type="button"
-                  onClick={handleMicButton}
-                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                    isListening
-                      ? "bg-red-500/10 text-red-500 border border-red-500/30"
+              <button
+                type="button"
+                onClick={handleMicButton}
+                disabled={isTranscribing}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                  isRecording
+                    ? "bg-red-500/10 text-red-500 border border-red-500/30"
+                    : isTranscribing
+                      ? "bg-[var(--accent-soft)] text-[var(--text-secondary)] border border-transparent cursor-wait"
                       : micPermission === "denied"
                         ? "bg-red-500/10 text-red-400 border border-red-500/20 hover:border-red-500/40"
                         : "bg-[var(--accent-soft)] text-[var(--accent)] border border-transparent hover:border-[var(--accent)]/30"
-                  }`}
-                >
-                  {isListening ? (
-                    <>
-                      <Square className="h-3 w-3 fill-current" />
-                      Stop
-                    </>
-                  ) : micPermission === "granted" ? (
-                    <>
-                      <Mic className="h-3 w-3" />
-                      Speak
-                    </>
-                  ) : (
-                    <>
-                      <Mic className="h-3 w-3" />
-                      Enable Mic
-                    </>
-                  )}
-                </button>
-              )}
+                }`}
+              >
+                {isRecording ? (
+                  <>
+                    <Square className="h-3 w-3 fill-current" />
+                    Stop
+                  </>
+                ) : isTranscribing ? (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    Transcribing...
+                  </>
+                ) : micPermission === "granted" ? (
+                  <>
+                    <Mic className="h-3 w-3" />
+                    Speak
+                  </>
+                ) : (
+                  <>
+                    <Mic className="h-3 w-3" />
+                    Enable Mic
+                  </>
+                )}
+              </button>
             </div>
             <div className="relative">
               <textarea
@@ -408,16 +403,16 @@ export function EstimateTool({ isPro, usage, businessProfile, recentEstimates }:
                 onChange={(e) => setJobDescription(e.target.value)}
                 rows={5}
                 className={`w-full rounded-lg border bg-[var(--bg-secondary)] px-4 py-3 text-sm leading-relaxed focus:border-[var(--accent)] focus:outline-none transition-colors ${
-                  isListening
+                  isRecording
                     ? "border-red-500/50"
                     : "border-[var(--border)]"
                 }`}
                 placeholder="Bathroom remodel, relocate toilet 3 feet, new shower valve, replace all supply lines from copper to PEX, 1960s house with cast iron drain"
               />
-              {isListening && (
+              {isRecording && (
                 <div className="absolute bottom-3 right-3 flex items-center gap-1.5 text-xs text-red-500">
                   <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                  Listening...
+                  Recording...
                 </div>
               )}
             </div>
