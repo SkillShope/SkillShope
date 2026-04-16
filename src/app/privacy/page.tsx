@@ -11,7 +11,7 @@ export default function PrivacyPage() {
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="mb-2 text-3xl font-bold">Privacy Policy</h1>
       <p className="mb-10 text-sm text-[var(--text-secondary)]">
-        Last updated: March 24, 2026
+        Last updated: April 15, 2026
       </p>
 
       <div className="space-y-8 text-sm leading-relaxed text-[var(--text-secondary)]">
@@ -53,13 +53,35 @@ export default function PrivacyPage() {
             stored in our database and displayed publicly on the platform.
           </p>
           <h3 className="mb-2 text-sm font-medium text-[var(--text)]">
+            Voice &amp; Audio Data
+          </h3>
+          <p className="mb-3">
+            Our AI Estimate Generator includes an optional speech-to-text feature.
+            When you choose to use it, your device&apos;s microphone records audio
+            which is sent to our server and forwarded to OpenAI for transcription.
+            The audio is used solely to convert your speech to text for the estimate
+            form. We do not store, retain, or replay your audio recordings -- they
+            are discarded immediately after transcription. You can always type your
+            job description instead of using the microphone.
+          </p>
+          <h3 className="mb-2 text-sm font-medium text-[var(--text)]">
+            AI-Generated Estimates
+          </h3>
+          <p className="mb-3">
+            When you use the AI Estimate Generator, the job description and any
+            uploaded photos you provide are sent to third-party AI services
+            (Anthropic, OpenAI) for processing. We do not use your estimate data
+            to train AI models. Generated estimates are stored in your account so
+            you can access them later.
+          </p>
+          <h3 className="mb-2 text-sm font-medium text-[var(--text)]">
             Analytics Data
           </h3>
           <p>
             We use Vercel Analytics to collect anonymous usage data including page
             views, referrers, browser type, and device information. This data is
             aggregated and cannot be used to identify individual users. No cookies
-            are used for analytics — Vercel Analytics is cookie-free and compliant
+            are used for analytics -- Vercel Analytics is cookie-free and compliant
             with GDPR, CCPA, and PECR.
           </p>
         </section>
@@ -104,9 +126,26 @@ export default function PrivacyPage() {
               </a>.
             </li>
             <li>
-              <strong>Neon</strong> — Database hosting. Subject to{" "}
+              <strong>Neon</strong> -- Database hosting. Subject to{" "}
               <a href="https://neon.tech/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">
                 Neon&apos;s Privacy Policy
+              </a>.
+            </li>
+            <li>
+              <strong>OpenAI</strong> -- Audio transcription (speech-to-text) and
+              AI estimate generation. Audio recordings and job descriptions are
+              sent to OpenAI for processing. We do not store audio after
+              transcription. Subject to{" "}
+              <a href="https://openai.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">
+                OpenAI&apos;s Privacy Policy
+              </a>.
+            </li>
+            <li>
+              <strong>Anthropic</strong> -- AI estimate generation and content
+              processing. Job descriptions and photos are sent to Anthropic for
+              generating itemized estimates. Subject to{" "}
+              <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">
+                Anthropic&apos;s Privacy Policy
               </a>.
             </li>
           </ul>
