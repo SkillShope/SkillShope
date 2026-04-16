@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { BlueprintCard } from "@/components/blueprint-card";
 import { BLUEPRINT_CATEGORIES, BLUEPRINT_TYPES } from "@/lib/constants";
@@ -61,15 +63,24 @@ export default async function BrowsePage({ searchParams }: Props) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Browse Templates</h1>
-        <p className="mt-2 text-[var(--text-secondary)]">
-          {resultCount} template{resultCount !== 1 ? "s" : ""} found
-          {q ? ` for "${q}"` : ""}
-          {category
-            ? ` in ${BLUEPRINT_CATEGORIES.find((c) => c.value === category)?.label ?? category}`
-            : ""}
-        </p>
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Browse Templates</h1>
+          <p className="mt-2 text-[var(--text-secondary)]">
+            {resultCount} template{resultCount !== 1 ? "s" : ""} found
+            {q ? ` for "${q}"` : ""}
+            {category
+              ? ` in ${BLUEPRINT_CATEGORIES.find((c) => c.value === category)?.label ?? category}`
+              : ""}
+          </p>
+        </div>
+        <Link
+          href="/publish"
+          className="flex shrink-0 items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+          Sell a Template
+        </Link>
       </div>
 
       {/* Filters */}
